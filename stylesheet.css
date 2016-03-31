@@ -1,0 +1,149 @@
+/*stylesheet.css*/
+body{
+  margin:0;
+  padding:0;
+  font-size:100%;
+  background-color:#06c;
+  font-family:Arial, Helvetica, sans-serif;
+}
+header{
+  background-color:#0685ff;
+  padding-bottom:2em;
+  margin-bottom:5em;
+}
+.event{
+  float:left;
+  margin-left:1.4em;
+  margin-top:1.4em;
+  background-color:#003d78;
+  color:white;
+  border:none;
+  align:center;
+  padding:0.4em 01em;
+  font-size:1.1em;
+}
+#logo{
+  color:#003265;
+  font-size:4.4em;
+  float:left;
+  padding-left:2%;
+  padding-top:3px;
+  text-decoration:none;
+}
+.log-in{
+  float:right;
+  text-align:right;
+  margin-right:1.1em;
+  margin-top:0.9em;
+  font-size:0.95em;
+}
+#loginButton{
+  margin-bottom:0.6em;
+  background-color:#003d78;
+  color:white;
+  border:none;
+  align:center;
+  padding:0.4em 01em;
+  font-size:1.1em;
+}
+#theWrap{
+  clear:both;
+  width:80%;
+  margin:0px auto 4em auto;
+}
+#topWrap{
+  float:left;
+  width:100%;
+  margin:0;
+  padding-top:0.5em;
+  background-color:#004299;
+  color:white;
+}
+.subheader{
+  float:left;
+  padding:0px 3% 0px 3%;
+  margin:0 auto;
+  width:44%; 
+}
+header a, .subheader a{
+ color:white;
+}
+.subTitle{
+  font-size:1.6em; 
+  font-weight:bold;
+}
+.subList{
+  list-style-type:square;
+  list-style-position:inside;
+  font-size:1em;  
+  line-height:1.4;
+  display:inline;
+}
+#calendarWrapper{
+  clear:both;
+  width:100%;
+  margin:1em auto 0px auto;
+  background-color:#0084ff;
+  color:white;
+  border-top:1px solid #0084ff;
+}
+#month{
+  font-size:5em;
+  text-align:center;
+  margin-bottom:20px;
+}
+#weekHeader{
+  margin:0 auto;
+  width:100%;
+  table-layout:fixed;
+  font-size:1.5em;
+  margin-bottom:0.35em;
+  align:center; 
+}
+#weekHeader th{
+ padding:0.5%;  
+ width:13%;
+}
+article{
+  width:100%;
+  overflow-x:auto;
+}
+#tableCalendar{
+ margin:0 auto;
+ width:100%;
+ font-size:1.5em
+ table-layout:fixed;
+ background-color:#004e99;
+ overflow-y:hidden;
+}
+#tableCalendar td{
+  background-color:rgba(255, 255, 255, 0.93);
+  vertical-align:top;
+  padding:0.5%;  
+  width:13%; 
+  height:10em; 
+ //max-height:10.1em;
+ // overflow-y:hidden;
+  color:black;
+}
+#tableCalendar td:hover{
+  background-color:#fff; 
+}
+#dropdown{
+  margin:1.4em 0px 1.4em 1em;
+  font-size:1.1em;  
+}
+#dropdown select{
+  font-size:0.9em;
+}
+#bottomWrapper{
+  clear:both;
+}
+footer{
+  background-color:#004e99;
+  width:100%; 
+  clear:both;
+  text-align:center;
+  font-size:1.4em;
+  color:white;
+}
