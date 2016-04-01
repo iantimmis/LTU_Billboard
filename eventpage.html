@@ -1,15 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Event Page</title>
-  <link href="stylesheet.css" rel="stylesheet" type="text/css">
-  <style type="text/css">
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Event Page</title>
+	
+	<link href="stylesheet.css" rel="stylesheet" type="text/css">
+	
+	<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="jquery-2.2.2.min.js"></script>
+	<script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+			$("#anEvent").on("click",toggleModal);
+		});
+		function toggleModal(evt){
+			$('#eventModal').modal('toggle');
+		}
+    </script>
+  
+	<style type="text/css">
 	a.orglink{
 		text-decoration:none;
 		color:black;
 	}
 	a.orglink:hover{
-		color:white;
+		color:blue;
 	}
 	body {
 		background-color: #0066cc;
@@ -42,6 +59,12 @@
 		border-bottom: solid;
 		border-width: 1px;
 	}
+	.modal-body {
+		color:black;
+	}
+	.modal-title{
+		color:black;
+	}
   </style>
 </head>
 
@@ -50,34 +73,41 @@
 	Close
 </header>
 <div class="main">
-	<h1>Distinguished Lecturer</h1>
+	<h1><div id="anEvent">Distinguished Lecturer</div></h1>
 	
-<p class="desc">
-David Vaglia presents an overview of the status of electricity generating nuclear power plants around the world and the current status and probable future of nuclear power. He will discuss the different nuclear power plant designs in relation to recent nuclear incidents and the impact those incidents have had on the industry.
-<br>
-<br>
-Vaglia also will cover the problems and opportunities created by the aging nuclear workforce, the safety of nuclear facilities, the drive to extend the life of current plants, and the challenges of building new reactors.<p>	
-<table class="info">
-<tr>
-	<td>Thursday, March 24 6-8 p.m.</td>
-	<td>College of Engineering</td>
-</tr>
-<tr>
-<td>UTLC, T429</td>
-<td><a class="orglink" href="http://www.ltu.edu/external_attach/images/vaglia_talk.pdf">Download Flier</a></td>
-</tr>
 
-<tr>
-<td><button id="addToCal">Add to Calendar</td>
-<td><button id="rsvp">RSVP for Event</td>
-</tr>
-
-</table>
-
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="eventModalLabel">Distinguished Lecturer</h2>
+      </div>
+      <div class="modal-body">
+        <p>David Vaglia presents an overview of the status of electricity generating nuclear power plants around the world and the current status and probable future of nuclear power.<br><br>He will discuss the different nuclear power plant designs in relation to recent nuclear incidents and the impact those incidents have had on the industry.
+		<table class="info">
+		<tr>
+			<td>Thursday, March 24 6-8 p.m.</td>
+			<td>College of Engineering</td>
+		</tr>
+		<tr>
+			<td>UTLC, T429</td>
+			<td><a class="orglink" href="http://www.ltu.edu/external_attach/images/vaglia_talk.pdf">Download Flier</a></td>
+		</tr>
+		</table>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">RSVP</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Add to Calendar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </div>
 <footer>
-Matthew Castaldini<br>Hanan Jalnko<br>Kathleen Napier<br>Ian Timmis
+Matthew Castaldini Hanan Jalnko Kathleen Napier Ian Timmis
 </footer>
 </table>
 </body>
