@@ -17,6 +17,11 @@
 		});
 		function toggleModal(evt){
 			$('#eventModal').modal('toggle');
+		}$(function() {
+			$("#anEvent2").on("click",toggleModal);
+		});
+		function toggleModal(evt){
+			$('#eventModal2').modal('toggle');
 		}
     </script>
   
@@ -74,7 +79,7 @@
 </header>
 <div class="main">
 	<h1><div id="anEvent">Distinguished Lecturer</div></h1>
-	
+	<h1><div id="anEvent2">Computer Science Seminar</div></h1>
 
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
   <div class="modal-dialog" role="document">
@@ -105,6 +110,36 @@
   </div>
 </div>
 
+<div class="modal fade" id="eventModal2" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel2">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="eventModalLabel2">Computer Science Seminar - Android Auto</h2>
+      </div>
+      <div class="modal-body">
+		<p>Godfrey is founder and president of <em>RIIS (Research Into Internet Systems) LLC</em>, a mobile development firm in the Detroit Metro area. He is also author of "Agile Android", "Bulletproof Android," "Android Best Practices," "Decompiling Java" and "Decompiling Android." Godfrey has spoken at several DroidCons, AnDevcons, JavaOne, ASP-Connections, VSLive, Codemash, Code PaLOUsa, 1DevDay and many local Java and .Net user groups on a wide range of topics such as Continuous Integration, Agile development and mobile security.
+		<p>Google released a couple of APIs that allow Android developers to create their own mobile automotive apps that expand the boundaries of the automotive dashboard far beyond the physical car. You'll learn how to create apps for this new and relatively overlooked commercial opportunity for mobile developers. We'll also look at some of the other options available from Apple and Ford Sync.
+
+		<table class="info">
+		<tr>
+			<td>Thursday, March 30 12:30 - 01:30 PM</td>
+			<td>College of Engineering</td>
+		</tr>
+		<tr>
+			<td>Buell Management Building M218</td>
+			<td><a class="orglink" href="http://bit.ly/1ogtLMJ">Event Page</a></td>
+		</tr>
+		</table>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">RSVP</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Add to Calendar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 <footer>
 Matthew Castaldini Hanan Jalnko Kathleen Napier Ian Timmis
