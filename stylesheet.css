@@ -8,13 +8,20 @@ body{
 }
 header{
   background-color:#0685ff;
-  padding-bottom:2em;
+  padding:0.1rem 1.25rem;
   margin-bottom:5em;
+  display:-webkit-box;
+  display:-ms-flexbox;
+  display:-moz-flex;
+  display:-webkit-flex;
+  display:flex;
+  //-webkit-box-align-items:center;
+  -ms-align-items:center;
+  -webkit-align-items:center;
+  -moz-align-items:center;
+  align-items:center;
 }
 .event{
-  float:left;
-  margin-left:1.4em;
-  margin-top:1.4em;
   background-color:#003d78;
   color:white;
   border:none;
@@ -25,17 +32,13 @@ header{
 #logo{
   color:#003265;
   font-size:4.4em;
-  float:left;
   padding-left:2%;
-  padding-top:3px;
   text-decoration:none;
 }
 .log-in{
-  float:right;
   text-align:right;
-  margin-right:1.1em;
-  margin-top:0.9em;
   font-size:0.95em;
+  margin-left:auto;
 }
 #loginButton{
   margin-bottom:0.6em;
@@ -47,7 +50,6 @@ header{
   font-size:1.1em;
 }
 #theWrap{
-  clear:both;
   width:80%;
   margin:0px auto 4em auto;
 }
