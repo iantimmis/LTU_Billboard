@@ -44,7 +44,7 @@ header{
   color:white;
   border:none;
   align:center;
-  padding:0.4em 01em;
+  padding:0.4em 1em;
   font-size:1.1em;
 }
 #theWrap{
@@ -89,6 +89,7 @@ header a, .subheader a{
   border-top:1px solid #0084ff;
 }
 #month{
+  clear:both;
   font-size:5em;
   text-align:center;
   margin-bottom:20px;
@@ -136,6 +137,18 @@ article{
 }
 #dropdown select{
   font-size:0.9em;
+}
+#filter{
+  float:right;
+  margin:1.4em 1.4em 1.4em 0px;
+}
+#filterbutton{
+  background-color:#003d78;
+  color:white;
+  border:none;
+  align:center;
+  padding:0.2em 0.4em;
+  font-size:1em;
 }
 #bottomWrapper{
   clear:both;
