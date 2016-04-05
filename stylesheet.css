@@ -132,6 +132,7 @@ article{
   background-color:#fff; 
 }
 #dropdown{
+  float:left;
   margin:1.4em 0px 1.4em 1em;
   font-size:1.1em;  
 }
