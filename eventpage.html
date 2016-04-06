@@ -17,11 +17,18 @@
 		});
 		function toggleModal(evt){
 			$('#eventModal').modal('toggle');
-		}$(function() {
+		}
+		$(function() {
 			$("#anEvent2").on("click",toggleModal2);
 		});
 		function toggleModal2(evt){
 			$('#eventModal2').modal('toggle');
+		}
+		$(function() {
+			$("#loginId").on("click",toggleLoginModal);
+		});
+		function toggleLoginModal(evt){
+			$('#loginModal').modal('toggle');
 		}
     </script>
   
@@ -140,6 +147,114 @@
     </div>
   </div>
 </div>
+
+<h1><div id="loginId"><br>Log In</div></h1>
+
+<!-- Modal. #loginModal in function -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+	  <!-- Modal header with close button and title-->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="loginModal">Log-In or Create Account</h2>
+      </div>
+	  
+	  <!-- Modal body -->
+      <div class="modal-body">
+	  
+		<!-- Tabs for either log-in or account creation -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Log-In</a></li>
+			<li role="presentation"><a href="#createAccount" aria-controls="createAccount" role="tab" data-toggle="tab">Create Account</a></li>
+		</ul>
+		
+		<!-- Div for tab content -->
+		<div class="tab-content">
+		
+			<!-- First tab for log-in form -->
+			<div role="tabpanel" class="tab-pane active" id="login"><br>
+			<!--Form for logging in. Just takes username, password -->
+			<form>
+			  <!-- Email row -->
+			  <div class="form-group row">
+				<label for="inputEmail3" class="col-sm-4 form-control-label" align="right">Email</label>
+				<div class="col-sm-7">
+				  <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+				</div>
+			  </div>
+			  <!-- Password row -->
+			  <div class="form-group row">
+				<label for="inputPassword3" class="col-sm-4 form-control-label" align="right">Password</label>
+				<div class="col-sm-5">
+				  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+				</div>
+			  </div>
+			  
+			</form>
+			<!-- End of log-in form and first tab -->
+			</div>
+			
+			<!-- Second tab for account creation form -->
+			<div role="tabpanel" class="tab-pane" id="createAccount"><br>
+			<!--Form for account creation. Just takes username, password twice, and account type -->
+			<form>
+			  <!-- Email row -->
+			  <div class="form-group row">
+				<label for="inputEmail3" class="col-sm-4 form-control-label" align="right">Email</label>
+				<div class="col-sm-7">
+				  <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+				</div>
+			  </div>
+			  <!-- Password row -->
+			  <div class="form-group row">
+				<label for="inputPassword3" class="col-sm-4 form-control-label" align="right">Password</label>
+				<div class="col-sm-5">
+				  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+				</div>
+			  </div>
+			  <!-- Confirm password row -->
+			  <div class="form-group row">
+				<label for="inputPassword3" class="col-sm-4 form-control-label" align="right">Confirm Password</label>
+				<div class="col-sm-5">
+				  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+				</div>
+			  </div>
+			  <!-- Radio button row. -->
+			  <div class="form-group row">
+				<label class="col-sm-4" align="right">Account Type</label>
+				<div class="col-sm-5">
+				  <div class="radio-inline">
+					<label>
+					  <input type="radio" name="actTypeRadio" id="studentAct" value="studentAct" checked>
+					  Student
+					</label>
+				  </div>
+				  <div class="radio-inline">
+					<label>
+					  <input type="radio" name="actTypeRadio" id="orgAct" value="orgAct">
+					  Organization
+					</label>
+				  </div>
+				</div>
+			  </div>
+			</form>
+			<!-- End of account creation form and second tab -->
+			</div>
+			
+		</div>
+      </div>
+	  
+	  <!-- Modal bottom buttons-->
+      <div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br><br>
+
 </div>
 <footer>
 Matthew Castaldini Hanan Jalnko Kathleen Napier Ian Timmis
