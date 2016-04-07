@@ -12,7 +12,7 @@ header{
   margin-bottom:5em;
 }
 .event{
-  display:none;
+  //display:none;
   float:left;
   margin-left:1.4em;
   margin-top:1.4em;
@@ -124,8 +124,6 @@ article{
   padding:0.5%;  
   width:13%; 
   height:10em; 
- //max-height:10.1em;
- // overflow-y:hidden;
   color:black;
 }
 #tableCalendar td:hover{
