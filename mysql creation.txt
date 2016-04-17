@@ -1,0 +1,37 @@
+CREATE DATABASE LTUBillboard;
+
+USE LTUBillboard;
+
+CREATE TABLE ltuorganization (
+    id INT(6) NOT NULL AUTO_INCREMENT,
+    the_name VARCHAR(30) NOT NULL,
+    description TEXT NOT NULL,
+    website VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE ltuevents (
+    id INT(6) NOT NULL AUTO_INCREMENT, 
+    org_id INT(6) NOT NULL,
+    is_private TINYINT(1) NOT NULL,
+    evt_name VARCHAR(30) NOT NULL,
+    evt_room VARCHAR(30) NOT NULL,
+    evt_category VARCHAR(30) NOT NULL,
+    evt_date VARCHAR(30) NOT NULL,
+    evt_desc TEXT NOT NULL,
+    primary key (id),
+    INDEX (org_id)
+);
+
+CREATE TABLE user_account (
+	id INT(6) NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    org_list TEXT NOT NULL,
+    event_list TEXT NOT NULL,
+    act_username VARCHAR(30) NOT NULL,
+    act_password VARCHAR(30) NOT NULL,
+    is_admin TINYINT(1) NOT NULL,
+    PRIMARY KEY (id)
+);
+    
