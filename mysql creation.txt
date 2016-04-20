@@ -7,6 +7,8 @@ CREATE TABLE ltuorganization (
     the_name VARCHAR(30) NOT NULL,
     description TEXT NOT NULL,
     website VARCHAR(30) NOT NULL,
+	login_username VARCHAR(30) NOT NULL,
+	login_password VARCHAR(30) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -18,6 +20,8 @@ CREATE TABLE ltuevents (
     evt_room VARCHAR(30) NOT NULL,
     evt_category VARCHAR(30) NOT NULL,
     evt_date VARCHAR(30) NOT NULL,
+    evt_start_time VARCHAR(30) NOT NULL,
+    evt_end_time VARCHAR(30) NOT NULL,
     evt_desc TEXT NOT NULL,
     primary key (id),
     INDEX (org_id)

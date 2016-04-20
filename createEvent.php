@@ -53,14 +53,14 @@
 	  </div>
 	  <!-- Event Name -->
 	  <div class="form-group row">
-		<label for="eventName" class="col-sm-1 form-control-label" align="right">Event Name:&nbsp;</label>
+		<label for="evtName" class="col-sm-1 form-control-label" align="right">Event Name:&nbsp;</label>
 		<div class="col-sm-2">
 		  <input type="text" class="form-control" id="evtName" name="evtName" placeholder="Event Name">
 		</div>
 	  </div>
 	  <!-- Room row -->
 	  <div class="form-group row">
-		<label for="buildingRoom" class="col-sm-1 form-control-label" align="right">Building & Room:&nbsp;</label>
+		<label for="evtBuildingRoom" class="col-sm-1 form-control-label" align="right">Building & Room:&nbsp;</label>
 		<div class="col-sm-1">
 		  <input type="text" class="form-control" id="evtBuildingRoom" name="evtBuildingRoom" placeholder="Room">
 		</div>
@@ -77,23 +77,27 @@
 	  </div>
 	  <!-- Date row -->
 	  <div class="form-group row">
-		<label for="date" class="col-sm-1 form-control-label" align="right">Date:&nbsp;</label>
+		<label for="evtDesc" class="col-sm-1 form-control-label" align="right">Date:&nbsp;</label>
 		<div class="col-sm-1">
-		  <input type="date" class="form-control" id="evtDate" name="evtDate">
+		  <input type="date" class="form-control" id="evtDesc" name="evtDate">
 		</div>
 	  </div>
 	  <!-- Time row -->
 	  <div class="form-group row">
-		<label for="time" class="col-sm-1 form-control-label" align="right">Time:&nbsp;</label>
+		<label for="evtStartTime" class="col-sm-1 form-control-label" align="right">Start Time:&nbsp;</label>
 		<div class="col-sm-1">
-		  <input type="time" class="form-control" id="evtTime" name="evtTime">
+		  <input type="time" class="form-control" id="evtStartTime" name="evtStartTime">
+		</div>
+		<label for="evtEndTime" class="col-sm-1 form-control-label" align="right">End Time:&nbsp;</label>
+		<div class="col-sm-1">
+		  <input type="time" class="form-control" id="evtEndTime" name="evtEndTime" min ="0">
 		</div>
 	  </div>
 	  <!-- Description row -->
 	  <div class="form-group row">
-		<label for="desc" class="col-sm-1 form-control-label" align="right">Description:&nbsp;</label>
+		<label for="evtDesc" class="col-sm-1 form-control-label" align="right">Description:&nbsp;</label>
 		<div class="col-sm-3">
-		  <textarea class="form-control" id="desc" name="evtDesc" rows="3" placeholder="Detailed description of event."></textarea>
+		  <textarea class="form-control" id="evtDesc" name="evtDesc" rows="3" placeholder="Detailed description of event."></textarea>
 		</div>
 	  </div>
 	  <!-- hidden value for org id -->

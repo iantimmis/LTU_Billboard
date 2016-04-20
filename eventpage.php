@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT * FROM ltuevents where id=5";
+$sql = "SELECT * FROM ltuevents where id=1";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -102,9 +102,6 @@ $conn->close();
 		color:black;
 	}
   </style>
-  <?php 
-  
-  ?>
 </head>
 
 <body>
@@ -113,7 +110,7 @@ $conn->close();
 </header>
 <div class="main">
 	<h1><div id="anEvent">Distinguished Lecturer</div></h1>
-	<h1><div id="anEvent2"><?php echo $evtInfo['evtName']?></div></h1>
+	<h1><div id="anEvent2"><?php echo $evtInfo['evt_name']?></div></h1>
 
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
   <div class="modal-dialog" role="document">
