@@ -104,7 +104,7 @@
 		<!-- Div for tab content -->
 		<div class="tab-content">
 		<!-- First tab for account creation form -->
-			<div role="tabpanel" class="tab-pane" id="createAccount"><br>
+			<div role="tabpanel" class="tab-pane active" id="createAccount"><br>
 			<!--Form for account creation. Just takes username, password twice, and account type -->
 			<form action = "createAccount.php" method ="post" role="form">
 			  <!-- Radio button row. -->
@@ -158,7 +158,7 @@
 			
 			
 			<!-- Second tab for student log-in form -->
-			<div role="tabpanel" class="tab-pane active" id="loginAsStudent"><br>
+			<div role="tabpanel" class="tab-pane" id="loginAsStudent"><br>
 			<!--Form for logging in. Just takes username, password -->
 			<form action="loginAsStudent.php" method ="post" role="form">
 			  <!-- Username row -->
@@ -186,7 +186,7 @@
 			</div>
 			
 			<!-- Third tab for Organization log-in form -->
-			<div role="tabpanel" class="tab-pane active" id="loginAsOrg"><br>
+			<div role="tabpanel" class="tab-pane" id="loginAsOrg"><br>
 			<!--Form for logging in. Just takes username, password -->
 			<form action="loginAsOrg.php" method ="post" role="form">
 			  <!-- Username row -->
