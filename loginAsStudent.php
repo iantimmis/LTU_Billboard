@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	$username= $_POST["studentUsername"];
 	$password= $_POST["studentPassword"];
 
@@ -17,22 +18,18 @@
 
 	if ($result->num_rows > 0) {
 		// output data of each row
-		$evtInfo=$result->fetch_assoc();
+		$userInfo=$result->fetch_assoc();
 	} else {
 		echo "0 results";
 	}
 	$conn->close();
 	
-	//header("Location: eventpage.php");
+	$_SESSION['userId'] = $userInfo['id'];
+	$_SESSION["firstName"] = $userInfo['first_name'];
+	$_SESSION["lastName"] = $userInfo['last_name'];
+	$_SESSION['orgList'] = $userInfo['org_list'];
+	$_SESSION['eventList'] = $userInfo['event_list'];
+	$_SESSION['isAdmin'] = $userInfo['is_admin'];
+	
+	header("Location: eventpage.php");
 ?>
-<!doctype html>
-<html>
-<head>
-<title>logged in page</title>
-</head>
-<body>
-<pre>
-<?php echo $evtInfo['first_name'] . " " . $evtInfo['last_name']; ?>
-</pre>
-</body>
-</html>

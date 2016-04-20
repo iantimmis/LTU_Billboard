@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "root";
@@ -18,8 +19,19 @@ if ($result->num_rows > 0) {
     // output data of each row
 	$evtInfo=$result->fetch_assoc();
 } else {
-    echo "0 results";
+	echo "0 results";
 }
+if(isset($_SESSION['userId'])){
+	$userInfo['userId'] = $_SESSION['userId'];
+	$userInfo['firstName'] = $_SESSION["firstName"];
+	$userInfo['lastName'] = $_SESSION["lastName"];
+	$userInfo['orgList'] = $_SESSION['orgList'];
+	$userInfo['eventList'] = $_SESSION['eventList'];
+	$userInfo['isAdmin'] = $_SESSION['isAdmin'];
+}else{
+	echo "Failed Log In";
+}
+
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -111,6 +123,7 @@ $conn->close();
 <div class="main">
 	<h1><div id="anEvent">Distinguished Lecturer</div></h1>
 	<h1><div id="anEvent2"><?php echo $evtInfo['evt_name']?></div></h1>
+	<h1><?php echo $userInfo['firstName'];?>
 
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
   <div class="modal-dialog" role="document">
