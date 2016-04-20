@@ -16,12 +16,6 @@
 	<script type="text/javascript" src="bootstrap.min.js"></script>
     <script type="text/javascript">
 		$(function() {
-			$("#loginId").on("click",toggleLoginModal);
-		});
-		function toggleLoginModal(evt){
-			$('#loginModal').modal('toggle');
-		}
-		$(function() {
 			$("#logoutId").on("click",logOutFunction);
 		});
 		function logOutFunction(evt){
@@ -78,7 +72,7 @@
 </head>
 <body>
 <div class="main">
-<button id="loginId" type="button" class="btn btn-default"><br>Log In</button><br /> <br />
+<button id="loginId" type="button" class="btn btn-default" data-toggle="modal" data-target="#loginModal"><br>Log In</button><br /> <br />
 <button id="logoutId" type="button" class="btn btn-default"><br>Log Out</button>
 
 <!-- Modal. #loginModal in function -->
@@ -146,10 +140,11 @@
 				  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Password">
 				</div>
 			  </div>
+			  <hr />
 			  <div class="form-group row">
-				<label for="submit" class="col-sm-1 form-control-label" align="right">&nbsp;</label>
-				<div class="col-sm-1" align="left">
+				<div class="col-sm-12" align="right">
 					<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+					<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 			</form>
@@ -175,10 +170,11 @@
 				  <input type="password" class="form-control" id="studentPassword" name="studentPassword" placeholder="Password">
 				</div>
 			  </div>
+			  <hr />
 			  <div class="form-group row">
-				<label for="submit" class="col-sm-1 form-control-label" align="right">&nbsp;</label>
-				<div class="col-sm-1" align="left">
+				<div class="col-sm-12" align="right">
 					<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+					<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 			</form>
@@ -204,10 +200,11 @@
 				</div>
 			  </div>
 			  <!-- Submit button -->
-			<div class="form-group row">
-				<label for="submit" class="col-sm-1 form-control-label" align="right">&nbsp;</label>
-				<div class="col-sm-1" align="left">
+				<hr />
+			  <div class="form-group row">
+				<div class="col-sm-12" align="right">
 					<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+					<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 			</form>
@@ -219,10 +216,6 @@
 		</div>
       </div>
 	  
-	  <!-- Modal bottom buttons-->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      </div>
     </div>
   </div>
 </div>
