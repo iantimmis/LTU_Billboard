@@ -21,14 +21,19 @@ if ($result->num_rows > 0) {
 } else {
 	echo "0 results";
 }
-if(isset($_SESSION['userId'])){
+if (isset($_SESSION['userId'])){
 	$userInfo['userId'] = $_SESSION['userId'];
 	$userInfo['firstName'] = $_SESSION["firstName"];
 	$userInfo['lastName'] = $_SESSION["lastName"];
 	$userInfo['orgList'] = $_SESSION['orgList'];
 	$userInfo['eventList'] = $_SESSION['eventList'];
 	$userInfo['isAdmin'] = $_SESSION['isAdmin'];
-}else{
+} elseif (isset($_SESSION['orgId'])) {
+	$orgInfo['id'] = $_SESSION['orgId'];
+	$orgInfo['name'] = $_SESSION['orgName'];
+	$orgInfo['desc'] = $_SESSION['orgDesc'];
+	$orgInfo['website'] = $_SESSION['orgWebsite'];
+} else {
 	echo "Failed Log In";
 }
 
@@ -123,7 +128,14 @@ $conn->close();
 <div class="main">
 	<h1><div id="anEvent">Distinguished Lecturer</div></h1>
 	<h1><div id="anEvent2"><?php echo $evtInfo['evt_name']?></div></h1>
-	<h1><?php echo $userInfo['firstName'];?>
+	<h1><?php 
+			if(isset($userInfo)){
+				echo $userInfo['firstName'];
+			}
+			if(isset($orgInfo)){
+				echo $orgInfo['name'];
+			}
+		?></h1>
 
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
   <div class="modal-dialog" role="document">

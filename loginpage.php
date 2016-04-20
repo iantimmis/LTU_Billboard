@@ -1,3 +1,6 @@
+<?php 
+	session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +20,12 @@
 		});
 		function toggleLoginModal(evt){
 			$('#loginModal').modal('toggle');
+		}
+		$(function() {
+			$("#logoutId").on("click",logOutFunction);
+		});
+		function logOutFunction(evt){
+			window.location.href = "logout.php"
 		}
     </script>
   
@@ -69,7 +78,8 @@
 </head>
 <body>
 <div class="main">
-<h1><div id="loginId"><br>Log In</div></h1>
+<button id="loginId" type="button" class="btn btn-default"><br>Log In</button><br /> <br />
+<button id="logoutId" type="button" class="btn btn-default"><br>Log Out</button>
 
 <!-- Modal. #loginModal in function -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal">
@@ -183,14 +193,14 @@
 			  <div class="form-group row">
 				<label for="orgUsername" class="col-sm-4 form-control-label" align="right">Username</label>
 				<div class="col-sm-7">
-				  <input type="text" class="form-control" id="orgUsername" placeholder="Username">
+				  <input type="text" class="form-control" id="orgUsername" name ="orgUsername"placeholder="Username">
 				</div>
 			  </div>
 			  <!-- Password row -->
 			  <div class="form-group row">
 				<label for="orgPassword" class="col-sm-4 form-control-label" align="right">Password</label>
 				<div class="col-sm-5">
-				  <input type="password" class="form-control" id="orgPassword" placeholder="Password">
+				  <input type="password" class="form-control" id="orgPassword" name="orgPassword" placeholder="Password">
 				</div>
 			  </div>
 			  <!-- Submit button -->
@@ -211,7 +221,6 @@
 	  
 	  <!-- Modal bottom buttons-->
       <div class="modal-footer">
-		<button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
     </div>

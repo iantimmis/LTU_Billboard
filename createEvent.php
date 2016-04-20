@@ -1,3 +1,13 @@
+<?php
+	session_start();
+	
+	if(isset($_SESSION['orgId'])){
+		$loggedIn = 1;
+		$orgId = $_SESSION['orgId'];
+	} else{
+		$loggedIn = 0;
+	}
+?>
 <!doctype html>
 <html>
 <head>
@@ -32,6 +42,7 @@
 
     <br />
 	<br />
+	<?php if($loggedIn): ?>
 	<form class="form-horizontal" action="submitEvent.php" method="post" role="form">
 	  <!-- Type Row -->
 	  <div class="form-group row">
@@ -102,7 +113,7 @@
 	  </div>
 	  <!-- hidden value for org id -->
 		<div class="col-sm-1">
-		  <input type="hidden" class="form-control" id="evtOrgId" name="evtOrgId" value="1">
+		  <input type="hidden" class="form-control" id="evtOrgId" name="evtOrgId" value=<?php echo $orgId;?>>
 		</div>
 	  <!-- Submit button -->
 	  <div class="form-group row">
@@ -111,10 +122,10 @@
 		<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
 		</div>
 	  </div>
-		
-	  
 	</form>
-	
+	<?php else: ?>
+	<h1>You are not Logged in</h1>
+	<?php endif ?>
 	
 	<footer>
       Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Tammis
