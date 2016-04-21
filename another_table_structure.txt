@@ -1,0 +1,21 @@
+//Here is the structure for my version of the ltuevents table:
+
+//Collation for database is utf8_unicode_ci
+//Database name: LTUBillboard
+//Table name: ltuevents
+
+Column	  	Type		Extra		Is primary?
+
+evtOrgId	int(11)		AUTO_INCREMENT  Primary Key
+evtPrivate	tinyint(1)	
+evtName		varchar(50)	
+evtBuildingRoom	varchar(50)	
+evtCategory	varchar(50)	
+evtDate		date	
+evtTime		time		
+evtDesc		text		
+evtEndDate	date		
+evtEndTime	time		
+evtURL		varchar(255)	
+
+
