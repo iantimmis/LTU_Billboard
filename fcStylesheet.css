@@ -86,69 +86,25 @@ header a, .subheader a{
   margin:1em auto 0px auto;
   background-color:#0084ff;
   color:white;
-  border-top:1px solid #0084ff;
-}
-#month{
-  clear:both;
-  font-size:5em;
-  text-align:center;
-  margin-bottom:20px;
-}
-#weekHeader{
-  margin:0 auto;
-  width:100%;
-  table-layout:fixed;
-  font-size:1.5em;
-  margin-bottom:0.35em;
-  align:center; 
-}
-#weekHeader th{
- padding:0.5%;  
- width:13%;
-}
-article{
-  width:100%;
-  overflow-x:auto;
-}
-#tableCalendar{
- margin:0 auto;
- width:100%;
- font-size:1.5em
- table-layout:fixed;
- background-color:#004e99;
- overflow-y:hidden;
-}
-#tableCalendar td{
-  background-color:rgba(255, 255, 255, 0.93);
-  vertical-align:top;
-  padding:0.5%;  
-  width:13%; 
-  height:10em; 
-  color:black;
-  //border:5px solid black;
-}
-#tableCalendar td:hover{
-  background-color:#fff; 
+  height:3.5em;
 }
 #dropdown{
-  float:right;
-  margin:2em 0em 2em 0em;
+  float:left;
+  margin:1em 0em 0em 0.5em;
   font-size:1.1em;  
 }
 #dropdown select{
   font-size:0.9em;
 }
-#filter{
-  float:right;
-  margin:1.4em 1.4em 3em 0px;
+#calWrap{
+  clear:both;
+  background-color:#004e99;
+  margin:0;
 }
-#filterbutton{
-  background-color:#003d78;
-  color:white;
-  border:none;
-  align:center;
-  padding:0.2em 0.4em;
-  font-size:1em;
+#calendar{
+  color:black;
+  background-color:rgba(255, 255, 255, 0.93);
+  padding-top:1em;
 }
 #bottomWrapper{
   clear:both;
@@ -162,7 +118,3 @@ footer{
   color:white;
 }
 
-#calendar{
-  clear:both;
-  margin-top:2em;
-}
