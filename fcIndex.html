@@ -21,9 +21,13 @@
           right:"month,basicWeek,basicDay"
         },
         eventLimit:true,
-        now:"2016-03-21T00:00:00",
         eventColor:"#004299",
-        timeFormat:"h:mmt", 
+        timeFormat:"h:mmt",
+        eventSources:[
+          {
+            url:'fcEvents.php',	
+          },
+        ],
         events:[
           {
             title:"Spring 2016 Job Fair",
@@ -100,15 +104,17 @@
       </div>
     </div>
     <div id="calendarWrapper">
-        <div  id="dropdown">
-          Filter By:&nbsp;
-          <select>
-            <option>Architecture + Design</option>
-            <option>Arts + Science</option>
-            <option>Engineering</option>
-            <option>Student Interests</option>
-          </select>
-        </div>
+      <div  id="dropdown">
+        Filter By:&nbsp;
+        <select>
+          <option>Architecture + Design</option>
+          <option>Arts + Science</option>
+          <option>Engineering</option>
+          <option>Student Interests</option>
+        </select>
+      </div>
+    </div>
+    <div id="calWrap">
       <div id='calendar'></div>
     </div>
   </div>
