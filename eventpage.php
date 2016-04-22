@@ -12,15 +12,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT * FROM ltuevents where id=1";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // output data of each row
-	$evtInfo=$result->fetch_assoc();
-} else {
-	echo "0 results";
-}
 if (isset($_SESSION['userId'])){
 	$userInfo['userId'] = $_SESSION['userId'];
 	$userInfo['firstName'] = $_SESSION["firstName"];
@@ -37,8 +28,32 @@ if (isset($_SESSION['userId'])){
 	echo "Failed Log In";
 }
 
+$joinQuery = "SELECT eventId FROM user_event_join where userId=1";
+$joinResult = $conn->query($joinQuery);
+$eventIds = array();
+if ($joinResult->num_rows > 0) {
+	while($joinRow = $joinResult->fetch_assoc()) {
+		array_push($eventIds,$joinRow['eventId']);
+	}
+} else {
+	echo "0 results";
+}
+$eventsInfo = array();
+foreach ($eventIds as $evtId){
+	$evtQuery = "SELECT * FROM ltuevents where eventId={$evtId};";
+	$evtResult = $conn->query($evtQuery);
+	if ($joinResult->num_rows > 0) {
+		while($evtRow = $evtResult->fetch_assoc()) {
+			array_push($eventsInfo,$evtRow);
+		}
+	} else {
+		echo "0 events";
+	}
+}
+$numEvents = count($eventsInfo);
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,7 +142,6 @@ $conn->close();
 </header>
 <div class="main">
 	<h1><div id="anEvent">Distinguished Lecturer</div></h1>
-	<h1><div id="anEvent2"><?php echo $evtInfo['evt_name']?></div></h1>
 	<h1><?php 
 			if(isset($userInfo)){
 				echo $userInfo['firstName'];
@@ -165,25 +179,27 @@ $conn->close();
     </div>
   </div>
 </div>
-
+<?php for ($eventNum = 0; $eventNum<$numEvents;$eventNum++): ?>
+<button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventModal<?php echo $eventNum ?>">
+<?php echo $eventsInfo[$eventNum]['evt_name']?></button><br /><br />
 <!-- Dynamic Modal -->
-<div class="modal fade" id="eventModal2" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel2">
+<div class="modal fade" id="eventModal<?php echo $eventNum ?>" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel<?php echo $eventNum ?>">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h2 class="modal-title" id="eventModalLabel2"><?php echo $evtInfo['evtName']?></h2>
+        <h2 class="modal-title" id="eventModalLabel<?php echo $eventNum ?>"><?php echo $eventsInfo[$eventNum]['evt_name']?></h2>
       </div>
       <div class="modal-body">
-		<?php echo $evtInfo['evtDesc']?>
+		<?php echo $eventsInfo[$eventNum]['evt_desc']?>
 		<table class="info">
 		<tr>
-			<td><?php echo "Date: {$evtInfo['evtDate']} Time: {$evtInfo['evtTime']}"?></td>
-			<td><?php echo "Event Org IdNum: {$evtInfo['evtOrgId']}"?></td>
+			<td><?php echo "Date: {$eventsInfo[$eventNum]['evt_start_date']}<br />Start Time: {$eventsInfo[$eventNum]['evt_start_time']} End Time: {$eventsInfo[$eventNum]['evt_end_time']}"?></td>
+			<td><?php echo "Event Org IdNum: {$eventsInfo[$eventNum]['org_id']}"?></td>
 		</tr>
 		<tr>
-			<td><?php echo "Building/Room: {$evtInfo['evtBuildingRoom']}"?></td>
-			<td><a class="orglink" href="http://bit.ly/1ogtLMJ">Event Page</a></td>
+			<td><?php echo "Building/Room: {$eventsInfo[$eventNum]['evt_room']}"?></td>
+			<td><a class="orglink" href="<?php echo $eventsInfo[$eventNum]['evt_url']?>">Event Page</a></td>
 		</tr>
 		</table>
       </div>
@@ -195,116 +211,7 @@ $conn->close();
     </div>
   </div>
 </div>
-
-<h1><div id="loginId"><br>Log In</div></h1>
-
-<!-- Modal. #loginModal in function -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-	  <!-- Modal header with close button and title-->
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h2 class="modal-title" id="loginModal">Log-In or Create Account</h2>
-      </div>
-	  
-	  <!-- Modal body -->
-      <div class="modal-body">
-	  
-		<!-- Tabs for either log-in or account creation -->
-		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Log-In</a></li>
-			<li role="presentation"><a href="#createAccount" aria-controls="createAccount" role="tab" data-toggle="tab">Create Account</a></li>
-		</ul>
-		
-		<!-- Div for tab content -->
-		<div class="tab-content">
-		
-			<!-- First tab for log-in form -->
-			<div role="tabpanel" class="tab-pane active" id="login"><br>
-			<!--Form for logging in. Just takes username, password -->
-			<form>
-			  <!-- Email row -->
-			  <div class="form-group row">
-				<label for="inputEmail3" class="col-sm-4 form-control-label" align="right">Email</label>
-				<div class="col-sm-7">
-				  <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-				</div>
-			  </div>
-			  <!-- Password row -->
-			  <div class="form-group row">
-				<label for="inputPassword3" class="col-sm-4 form-control-label" align="right">Password</label>
-				<div class="col-sm-5">
-				  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-				</div>
-			  </div>
-			  
-			</form>
-			<!-- End of log-in form and first tab -->
-			</div>
-			
-			<!-- Second tab for account creation form -->
-			<div role="tabpanel" class="tab-pane" id="createAccount"><br>
-			<!--Form for account creation. Just takes username, password twice, and account type -->
-			<form>
-			  <!-- Email row -->
-			  <div class="form-group row">
-				<label for="inputEmail3" class="col-sm-4 form-control-label" align="right">Email</label>
-				<div class="col-sm-7">
-				  <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-				</div>
-			  </div>
-			  <!-- Password row -->
-			  <div class="form-group row">
-				<label for="inputPassword3" class="col-sm-4 form-control-label" align="right">Password</label>
-				<div class="col-sm-5">
-				  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-				</div>
-			  </div>
-			  <!-- Confirm password row -->
-			  <div class="form-group row">
-				<label for="inputPassword3" class="col-sm-4 form-control-label" align="right">Confirm Password</label>
-				<div class="col-sm-5">
-				  <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-				</div>
-			  </div>
-			  <!-- Radio button row. -->
-			  <div class="form-group row">
-				<label class="col-sm-4" align="right">Account Type</label>
-				<div class="col-sm-5">
-				  <div class="radio-inline">
-					<label>
-					  <input type="radio" name="actTypeRadio" id="studentAct" value="studentAct" checked>
-					  Student
-					</label>
-				  </div>
-				  <div class="radio-inline">
-					<label>
-					  <input type="radio" name="actTypeRadio" id="orgAct" value="orgAct">
-					  Organization
-					</label>
-				  </div>
-				</div>
-			  </div>
-			</form>
-			<!-- End of account creation form and second tab -->
-			</div>
-			
-		</div>
-      </div>
-	  
-	  <!-- Modal bottom buttons-->
-      <div class="modal-footer">
-		<button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-<br><br><br>
-
-
-
+<?php endfor ?>
 </div>
 <footer>
 Matthew Castaldini Hanan Jalnko Kathleen Napier Ian Timmis

@@ -72,7 +72,7 @@
 </head>
 <body>
 <div class="main">
-<button id="loginId" type="button" class="btn btn-default" data-toggle="modal" data-target="#loginModal"><br>Log In</button><br /> <br />
+<button type="button" class="btn btn-default" data-toggle="modal" data-target="#loginModal">Log In</button><br /> <br />
 <button id="logoutId" type="button" class="btn btn-default"><br>Log Out</button>
 
 <!-- Modal. #loginModal in function -->
