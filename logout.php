@@ -3,5 +3,5 @@
 	session_unset();
 	session_destroy();
 	
-	header("Location: loginpage.php");
+	header("Location: fcIndex.php");
 ?>

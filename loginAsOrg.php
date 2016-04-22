@@ -29,5 +29,5 @@
 	$_SESSION["orgDesc"] = $userInfo['org_description'];
 	$_SESSION['orgWebsite'] = $userInfo['org_website'];
 	
-	header("Location: eventpage.php");
+	header("Location: fcIndex.php");
 ?>

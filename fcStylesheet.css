@@ -47,6 +47,15 @@ header{
   padding:0.4em 1em;
   font-size:1.1em;
 }
+#logoutButton{
+  margin-bottom:0.6em;
+  background-color:#003d78;
+  color:white;
+  border:none;
+  align:center;
+  padding:0.4em 1em;
+  font-size:1.1em;
+}
 #theWrap{
   clear:both;
   width:80%;
@@ -117,4 +126,3 @@ footer{
   font-size:1.4em;
   color:white;
 }
-

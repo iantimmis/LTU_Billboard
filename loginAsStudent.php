@@ -29,5 +29,5 @@
 	$_SESSION["lastName"] = $userInfo['last_name'];
 	$_SESSION['isAdmin'] = $userInfo['is_admin'];
 	
-	header("Location: eventpage.php");
+	header("Location: fcIndex.php");
 ?>

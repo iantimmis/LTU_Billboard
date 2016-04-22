@@ -12,6 +12,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+//check session to see if logged in and user and get info if true
 $loggedInAsUser = false;
 if (isset($_SESSION['userId'])){
 	$userInfo['userId'] = $_SESSION['userId'];
@@ -78,7 +79,6 @@ if (isset($_SESSION['userId'])){
 	$message = $orgInfo['name'];
 } else {
 	
-	//$joinQuery = "SELECT eventId FROM user_event_join where userId=1;";
 	$message = "No One";
 }
 
