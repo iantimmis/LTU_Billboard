@@ -12,46 +12,77 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+$loggedInAsUser = false;
 if (isset($_SESSION['userId'])){
 	$userInfo['userId'] = $_SESSION['userId'];
 	$userInfo['firstName'] = $_SESSION["firstName"];
 	$userInfo['lastName'] = $_SESSION["lastName"];
-	$userInfo['orgList'] = $_SESSION['orgList'];
-	$userInfo['eventList'] = $_SESSION['eventList'];
 	$userInfo['isAdmin'] = $_SESSION['isAdmin'];
+	$userId = $userInfo['userId'];
+	$joinQuery = "SELECT eventId FROM user_event_join where userId={$userId};";
+	$joinResult = $conn->query($joinQuery);
+	$eventIds = array();
+	if ($joinResult->num_rows > 0) {
+		while($joinRow = $joinResult->fetch_assoc()) {
+			array_push($eventIds,$joinRow['eventId']);
+		}
+	} else {
+		echo "0 results";
+	}
+	$eventsInfo = array();
+	foreach ($eventIds as $evtId){
+		$evtQuery = "SELECT * FROM ltuevents where eventId={$evtId};";
+		$evtResult = $conn->query($evtQuery);
+		if ($evtResult->num_rows > 0) {
+			while($evtRow = $evtResult->fetch_assoc()) {
+				array_push($eventsInfo,$evtRow);
+			}
+		} else {
+			echo "0 events";
+		}
+	}
+	$numEvents = count($eventsInfo);
+	
+	$joinQuery2 = "SELECT orgId FROM user_org_join where userId={$userId};";
+	$joinResult2 = $conn->query($joinQuery2);
+	$orgIds = array();
+	if ($joinResult2->num_rows > 0) {
+		while($joinRow2 = $joinResult2->fetch_assoc()) {
+			array_push($orgIds,$joinRow2['orgId']);
+		}
+	} else {
+		echo "0 results";
+	}
+	$orgsInfo = array();
+	foreach ($orgIds as $orgId){
+		$orgQuery = "SELECT * FROM ltuorganization where orgId={$orgId};";
+		$orgResult = $conn->query($orgQuery);
+		if ($orgResult->num_rows > 0) {
+			while($orgRow = $orgResult->fetch_assoc()) {
+				array_push($orgsInfo,$orgRow);
+			}
+		} else {
+			echo "0 events";
+		}
+	}
+	$numOrgs = count($orgsInfo);
+	
+	$conn->close();
+	$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
+	$loggedInAsUser = true;
 } elseif (isset($_SESSION['orgId'])) {
 	$orgInfo['id'] = $_SESSION['orgId'];
 	$orgInfo['name'] = $_SESSION['orgName'];
 	$orgInfo['desc'] = $_SESSION['orgDesc'];
 	$orgInfo['website'] = $_SESSION['orgWebsite'];
+	$message = $orgInfo['name'];
 } else {
-	echo "Failed Log In";
+	
+	//$joinQuery = "SELECT eventId FROM user_event_join where userId=1;";
+	$message = "No One";
 }
 
-$joinQuery = "SELECT eventId FROM user_event_join where userId=1";
-$joinResult = $conn->query($joinQuery);
-$eventIds = array();
-if ($joinResult->num_rows > 0) {
-	while($joinRow = $joinResult->fetch_assoc()) {
-		array_push($eventIds,$joinRow['eventId']);
-	}
-} else {
-	echo "0 results";
-}
-$eventsInfo = array();
-foreach ($eventIds as $evtId){
-	$evtQuery = "SELECT * FROM ltuevents where eventId={$evtId};";
-	$evtResult = $conn->query($evtQuery);
-	if ($joinResult->num_rows > 0) {
-		while($evtRow = $evtResult->fetch_assoc()) {
-			array_push($eventsInfo,$evtRow);
-		}
-	} else {
-		echo "0 events";
-	}
-}
-$numEvents = count($eventsInfo);
-$conn->close();
+
 ?>
 
 <!DOCTYPE html>
@@ -142,14 +173,7 @@ $conn->close();
 </header>
 <div class="main">
 	<h1><div id="anEvent">Distinguished Lecturer</div></h1>
-	<h1><?php 
-			if(isset($userInfo)){
-				echo $userInfo['firstName'];
-			}
-			if(isset($orgInfo)){
-				echo $orgInfo['name'];
-			}
-		?></h1>
+	<h1><?php echo "Logged in as: {$message}";?></h1>
 
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
   <div class="modal-dialog" role="document">
@@ -179,7 +203,7 @@ $conn->close();
     </div>
   </div>
 </div>
-<?php for ($eventNum = 0; $eventNum<$numEvents;$eventNum++): ?>
+<?php if($loggedInAsUser){for ($eventNum = 0; $eventNum<$numEvents;$eventNum++): ?>
 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventModal<?php echo $eventNum ?>">
 <?php echo $eventsInfo[$eventNum]['evt_name']?></button><br /><br />
 <!-- Dynamic Modal -->
@@ -211,7 +235,36 @@ $conn->close();
     </div>
   </div>
 </div>
-<?php endfor ?>
+<?php endfor;} ?>
+<?php if($loggedInAsUser){for ($orgNum = 0; $orgNum<$numOrgs;$orgNum++): ?>
+<button type="button" class="btn btn-default" data-toggle="modal" data-target="#orgModal<?php echo $orgNum ?>">
+<?php echo $orgsInfo[$orgNum]['org_name']?></button><br /><br />
+<!-- Dynamic Modal -->
+<div class="modal fade" id="orgModal<?php echo $orgNum ?>" tabindex="-1" role="dialog" aria-labelledby="orgModalLabel<?php echo $orgNum ?>">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="orgModalLabel<?php echo $orgNum ?>"><?php echo $orgsInfo[$orgNum]['org_name']?></h2>
+      </div>
+      <div class="modal-body">
+		<?php echo "Description: {$orgsInfo[$orgNum]['org_description']}"?>
+		<table class="info">
+		<tr>
+			<td><?php echo "Name: {$orgsInfo[$orgNum]['org_name']}"?></td>
+			<td><?php echo "Website: {$orgsInfo[$orgNum]['org_website']}"?></td>
+		</tr>
+		</table>
+      </div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-primary" data-dismiss="modal">RSVP</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Add to Calendar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php endfor;} ?>
 </div>
 <footer>
 Matthew Castaldini Hanan Jalnko Kathleen Napier Ian Timmis

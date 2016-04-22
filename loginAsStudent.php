@@ -13,7 +13,7 @@
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	$sql = "SELECT * FROM user_account WHERE act_username='{$username}' AND act_password='{$password}';";
+	$sql = "SELECT * FROM user_account WHERE login_username='{$username}' AND login_password='{$password}';";
 	$result = $conn->query($sql);
 
 	if ($result->num_rows > 0) {
@@ -24,11 +24,9 @@
 	}
 	$conn->close();
 	
-	$_SESSION['userId'] = $userInfo['id'];
+	$_SESSION['userId'] = $userInfo['userId'];
 	$_SESSION["firstName"] = $userInfo['first_name'];
 	$_SESSION["lastName"] = $userInfo['last_name'];
-	$_SESSION['orgList'] = $userInfo['org_list'];
-	$_SESSION['eventList'] = $userInfo['event_list'];
 	$_SESSION['isAdmin'] = $userInfo['is_admin'];
 	
 	header("Location: eventpage.php");

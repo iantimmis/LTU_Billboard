@@ -24,10 +24,10 @@
 	}
 	$conn->close();
 	
-	$_SESSION['orgId'] = $userInfo['id'];
-	$_SESSION["orgName"] = $userInfo['the_name'];
-	$_SESSION["orgDesc"] = $userInfo['description'];
-	$_SESSION['orgWebsite'] = $userInfo['website'];
+	$_SESSION['orgId'] = $userInfo['orgId'];
+	$_SESSION["orgName"] = $userInfo['org_name'];
+	$_SESSION["orgDesc"] = $userInfo['org_description'];
+	$_SESSION['orgWebsite'] = $userInfo['org_website'];
 	
 	header("Location: eventpage.php");
 ?>
