@@ -212,9 +212,9 @@
 									<form action="loginAsStudent.php" method ="post" role="form">
 										<!-- Username row -->
 										<div class="form-group row">
-											<label for="studentUsername" class="col-sm-4 form-control-label" align="right">Username</label>
+											<label for="studentEmail" class="col-sm-4 form-control-label" align="right">Email</label>
 											<div class="col-sm-7">
-												<input type="text" class="form-control" id="studentUsername" name="studentUsername" placeholder="Username" />
+												<input type="email" class="form-control" id="studentEmail" name="studentEmail" placeholder="user@example.com" />
 											</div>
 										</div>
 										<!-- Password row -->
@@ -241,9 +241,9 @@
 									<form action="loginAsOrg.php" method ="post" role="form">
 										<!-- Username row -->
 										<div class="form-group row">
-											<label for="orgUsername" class="col-sm-4 form-control-label" align="right">Username</label>
+											<label for="orgEmail" class="col-sm-4 form-control-label" align="right">Email</label>
 											<div class="col-sm-7">
-												<input type="text" class="form-control" id="orgUsername" name ="orgUsername"placeholder="Username" />
+												<input type="email" class="form-control" id="orgEmail" name ="orgEmail" placeholder="org@example.com" />
 											</div>
 										</div>
 										<!-- Password row -->

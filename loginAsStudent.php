@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$username= $_POST["studentUsername"];
+	$username= $_POST["studentEmail"];
 	$password= $_POST["studentPassword"];
 
 	$servername = "localhost";
@@ -13,7 +13,7 @@
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	$sql = "SELECT * FROM user_account WHERE login_username='{$username}' AND login_password='{$password}';";
+	$sql = "SELECT * FROM user_account WHERE user_email='{$username}' AND login_password='{$password}';";
 	$result = $conn->query($sql);
 
 	if ($result->num_rows > 0) {

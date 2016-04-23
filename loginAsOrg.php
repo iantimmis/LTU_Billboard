@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$username= $_POST["orgUsername"];
+	$username= $_POST["orgEmail"];
 	$password= $_POST["orgPassword"];
 
 	$servername = "localhost";
@@ -13,21 +13,22 @@
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	$sql = "SELECT * FROM ltuorganization WHERE login_username='{$username}' AND login_password='{$password}';";
+	$sql = "SELECT * FROM ltuorganization WHERE org_email='{$username}' AND login_password='{$password}';";
 	$result = $conn->query($sql);
 
 	if ($result->num_rows > 0) {
 		// output data of each row
 		$userInfo=$result->fetch_assoc();
+		
+		$_SESSION['orgId'] = $userInfo['orgId'];
+		$_SESSION["orgName"] = $userInfo['org_name'];
+		$_SESSION["orgDesc"] = $userInfo['org_description'];
+		$_SESSION['orgWebsite'] = $userInfo['org_website'];
 	} else {
 		echo "0 results";
 	}
 	$conn->close();
 	
-	$_SESSION['orgId'] = $userInfo['orgId'];
-	$_SESSION["orgName"] = $userInfo['org_name'];
-	$_SESSION["orgDesc"] = $userInfo['org_description'];
-	$_SESSION['orgWebsite'] = $userInfo['org_website'];
 	
 	header("Location: fcIndex.php");
 ?>
