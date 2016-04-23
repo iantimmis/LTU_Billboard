@@ -9,6 +9,7 @@ CREATE TABLE ltuorganization (
     org_website VARCHAR(50) NOT NULL,
 	login_username VARCHAR(50) NOT NULL,
 	login_password VARCHAR(50) NOT NULL,
+	org_email VARCHAR(255) NOT NULL,
     PRIMARY KEY (orgId)
 );
 
@@ -36,6 +37,7 @@ CREATE TABLE user_account (
     login_username VARCHAR(50) NOT NULL,
     login_password VARCHAR(50) NOT NULL,
     is_admin TINYINT(1) NOT NULL,
+	user_email VARCHAR(255) NOT NULL,
     PRIMARY KEY (userId)
 );
 
