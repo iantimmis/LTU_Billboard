@@ -1,4 +1,5 @@
 <?php
+	$sourcePage = $_POST['submit'];
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
@@ -32,5 +33,5 @@
 		$conn->close();
 	}
 	
-	header("Location: fcIndex.php");
+	header("Location: {$sourcePage}");
 ?>

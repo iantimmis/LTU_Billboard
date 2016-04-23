@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	$sourcePage = $_POST['submit'];
 	$username= $_POST["studentEmail"];
 	$password= $_POST["studentPassword"];
 
@@ -29,5 +30,5 @@
 	$_SESSION["lastName"] = $userInfo['last_name'];
 	$_SESSION['isAdmin'] = $userInfo['is_admin'];
 	
-	header("Location: fcIndex.php");
+	header("Location: {$sourcePage}");
 ?>

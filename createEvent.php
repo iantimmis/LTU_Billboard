@@ -116,7 +116,7 @@
 									<hr />
 									<div class="form-group row">
 										<div class="col-sm-12" align="right">
-											<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+											<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="createEvent.php">Submit</button>
 											<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 										</div>
 									</div>
@@ -146,7 +146,7 @@
 									<hr />
 									<div class="form-group row">
 										<div class="col-sm-12" align="right">
-											<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+											<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="createEvent.php">Submit</button>
 											<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 										</div>
 									</div>
@@ -209,7 +209,7 @@
 										<div class="form-group row">
 											<!-- Submit Row -->
 											<div class="col-sm-12" align="right">
-												<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+												<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="createEvent.php">Submit</button>
 												<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 											</div>
 										</div>
@@ -257,7 +257,7 @@
 										<hr />
 										<div class="form-group row">
 											<div class="col-sm-12" align="right">
-												<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+												<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="createEvent.php">Submit</button>
 												<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 											</div>
 										</div>
@@ -363,7 +363,7 @@
 			<div class="form-group row">
 				<label for="submit" class="col-sm-1 form-control-label" align="right"></label>
 				<div class="col-sm-1" align="left">
-					<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+					<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="createEvent.php">Submit</button>
 				</div>
 			</div>
 		</form>

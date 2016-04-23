@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	$sourcePage = $_POST['submit'];
 	$username= $_POST["orgEmail"];
 	$password= $_POST["orgPassword"];
 
@@ -30,5 +31,5 @@
 	$conn->close();
 	
 	
-	header("Location: fcIndex.php");
+	header("Location: {$sourcePage}");
 ?>

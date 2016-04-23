@@ -166,7 +166,7 @@
 					<hr />
 				  <div class="form-group row">
 					<div class="col-sm-12" align="right">
-						<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+						<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="fcIndex.php">Submit</button>
 						<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
@@ -196,7 +196,7 @@
 					<hr />
 				  <div class="form-group row">
 					<div class="col-sm-12" align="right">
-						<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="submit">Submit</button>
+						<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="fcIndex.php">Submit</button>
 						<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
