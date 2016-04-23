@@ -29,7 +29,7 @@
 <head>
   <title>LTU Billboard</title>
   <link href="fcStylesheet.css" rel="stylesheet" type="text/css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
   <link href="bootstrap.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="jquery-2.2.2.min.js"></script>
@@ -100,7 +100,7 @@
 <body>
   <header>
     <?php if($loggedInAsOrg) echo "<a href='createEvent.php'><button class='event'>Create Event</button></a>";?>
-	<a href="index.html" id=logo>LTU Billboard</a>
+	<a href="fcIndex.php" id=logo>LTU Billboard</a>
     <?php if(!$loggedIn): ?>
     <span class="log-in">
       <button id="loginButton" data-toggle="modal" data-target="#loginModal">Log In</button>

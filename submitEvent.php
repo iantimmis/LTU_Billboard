@@ -1,18 +1,7 @@
 <?php
-	$evtPrivate = $_POST["evtPrivate"];
-	$evtName = $_POST["evtName"];
-	$evtBuildingRoom = $_POST["evtBuildingRoom"];
-	$evtCategory = $_POST["evtCategory"];
-	$evtDate = $_POST["evtDate"];
-	$evtStartTime = $_POST["evtStartTime"];
-	$evtEndTime = $_POST["evtEndTime"];
-	$evtDesc = $_POST["evtDesc"];
-	$evtOrgId = $_POST["evtOrgId"];
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";
-	$evtInfo = array("isPrivate"=>$_POST["evtPrivate"], 'evtName'=>$_POST["evtName"],'evtBuildingRoom'=>$_POST["evtBuildingRoom"],'evtCategory'=>$_POST['evtCategory'],
-					'evtDate'=>$_POST['evtDate'],'evtStart'=>$_POST['evtStartTime'],'evtEnd'=>$_POST['evtEndTime'],'evtDesc'=>$_POST['evtDesc'],'evtOrgId'=>$_POST['evtOrgId']);
 	$dbname = "LTUBillboard";
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -20,8 +9,9 @@
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	$sql = "INSERT INTO LTUEvents (org_id,is_private, evt_name, evt_room,evt_category,evt_date,evt_start_time,evt_end_time,evt_desc)
-			VALUES ({$evtOrgId},{$evtPrivate}, '{$evtName}', '{$evtBuildingRoom}', '{$evtCategory}', '{$evtDate}', '{$evtStartTime}', '{$evtEndTime}', '{$evtDesc}')";
+	$sql = "INSERT INTO LTUEvents (org_id,is_private, evt_name, evt_room, evt_category,evt_start_date,evt_end_date,evt_start_time,evt_end_time,evt_desc,evt_url)
+			VALUES ({$_POST["evtOrgId"]},{$_POST["evtPrivate"]}, '{$_POST["evtName"]}', '{$_POST["evtBuildingRoom"]}', '{$_POST["evtCategory"]}',
+			'{$_POST["evtStartDate"]}','{$_POST["evtEndDate"]}', '{$_POST["evtStartTime"]}', '{$_POST["evtEndTime"]}', '{$_POST["evtDesc"]}','{$_POST["evtUrl"]}')";
  
 	if ($conn->query($sql) === TRUE) {
 		echo "New record created successfully";
@@ -32,18 +22,3 @@
 	
 	header("Location: eventpage.php");
 ?>
-
-<!doctype html>
-<html>
-<head>
-<title>Submit Event</title>
-</head>
-
-<body>
-<pre>
-<?php print_r($_POST);?><br /> <br />
-<?php print_r($evtInfo);?><br /><br />
-<?php echo $dbname;?>
-</pre>
-</body>
-</html>

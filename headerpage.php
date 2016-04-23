@@ -37,7 +37,7 @@
   <header>
   
 	<?php if($loggedInAsOrg) echo "<a href='createEvent.php'><button class='event'>Create Event</button></a>";?>
-	<a href="index.html" id=logo>LTU Billboard</a>
+	<a href="fcIndex.php" id=logo>LTU Billboard</a>
     <?php if(!$loggedIn): ?>
     <span class="log-in">
       <button id="loginButton" data-toggle="modal" data-target="#loginModal">Log In</button>
