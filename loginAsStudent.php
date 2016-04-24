@@ -29,6 +29,6 @@
 	$_SESSION["firstName"] = $userInfo['first_name'];
 	$_SESSION["lastName"] = $userInfo['last_name'];
 	$_SESSION['isAdmin'] = $userInfo['is_admin'];
-	
+	$_SESSION['userEmail'] = $userInfo['user_email'];
 	header("Location: {$sourcePage}");
 ?>

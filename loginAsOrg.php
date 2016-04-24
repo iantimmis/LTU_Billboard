@@ -19,12 +19,13 @@
 
 	if ($result->num_rows > 0) {
 		// output data of each row
-		$userInfo=$result->fetch_assoc();
+		$orgInfo=$result->fetch_assoc();
 		
-		$_SESSION['orgId'] = $userInfo['orgId'];
-		$_SESSION["orgName"] = $userInfo['org_name'];
-		$_SESSION["orgDesc"] = $userInfo['org_description'];
-		$_SESSION['orgWebsite'] = $userInfo['org_website'];
+		$_SESSION['orgId'] = $orgInfo['orgId'];
+		$_SESSION["orgName"] = $orgInfo['org_name'];
+		$_SESSION["orgDesc"] = $orgInfo['org_description'];
+		$_SESSION['orgWebsite'] = $orgInfo['org_website'];
+		$_SESSION['orgEmail'] = $orgInfo['org_email'];
 	} else {
 		echo "0 results";
 	}
