@@ -1,39 +1,4 @@
-<?php
-	session_start();
-
-	//check session to see if logged in and user and get info if true
-	$loggedInAsUser = false;
-	$loggedInAsOrg = false;
-	if (isset($_SESSION['userId'])){
-		$userInfo['userId'] = $_SESSION['userId'];
-		$userInfo['firstName'] = $_SESSION["firstName"];
-		$userInfo['lastName'] = $_SESSION["lastName"];
-		$userInfo['isAdmin'] = $_SESSION['isAdmin'];
-		$userId = $userInfo['userId'];
-		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
-		$loggedInAsUser = true;
-	} elseif (isset($_SESSION['orgId'])) {
-		$orgInfo['id'] = $_SESSION['orgId'];
-		$orgInfo['name'] = $_SESSION['orgName'];
-		$orgInfo['desc'] = $_SESSION['orgDesc'];
-		$orgInfo['website'] = $_SESSION['orgWebsite'];
-		$loggedInAsOrg = true;
-		$message = $orgInfo['name'];
-	} else {
-		$message = "No One";
-	}
-	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
-	$thisPage="headerpage.php";
-?>
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<link href="stylesheet.css" rel="stylesheet" type="text/css" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link href="bootstrap.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="jquery-2.2.2.min.js"></script>
-		<script type="text/javascript" src="bootstrap.min.js"></script>
-		<script type="text/javascript">
+<script type="text/javascript">
 			$(document).ready(function() {
 				$("#orgAct").hide();
 				$("input[name=actType]").on( "change", function() {
@@ -274,5 +239,3 @@
 			</div>
 		</div>
 		<?php endif ?>
-	</body>
-</html>
