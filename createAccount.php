@@ -1,5 +1,5 @@
 <?php
-	$sourcePage = $_POST['submit'];
+	$sourcePage = $_POST['source'];
 	$servername = "localhost";
 	$username = "root";
 	$password = "root";

@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$sourcePage = $_POST['submit'];
+	$sourcePage = $_POST['source'];
 	$username= $_POST["orgEmail"];
 	$password= $_POST["orgPassword"];
 
