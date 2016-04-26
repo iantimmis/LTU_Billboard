@@ -37,6 +37,7 @@
   <script src='jquery.min.js'></script>
   <script src='moment.min.js'></script>
   <script src='fullcalendar.js'></script>
+  <script type="text/javascript" src="bootstrap.min.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
