@@ -33,14 +33,25 @@
   
   <link href="bootstrap.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="jquery-2.2.2.min.js"></script>
-	<script type="text/javascript" src="bootstrap.min.js"></script>
   <link rel='stylesheet' href='fullcalendar.css' />
   <script src='jquery.min.js'></script>
   <script src='moment.min.js'></script>
   <script src='fullcalendar.js'></script>
+
   <script type="text/javascript">
     $(document).ready(function() {
       $('#calendar').fullCalendar({
+        eventClick:  function(event, jsEvent, view) {
+			
+            $('#eventModalLabel').html(event.title);
+            $('#modalDesc').html(event.desc);
+			$('#modalDateTime').html(event.end);
+			$('#modalOrgNum').html(event.org_id);
+			$('#modalRoom').html(event.room)
+            $('#modalEvtLink').attr('href',event.link);
+            $('#eventModal').modal();
+			return false;
+        },
         header:{
           left: "prev,next today",
           center:"title",
@@ -85,26 +96,21 @@
           {
             title:"Semi-Annual Code Challenge",
             start:"2016-04-03T08:30:00"
-          },         
-       ],
-       eventClick:function(event){
-         if(event.url){
-           window.open(event.url, "_blank", "scrollbars=yes,resizable=yes,width=600,height=600,top=50,left=50");
-           return false;
-         }
-       }
+          }         
+       ]
       })
 	  
-		$("#orgAct").hide();
-		$("input[name=actType]").on( "change", function() {
-			var target = $(this).val();
-			$(".chooseActType").hide();
-			$("#"+target).show();
-		});
-    });
+	  $("#orgAct").hide();
+				$("input[name=actType]").on( "change", function() {
+					var target = $(this).val();
+					$(".chooseActType").hide();
+					$("#"+target).show();
+				});
+    }
+	);
   </script>	
-</head>
-<body>
+	</head>
+	<body>
 <?php require 'requiredHeader.php';?>
   <div id="theWrap">
     <div id="topWrap">
@@ -140,6 +146,33 @@
       <div id='calendar'></div>
     </div>
   </div>
+	<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h2 class="modal-title" id="eventModalLabel"></h2>
+		  </div>
+		  <div class="modal-body">
+			<div id="modalDesc" align="center"></div>
+			<table class="info">
+			<tr>
+				<td>Start Time: <span id="modalDateTime"></span></td>
+				<td>Org Number: <span id="modalOrgNum"></span></td>
+			</tr>
+			<tr>
+				<td>Room: <span id="modalRoom"></span></td>
+				<td>Link: <a class="orglink" id="modalEvtLink" target="_blank">link</a></td>
+			</tr>
+			</table>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Add to Calendar</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>	
   <div id="bottomWrapper">
     <footer>
       Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Tammis
