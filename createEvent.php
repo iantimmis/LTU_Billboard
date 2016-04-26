@@ -44,6 +44,8 @@
 			text-align: center;
 		}
 		</style>
+		</head>
+		<body>
 	<?php require 'requiredHeader.php'?>
 
 		<br />

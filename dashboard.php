@@ -178,7 +178,10 @@ $loggedIn = $loggedInAsOrg || $loggedInAsUser
 			left: 100px;
 		}
 		</style>
+		</head>
+		<body>
 		<?php require 'requiredHeader.php'?>
+		<?php if($loggedInAsUser == true): ?>
 		<div class="userInformation">
 		<form>
 		<?php echo "Hello, {$userInfo['firstName']} {$userInfo['lastName']}, below are the events you've added to your calendar and organizations you've subscribed to."?>
@@ -202,6 +205,7 @@ $loggedIn = $loggedInAsOrg || $loggedInAsUser
 			</p>
 			<?php endfor;?>
 		</div>
+		<?php endif;?>
 		<footer>
 			Matthew Castaldini Hanan Jalnko Kathleen Napier Ian Timmis
 		</footer>

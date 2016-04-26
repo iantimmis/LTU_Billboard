@@ -1,5 +1,6 @@
 <?php 
 	session_start();
+	$thisPage = "loginpage.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,10 +22,6 @@
 				$(".chooseActType").hide();
 				$("#"+target).show();
 				});
-			});
-			$(function() {
-				$("#logoutId").on("click",function(){
-					window.location.href = "logout.php"});
 			});
 		</script>
 		<style type="text/css">
@@ -70,7 +67,9 @@
 	<body>
 		<div class="main">
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#loginModal">Log In</button><br /> <br />
-			<button id="logoutId" type="button" class="btn btn-default">Log Out</button>
+			<form action="logout.php" method="post" role="form">
+					<button id="logoutButton" type="submit" name="source" value="<?php echo $thisPage;?>">Log Out</button>
+				</form>
 
 			<!-- Modal. #loginModal in function -->
 			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal">
@@ -149,7 +148,7 @@
 											<div class="form-group row">
 												<!-- Submit Row -->
 												<div class="col-sm-12" align="right">
-													<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="loginpage.php">Submit</button>
+													<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="loginpage.php">Submit</button>
 													<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 												</div>
 											</div>
@@ -197,7 +196,7 @@
 											<hr />
 											<div class="form-group row">
 												<div class="col-sm-12" align="right">
-													<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="loginpage.php">Submit</button>
+													<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="loginpage.php">Submit</button>
 													<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 												</div>
 											</div>
@@ -227,7 +226,7 @@
 										<hr />
 										<div class="form-group row">
 											<div class="col-sm-12" align="right">
-												<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="loginpage.php">Submit</button>
+												<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="loginpage.php">Submit</button>
 												<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 											</div>
 										</div>
@@ -257,7 +256,7 @@
 										<hr />
 										<div class="form-group row">
 											<div class="col-sm-12" align="right">
-												<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="loginpage.php">Submit</button>
+												<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="loginpage.php">Submit</button>
 												<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 											</div>
 										</div>

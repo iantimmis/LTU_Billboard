@@ -20,10 +20,10 @@
         $jsonArray=array();
         while($row=$result->fetch_assoc())
         {
-  	    $start=$row['evt_start_date'] . "T" . $row['evt_start_time'];
-            $end=$row['evt_end_date'] . "T" . $row['evt_end_time'];
-            $subArray=array("id" => $row['org_id'], "title" => $row['evt_name'], 
-                "start" => $start, "end" => $end, "url" => $row['evt_url']);
+			$start=$row['evt_start_date'] . "T" . $row['evt_start_time'];
+			$end=$row['evt_end_date'] . "T" . $row['evt_end_time'];
+            $subArray=array("id"=>$row['eventId'], "org_id" => $row['org_id'], "title" => $row['evt_name'], 
+                "desc"=>$row['evt_desc'], "room"=>$row['evt_room'],"start" => $start, "end" => $end, "link" => $row['evt_url']);
 	    $jsonArray[]=$subArray;
         }
         echo json_encode($jsonArray);

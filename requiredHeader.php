@@ -1,15 +1,3 @@
-<script type="text/javascript">
-			$(document).ready(function() {
-				$("#orgAct").hide();
-				$("input[name=actType]").on( "change", function() {
-					var target = $(this).val();
-					$(".chooseActType").hide();
-					$("#"+target).show();
-				});
-			});
-		</script>
-	</head>
-	<body>
 		<header>
 			<?php if($loggedInAsOrg) echo "<a href='createEvent.php'><button class='event'>Create Event</button></a>";?>
 			<a href="fcIndex.php" id=logo>LTU Billboard</a>
