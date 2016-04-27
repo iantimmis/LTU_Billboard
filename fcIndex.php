@@ -35,81 +35,91 @@
 	<script type="text/javascript" src="jquery-2.2.2.min.js"></script>
   <link rel='stylesheet' href='fullcalendar.css' />
   <script src='jquery.min.js'></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
   <script src='moment.min.js'></script>
   <script src='fullcalendar.js'></script>
   <script type="text/javascript" src="bootstrap.min.js"></script>
 
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('#calendar').fullCalendar({
-        eventClick:  function(event, jsEvent, view) {
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#calendar').fullCalendar({
+				eventClick:  function(event, jsEvent, view) {
+					
+					$('#eventModalLabel').html(event.title);
+					$('#modalDesc').html(event.desc);
+					$('#modalDateTime').html(event.end);
+					$('#modalOrgNum').html(event.org_id);
+					$('#modalRoom').html(event.room)
+					$('#modalEvtLink').attr('href',event.link);
+					$('#eventModal').modal();
+					return false;
+				},
+				header:{
+				  left: "prev,next today",
+				  center:"title",
+				  right:"month,basicWeek,basicDay"
+				},
+				eventLimit:true,
+				eventColor:"#004299",
+				timeFormat:"h:mmt",
+				eventSources:[
+				  {
+					url:'fcEvents.php',	
+				  },
+				],
+				events:[
+				  {
+					title:"Spring 2016 Job Fair",
+					start:"2016-03-01T09:00:00",
+					end:"2016-03-01T16:00:00",
+					className:"fair"
+				  },
+				  {
+					title:"Career Center Management Webinar",
+					start:"2016-03-01T18:00:00",
+					end:"2016-03-01T20:00:00"
+				  },
+				  {
+					title:"Distinguished Lecturer",
+					start:"2016-03-24T18:00:00",
+					end:"2016-03-24T20:00:00",
+					url:"eventpage.html"
+				  },
+				  {
+					title:"Computer Science Seminar: Android Auto",
+					start:"2016-03-30T12:30:00",
+					end:"2016-03-30T13:30:00",
+					url:"eventpage.html"
+				  },
+				  {
+					title:"Blue and White Days",
+					start:"2016-04-01"
+				  },
+				  {
+					title:"Semi-Annual Code Challenge",
+					start:"2016-04-03T08:30:00"
+				  }         
+			   ]
+			})
+			  
+			$("#orgAct").hide();
+			$("input[name=actType]").on( "change", function() {
+				var target = $(this).val();
+				$(".chooseActType").hide();
+				$("#"+target).show();
+			});
 			
-            $('#eventModalLabel').html(event.title);
-            $('#modalDesc').html(event.desc);
-			$('#modalDateTime').html(event.end);
-			$('#modalOrgNum').html(event.org_id);
-			$('#modalRoom').html(event.room)
-            $('#modalEvtLink').attr('href',event.link);
-            $('#eventModal').modal();
-			return false;
-        },
-        header:{
-          left: "prev,next today",
-          center:"title",
-          right:"month,basicWeek,basicDay"
-        },
-        eventLimit:true,
-        eventColor:"#004299",
-        timeFormat:"h:mmt",
-        eventSources:[
-          {
-            url:'fcEvents.php',	
-          },
-        ],
-        events:[
-          {
-            title:"Spring 2016 Job Fair",
-            start:"2016-03-01T09:00:00",
-            end:"2016-03-01T16:00:00",
-            className:"fair"
-          },
-          {
-            title:"Career Center Management Webinar",
-            start:"2016-03-01T18:00:00",
-            end:"2016-03-01T20:00:00"
-          },
-          {
-            title:"Distinguished Lecturer",
-            start:"2016-03-24T18:00:00",
-            end:"2016-03-24T20:00:00",
-            url:"eventpage.html"
-          },
-          {
-            title:"Computer Science Seminar: Android Auto",
-            start:"2016-03-30T12:30:00",
-            end:"2016-03-30T13:30:00",
-            url:"eventpage.html"
-          },
-          {
-            title:"Blue and White Days",
-            start:"2016-04-01"
-          },
-          {
-            title:"Semi-Annual Code Challenge",
-            start:"2016-04-03T08:30:00"
-          }         
-       ]
-      })
-	  
-	  $("#orgAct").hide();
-				$("input[name=actType]").on( "change", function() {
-					var target = $(this).val();
-					$(".chooseActType").hide();
-					$("#"+target).show();
-				});
-    }
-	);
-  </script>	
+			$('#createStuAct').validate({
+				"rules" : {
+					"stuPassword" : {
+						"minlength" : 8,
+						"required" : true },
+					"confirmStuPassword" : {
+						"equalTo" : "#stuPassword"}
+				}
+			});
+		});//end of doc.ready
+	</script>	
 	</head>
 	<body>
 <?php require 'requiredHeader.php';?>
