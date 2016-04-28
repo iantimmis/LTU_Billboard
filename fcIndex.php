@@ -23,6 +23,11 @@
 		$message = "No One";
 	}
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
+	require_once '/Mobile-Detect-Folder/mobile_detect.php';//required file for checking for mobile
+	$detect = new Mobile_Detect;//variable for mobile detection
+	if($detect->isMobile()){}//if mobile
+	if($detect->isTablet()){}//if tablet
+	//http://mobiledetect.net/
 ?>
 <!DOCTYPE html>
 <html>
