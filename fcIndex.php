@@ -27,18 +27,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>LTU Billboard</title>
-  <link href="fcStylesheet.css" rel="stylesheet" type="text/css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
-  <link href="bootstrap.css" rel="stylesheet" type="text/css">
+	<title>LTU Billboard</title>
+	<link href="fcStylesheet.css" rel="stylesheet" type="text/css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	
+	<link href="bootstrap.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="jquery-2.2.2.min.js"></script>
-  <link rel='stylesheet' href='fullcalendar.css' />
-  <script src='jquery.min.js'></script>
+	<link rel='stylesheet' href='fullcalendar.css' />
+	<script src='jquery.min.js'></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
-  <script src='moment.min.js'></script>
-  <script src='fullcalendar.js'></script>
-  <script type="text/javascript" src="bootstrap.min.js"></script>
+	<script src='moment.min.js'></script>
+	<script src='fullcalendar.js'></script>
+	<script type="text/javascript" src="bootstrap.min.js"></script>
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -47,8 +47,10 @@
 					
 					$('#eventModalLabel').html(event.title);
 					$('#modalDesc').html(event.desc);
-					$('#modalDateTime').html(event.end);
-					$('#modalOrgNum').html(event.org_id);
+					$('#modalDate').html(event.date);
+					$('#modalStartTime').html(event.start_time);
+					$('#modalEndtime').html(event.end_time);
+					$('#modalOrgName').html(event.org_name);
 					$('#modalRoom').html(event.room)
 					$('#modalEvtLink').attr('href',event.link);
 					$('#eventModal').modal();
@@ -112,8 +114,7 @@
 			$('#createStuAct').validate({
 				"rules" : {
 					"stuPassword" : {
-						"minlength" : 8,
-						"required" : true },
+						"minlength" : 8},
 					"confirmStuPassword" : {
 						"equalTo" : "#stuPassword"}
 				}
@@ -166,16 +167,16 @@
 		  </div>
 		  <div class="modal-body">
 			<div id="modalDesc" align="center"></div>
-			<table class="info">
-			<tr>
-				<td>Start Time: <span id="modalDateTime"></span></td>
-				<td>Org Number: <span id="modalOrgNum"></span></td>
-			</tr>
-			<tr>
-				<td>Room: <span id="modalRoom"></span></td>
-				<td>Link: <a class="orglink" id="modalEvtLink" target="_blank">link</a></td>
-			</tr>
-			</table>
+			<br />
+			<div class="row">
+				<div class="col-sm-6" align="center"><span id="modalDate"></span><br /><span id="modalStartTime"></span> to <span id="modalEndtime"></span></div>
+				<div class="col-sm-6" align="center">Organization: <span id="modalOrgName"></span></div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-sm-6" align="center">Room: <span id="modalRoom"></span></div>
+				<div class="col-sm-6" align="center">Link: <a class="orglink" id="modalEvtLink" target="_blank">link</a></div>
+			</div>
 		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-primary" data-dismiss="modal">Add to Calendar</button>
@@ -186,7 +187,7 @@
 	</div>	
   <div id="bottomWrapper">
     <footer>
-      Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Tammis
+      Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Timmis
     </footer>
   </div>
 </body>

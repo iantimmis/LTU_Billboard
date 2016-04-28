@@ -101,9 +101,11 @@ header a, .subheader a{
   float:left;
   margin:1em 0em 0em 0.5em;
   font-size:1.1em;  
+  color:white;
 }
 #dropdown select{
   font-size:0.9em;
+  color:black;
 }
 #calWrap{
   clear:both;

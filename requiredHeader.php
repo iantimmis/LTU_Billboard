@@ -9,6 +9,7 @@
 			<?php else: ?>
 			<span class="log-in">
 				<form action="logout.php" method="post" role="form">
+					<div class="loggedInText" align="right">Logged in as:<br /> <?php echo ($loggedInAsOrg ? $orgInfo['name'] : $userInfo['firstName']);?></div>
 					<button id="logoutButton" type="submit" name="source" value="<?php echo $thisPage;?>">Log Out</button>
 				</form>
 			</span>
