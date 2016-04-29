@@ -25,6 +25,7 @@
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
 	require_once 'mobile_detect.php';//required file for checking for mobile
 	$detect = new Mobile_Detect;//variable for mobile detection
+	$isMobile = $detect->isMobile();
 	if($detect->isMobile()){echo "ismobile";}//if mobile
 	if($detect->isTablet()){}//if tablet
 	//http://mobiledetect.net/
@@ -158,20 +159,36 @@
     </div>
     <div id="calendarWrapper">
       <form method="get" action="changeFilter.php" id="dropdown">
-        Filter By:&nbsp;
+        Event Filter:&nbsp;
         <select id="selectId" name="filter">
-			<option value="none" <?php if($filterSet){if(strcmp($filter,'none')==0){echo "selected";}}?> >Show All</option>
-			<option value="arch" <?php if($filterSet){if(strcmp($filter,'arch')==0){echo "selected";}}?> >Architecture + Design</option>
-			<option value="arts" <?php if($filterSet){if(strcmp($filter,'arts')==0){echo "selected";}}?> >Arts + Science</option>
+			<option value="non" <?php if($filterSet){if(strcmp($filter,'non')==0){echo "selected";}}?> >Show All</option>
+			<option value="arc" <?php if($filterSet){if(strcmp($filter,'arc')==0){echo "selected";}}?> >Architecture + Design</option>
+			<option value="mcs" <?php if($filterSet){if(strcmp($filter,'mcs')==0){echo "selected";}}?> >Arts + Science</option>
 			<option value="eng" <?php if($filterSet){if(strcmp($filter,'eng')==0){echo "selected";}}?> >Engineering</option>
-			<option value="stud" <?php if($filterSet){if(strcmp($filter,'stud')==0){echo "selected";}}?> >Student Interests</option>
+			<option value="stu" <?php if($filterSet){if(strcmp($filter,'stu')==0){echo "selected";}}?> >Student Interests</option>
 			<?php if($loggedInAsUser){
 					if($filterSet){
 						if(strcmp($filter,'mine')==0)
-							{echo "<option value='mine' selected> I've signed up for</option>";}
-						else{ echo "<option value='mine'> I've signed up for</option>";}
+						{
+							echo "<option value='org'>My Organizations</option>";
+							echo "<option value='mine' selected>Added to Calendar</option>";
+						}
+						elseif(strcmp($filter,'org')==0)
+						{
+							echo "<option value='org' selected>My Organizations</option>";
+							echo "<option value='mine'>Added to Calendar</option>";
+						}
+						else
+						{ 
+							echo "<option value='org'>My Organizations</option>";
+							echo "<option value='mine'>Added to Calendar</option>";
+						}
 					}
-					else{ echo "<option value='mine'> I've signed up for</option>";}
+					else
+					{
+						echo "<option value='org'>My Organizations</option>";
+						echo "<option value='mine'>Added to Calendar</option>";
+					}
 				}?>
         </select>
       </form>
