@@ -23,11 +23,15 @@
 		$message = "No One";
 	}
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
-	require_once '/Mobile-Detect-Folder/mobile_detect.php';//required file for checking for mobile
+	require_once 'mobile_detect.php';//required file for checking for mobile
 	$detect = new Mobile_Detect;//variable for mobile detection
-	if($detect->isMobile()){}//if mobile
+	if($detect->isMobile()){echo "ismobile";}//if mobile
 	if($detect->isTablet()){}//if tablet
 	//http://mobiledetect.net/
+	$filterSet= isset($_SESSION['filter']);
+	if($filterSet)
+		$filter = $_SESSION['filter'];
+	
 ?>
 <!DOCTYPE html>
 <html>
@@ -108,7 +112,8 @@
 				  }         
 			   ]
 			})
-			  
+			
+			
 			$("#orgAct").hide();
 			$("input[name=actType]").on( "change", function() {
 				var target = $(this).val();
@@ -116,13 +121,17 @@
 				$("#"+target).show();
 			});
 			
-			$('#createStuAct').validate({
+			$("#createStuAct").validate({
 				"rules" : {
 					"stuPassword" : {
 						"minlength" : 8},
 					"confirmStuPassword" : {
 						"equalTo" : "#stuPassword"}
 				}
+			});
+			
+			$("#selectId").on("change", function(){
+				$("#dropdown").submit();
 			});
 		});//end of doc.ready
 	</script>	
@@ -149,15 +158,23 @@
       </div>
     </div>
     <div id="calendarWrapper">
-      <div  id="dropdown">
+      <form method="get" action="changeFilter.php" id="dropdown">
         Filter By:&nbsp;
-        <select>
-          <option>Architecture + Design</option>
-          <option>Arts + Science</option>
-          <option>Engineering</option>
-          <option>Student Interests</option>
+        <select id="selectId" name="filter">
+			<option value="none" <?php if($filterSet){if(strcmp($filter,'none')==0){echo "selected";}}?> >Show All</option>
+			<option value="arch" <?php if($filterSet){if(strcmp($filter,'arch')==0){echo "selected";}}?> >Architecture + Design</option>
+			<option value="arts" <?php if($filterSet){if(strcmp($filter,'arts')==0){echo "selected";}}?> >Arts + Science</option>
+			<option value="eng" <?php if($filterSet){if(strcmp($filter,'eng')==0){echo "selected";}}?> >Engineering</option>
+			<option value="stud" <?php if($filterSet){if(strcmp($filter,'stud')==0){echo "selected";}}?> >Student Interests</option>
+			<?php if($loggedInAsUser){
+				if($filterSet){
+					if(strcmp($filter,'mine')==0)
+						{echo "<option value='mine' selected> I've signed up for</option>";}
+					}
+				else{ echo "<option value='mine'> I've signed up for</option>";}
+				}?>
         </select>
-      </div>
+      </form>
     </div>
     <div id="calWrap">
       <div id='calendar'></div>
