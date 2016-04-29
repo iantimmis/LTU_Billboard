@@ -169,6 +169,7 @@
 					if($filterSet){
 						if(strcmp($filter,'mine')==0)
 							{echo "<option value='mine' selected> I've signed up for</option>";}
+						else{ echo "<option value='mine'> I've signed up for</option>";}
 					}
 					else{ echo "<option value='mine'> I've signed up for</option>";}
 				}?>
