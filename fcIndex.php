@@ -31,7 +31,6 @@
 	$filterSet= isset($_SESSION['filter']);
 	if($filterSet)
 		$filter = $_SESSION['filter'];
-	
 ?>
 <!DOCTYPE html>
 <html>
@@ -167,11 +166,11 @@
 			<option value="eng" <?php if($filterSet){if(strcmp($filter,'eng')==0){echo "selected";}}?> >Engineering</option>
 			<option value="stud" <?php if($filterSet){if(strcmp($filter,'stud')==0){echo "selected";}}?> >Student Interests</option>
 			<?php if($loggedInAsUser){
-				if($filterSet){
-					if(strcmp($filter,'mine')==0)
-						{echo "<option value='mine' selected> I've signed up for</option>";}
+					if($filterSet){
+						if(strcmp($filter,'mine')==0)
+							{echo "<option value='mine' selected> I've signed up for</option>";}
 					}
-				else{ echo "<option value='mine'> I've signed up for</option>";}
+					else{ echo "<option value='mine'> I've signed up for</option>";}
 				}?>
         </select>
       </form>
