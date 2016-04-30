@@ -5,6 +5,7 @@
 			<span class="log-in">
 				<button id="loginButton" data-toggle="modal" data-target="#loginModal">Log In</button>
 				<br />
+				<a id="createAccountLink">or create an account</a>
 			</span>
 			<?php else: ?>
 			<span class="log-in">
@@ -34,7 +35,7 @@
 					<div class="modal-body">
 
 						<!-- Tabs for either log-in or account creation -->
-						<ul class="nav nav-tabs" role="tablist">
+						<ul id="loginTabs" class="nav nav-tabs" role="tablist">
 							<li role="presentation" class="active"><a href="#loginAsStudent" aria-controls="loginAsStudent" role="tab" data-toggle="tab">Log-In As Student</a></li>
 							<li role="presentation"><a href="#loginAsOrg" aria-controls="loginAsOrg" role="tab" data-toggle="tab">Log-In As Organization</a></li>
 							<li role="presentation"><a href="#createAccount" aria-controls="createAccount" role="tab" data-toggle="tab">Create Account</a></li>

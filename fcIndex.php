@@ -111,9 +111,9 @@
 					start:"2016-04-03T08:30:00"
 				  }         
 			   ]
-			})
+			})//end of full calendar
 			
-			
+			//used for create account panel radio buttons
 			$("#orgAct").hide();
 			$("input[name=actType]").on( "change", function() {
 				var target = $(this).val();
@@ -121,6 +121,7 @@
 				$("#"+target).show();
 			});
 			
+			//validation for student account creation
 			$("#createStuAct").validate({
 				"rules" : {
 					"stuPassword" : {
@@ -130,8 +131,14 @@
 				}
 			});
 			
-			$("#selectId").on("change", function(){
+			//used for the calendar filter
+			$("#selectId").on( "change", function(){
 				$("#dropdown").submit();
+			});
+			
+			$("#createAccountLink").on("click", function(){
+				$('#loginModal').modal('show');
+				$('#loginTabs a:last').tab('show');
 			});
 		});//end of doc.ready
 	</script>	

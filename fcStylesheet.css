@@ -78,6 +78,9 @@ header{
 header a, .subheader a{
  color:white;
 }
+#createAccountLink{
+	color:black;
+}
 .subTitle{
   font-size:1.6em; 
   font-weight:bold;
