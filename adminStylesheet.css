@@ -1,0 +1,104 @@
+#mainWrap{
+  clear:both;
+  max-width:70%;
+  margin:0px auto 37em auto;
+  padding:0;
+}
+#title{
+  font-size:3em;
+  color:#e6f6ff;
+  margin:0 0 1.5em 0;
+}
+#requests{
+  float:left;
+  width:70%;
+  padding:0;
+  margin:0;
+}
+#sideBar{
+  margin-left:70%;
+  background-color:white;
+  padding:1em 1.5em 1em 1.5em;
+  color:#0084ff;
+  height:25em;
+  max-height:25em;
+}
+#requestHeader{
+   background-color:#004299;
+   padding: 1em 0 0 0; //2.5 from top
+}
+.requestType, .sort, .navButton, .choose{
+  margin:0;
+  background-color:white;
+  color:#003d78;
+  border:none;
+  align:center;
+  padding:0.1em 0.4em;
+  font-size:1em;
+}
+#navbar{
+  background-color:#004299;
+  padding: 0.3em;
+}
+#prev{
+  float:left;
+  margin:0 10% 0 37%;
+}
+#next{
+  float:right
+  margin:0;
+}
+a{
+  color:#0084ff;
+  text-decoration:none;
+}
+#requestTable{
+  height:35em; /*39.3*/
+  max-height:35em;
+  overflow-y:auto;
+  overflow-x:auto;
+  clear:both;
+  background-color:#f3f7ff;
+}
+.link, li{
+  line-height:1.4em;
+}
+#decision{
+  color:white;
+  float:right;
+  margin-right:0.2em;
+}
+#sortType{
+  color:white;
+}
+#type{
+  //clear:both;
+  color:white;
+  font-size:1.5em;
+  //margin-top:3em;
+  //margin-bottom:0.2em;
+}
+#type{
+  clear:both;
+  margin-top:3em;
+}
+#sorting{
+  margin-bottom:3em;
+  margin-left:0.2em;
+}
+#eventReq, #sortRecent{
+  background-color:#3385ff;
+  color:white;
+}
+#orgReq, #sortDate{
+  background-color:rgba(255, 255, 255, .3);
+}
+.requestType{
+  font-size:1.2em;
+}
+#checkText{
+  float:right;
+  margin-right:0.5em;
+  color:white;
+  font-size:0.9em;
+}
