@@ -9,6 +9,7 @@ CREATE TABLE ltuorganization (
     org_website VARCHAR(50) NOT NULL,
 	login_password VARCHAR(50) NOT NULL,
 	org_email VARCHAR(255) NOT NULL,
+    org_accepted TINYINT(1) NOT NULL,
     PRIMARY KEY (orgId)
 );
 
@@ -25,6 +26,7 @@ CREATE TABLE ltuevents (
     evt_end_time TIME NOT NULL,
     evt_desc TEXT NOT NULL,
 	evt_url VARCHAR(255) NOT NULL,
+    evt_visible TINYINT(1) NOT NULL,
     primary key (eventId),
     INDEX (org_id)
 );
