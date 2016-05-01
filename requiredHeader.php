@@ -43,11 +43,7 @@
 
 						<!-- Div for tab content -->
 						<div class="tab-content">
-							<!-- First tab for account creation form -->
-
-
-
-							<!-- Second tab for student log-in form -->
+							<!-- First tab for student log-in form -->
 							<div role="tabpanel" class="tab-pane active" id="loginAsStudent"><br />
 								<!--Form for logging in. Just takes username, password -->
 								<form action="loginAsStudent.php" method ="post" role="form" id="studentForm">
@@ -74,10 +70,10 @@
 										</div>
 									</div>
 								</form>
-								<!-- End of log-in form and 2nd tab -->
+								<!-- End of log-in form and 1st tab -->
 							</div>
 
-							<!-- Third tab for Organization log-in form -->
+							<!-- Second tab for Organization log-in form -->
 							<div role="tabpanel" class="tab-pane" id="loginAsOrg"><br />
 								<!--Form for logging in. Just takes username, password -->
 								<form action="loginAsOrg.php" method ="post" role="form" id="orgForm">
@@ -104,9 +100,9 @@
 										</div>
 									</div>
 								</form>
-								<!-- End of log-in form and 3rd tab -->
+								<!-- End of log-in form and 2nd tab -->
 							</div>
-							<!-- First tab for account creation form -->
+							<!-- Third tab for account creation form -->
 							<div role="tabpanel" class="tab-pane" id="createAccount"><br />
 								<!--Form for account creation. Just takes username, password twice, and account type -->
 								<form id="chooseActType">
