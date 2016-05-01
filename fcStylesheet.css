@@ -106,20 +106,6 @@ header a, .subheader a{
   font-size:1.1em;  
   color:white;
 }
-#privateEvtId{
-  float:left;
-  margin:1em 0em 0em 0.5em;
-  font-size:1.1em;  
-  color:white;
-}
-#privateEvtButton{
-  margin-bottom:0.6em;
-  background-color:#003d78;
-  color:white;
-  border:none;
-  align:center;
-  font-size:1em;
-}
 #dropdown select{
   font-size:0.9em;
   color:black;

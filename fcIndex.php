@@ -77,7 +77,40 @@
 				  {
 					url:'fcEvents.php',	
 				  },
-				]
+				],
+				events:[
+				  {
+					title:"Spring 2016 Job Fair",
+					start:"2016-03-01T09:00:00",
+					end:"2016-03-01T16:00:00",
+					className:"fair"
+				  },
+				  {
+					title:"Career Center Management Webinar",
+					start:"2016-03-01T18:00:00",
+					end:"2016-03-01T20:00:00"
+				  },
+				  {
+					title:"Distinguished Lecturer",
+					start:"2016-03-24T18:00:00",
+					end:"2016-03-24T20:00:00",
+					url:"eventpage.html"
+				  },
+				  {
+					title:"Computer Science Seminar: Android Auto",
+					start:"2016-03-30T12:30:00",
+					end:"2016-03-30T13:30:00",
+					url:"eventpage.html"
+				  },
+				  {
+					title:"Blue and White Days",
+					start:"2016-04-01"
+				  },
+				  {
+					title:"Semi-Annual Code Challenge",
+					start:"2016-04-03T08:30:00"
+				  }         
+			   ]
 			})//end of full calendar
 			
 			//used for create account panel radio buttons
@@ -142,45 +175,30 @@
 			<option value="stu" <?php if($filterSet){if(strcmp($filter,'stu')==0){echo "selected";}}?> >Student Interests</option>
 			<?php if($loggedInAsUser){
 					if($filterSet){
-						if(strcmp($filter,'add')==0)
+						if(strcmp($filter,'mine')==0)
 						{
-							echo "<option value='add' selected>Added to Calendar</option>";
 							echo "<option value='org'>My Organizations</option>";
-							echo "<option value='mine'>My Events</option>";
+							echo "<option value='mine' selected>Added to Calendar</option>";
 						}
 						elseif(strcmp($filter,'org')==0)
 						{
-							echo "<option value='add'>Added to Calendar</option>";
 							echo "<option value='org' selected>My Organizations</option>";
-							echo "<option value='mine'>My Events</option>";
-						}
-						elseif(strcmp($filter,'mine')==0)
-						{
-							echo "<option value='add'>Added to Calendar</option>";
-							echo "<option value='org'>My Organizations</option>";
-							echo "<option value='mine' selected>My Events</option>";
+							echo "<option value='mine'>Added to Calendar</option>";
 						}
 						else
 						{ 
-							echo "<option value='add'>Added to Calendar</option>";
 							echo "<option value='org'>My Organizations</option>";
-							echo "<option value='mine'>My Events</option>";
+							echo "<option value='mine'>Added to Calendar</option>";
 						}
 					}
 					else
 					{
-						echo "<option value='add'>Added to Calendar</option>";
 						echo "<option value='org'>My Organizations</option>";
-						echo "<option value='mine'>My Events</option>";
+						echo "<option value='mine'>Added to Calendar</option>";
 					}
 				}?>
         </select>
       </form>
-	  <?php if ($loggedInAsUser): ?>
-	  <div id = "privateEvtId">
-		Add your own event to the calendar here: <button id="privateEvtButton" data-toggle="modal" data-target="#privateEventModal">Add Event</button>
-	  </div>
-	  <?php endif?>
     </div>
     <div id="calWrap">
       <div id='calendar'></div>
@@ -212,64 +230,7 @@
 		  </div>
 		</div>
 	  </div>
-	</div>
-	<div class="modal fade" id="privateEventModal" tabindex="-1" role="dialog" aria-labelledby="privateEventModalLabel">
-	  <div class="modal-dialog" role="document">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h2 class="modal-title" id="privateEventModalLabel">Create Private Event</h2>
-		  </div>
-		  <div class="modal-body">
-			<div align="center">Here you can add your own event to your calendar.<br />It won't show up on anyone else's calendar.</div>
-			<br />
-			<form action="submitEvent.php" method="post" role="form" id="privateEventForm">
-				<div class="form-group row">
-					<label for="evtName" class="col-sm-3 form-control-label" align="right">Name</label>
-					<div class="col-sm-3">
-						<input required type="text" class="form-control" id="evtName" name ="evtName" placeholder="Name" />
-					</div>
-					<label for="evtBuildingRoom" class="col-sm-2 form-control-label" align="right">Location:</label>
-					<div class="col-sm-3">
-						<input type="text" class="form-control" id="evtBuildingRoom" name="evtBuildingRoom" placeholder="Location" />
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="evtStartDate" class="col-sm-3 form-control-label" align="right">Start/End Date:</label>
-					<div class="col-sm-4">
-						<input type="date" class="form-control" id="evtStartDate" name="evtStartDate" />
-					</div>
-					<div class="col-sm-4">
-						<input type="date" class="form-control" id="evtEndDate" name="evtEndDate" />
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="evtStartTime" class="col-sm-3 form-control-label" align="right">Start/End Time:</label>
-					<div class="col-sm-4">
-						<input type="time" class="form-control" id="evtStartTime" name="evtStartTime" min="0"/>
-					</div>
-					<div class="col-sm-4">
-						<input type="time" class="form-control" id="evtEndTime" name="evtEndTime" min ="0" />
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="evtDesc" class="col-sm-3 form-control-label" align="right">Description:</label>
-					<div class="col-sm-6">
-						<textarea class="form-control" id="evtDesc" name="evtDesc" rows="3" placeholder="Add any extra information for yourself."></textarea>
-					</div>
-				<div class="col-sm-1">
-					<input type="hidden" class="form-control" id="evtUserId" name="evtUserId" value=<?php echo $userId;?>></input>
-				</div>
-				</div>
-		  </div>
-		  <div class="modal-footer">
-			<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="fcIndex.php">Add to Calendar</button>
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		  </div>
-		  </form>
-		</div>
-	  </div>
-	</div>		
+	</div>	
   <div id="bottomWrapper">
     <footer>
       Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Timmis

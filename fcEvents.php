@@ -27,7 +27,7 @@
 	{
 		$filter = $_SESSION['filter'];
 	}
-	if(!$filterSet || ($filterSet && (strcmp($_SESSION['filter'],"non")==0))){//no filter
+	if(!$filterSet || ($filterSet && (strcmp($_SESSION['filter'],"none")==0))){//no filter
 		$con=new mysqli($servername, $username, $password, $dbname);
 		if($con->connect_error)
 		{
@@ -52,6 +52,7 @@
 		}
 		if($evtResult->num_rows==0)
 		{
+			//do nothing
 		}
 		else
 		{
@@ -59,7 +60,7 @@
 			while($row=$evtResult->fetch_assoc())
 			{
 				$evt_orgId = $row['org_id'];
-				$evt_orgName = $evt_orgId>0 ? $orgArray[$evt_orgId-1]['org_name'] : "User Created";
+				$evt_orgName = $orgArray[$evt_orgId-1]['org_name'];
 				$start=$row['evt_start_date'] . "T" . $row['evt_start_time'];
 				$end=$row['evt_end_date'] . "T" . $row['evt_end_time'];
 				$duration = $start . " to " . $end;
@@ -76,7 +77,7 @@
 	$hasOrgs = true;
 	$userArray  = array();
 	if($filterSet) {
-		if(strcmp($_SESSION['filter'],"add")==0){//filter for events added to calendar
+		if(strcmp($_SESSION['filter'],"mine")==0){//filter for events added to calendar
 			$con=new mysqli($servername, $username, $password, $dbname);
 			if($con->connect_error)
 			{
@@ -125,17 +126,6 @@
 								"date"=>$row['evt_start_date'], "start_time" =>$row['evt_start_time'], "end_time" =>$row['evt_end_time']);
 							$jsonArray[]=$subArray;
 						}
-						if($row['org_id'] == -1 * $userInfo['userId']){
-							$evt_orgId = $row['org_id'];
-							$evt_orgName = "User Created";
-							$start=$row['evt_start_date'] . "T" . $row['evt_start_time'];
-							$end=$row['evt_end_date'] . "T" . $row['evt_end_time'];
-							$duration = $start . " to " . $end;
-							$subArray=array("id"=>$row['eventId'], "org_id" => $row['org_id'], "org_name" => $evt_orgName, "title" => $row['evt_name'], 
-								"desc"=>$row['evt_desc'], "room"=>$row['evt_room'],"start" => $start, "end" => $end, "link" => $row['evt_url'],
-								"date"=>$row['evt_start_date'], "start_time" =>$row['evt_start_time'], "end_time" =>$row['evt_end_time']);
-							$jsonArray[]=$subArray;
-						}
 					}
 					echo json_encode($jsonArray);
 				}
@@ -172,7 +162,7 @@
 				}
 			}
 			if($hasOrgs){
-				$evtSql="SELECT * FROM ltuevents Where org_id > 0 ORDER BY evt_start_date";//get all events
+				$evtSql="SELECT * FROM ltuevents ORDER BY evt_start_date";//get all events
 				$evtResult=$con->query($evtSql);
 				if($evtResult->num_rows==0){}
 				else
@@ -196,37 +186,6 @@
 				}
 				$con->close();
 			}
-		}
-		if(strcmp($_SESSION['filter'],"mine")==0){
-			$con=new mysqli($servername, $username, $password, $dbname);
-			if($con->connect_error)
-			{
-				die("Connection failed:" . $con->connect_error);
-			}
-			$negUserId = -1 * $userInfo['userId'];
-			$evtSql="SELECT * FROM ltuevents Where org_id = {$negUserId} ORDER BY evt_start_date";//get all events
-			$evtResult=$con->query($evtSql);
-			if($evtResult->num_rows==0){}
-			else
-			{
-				$jsonArray=array();
-				while($row=$evtResult->fetch_assoc())
-				{
-					$evt_orgId = $row['org_id'];
-					$evt_orgName = "User Created";
-					$start=$row['evt_start_date'] . "T" . $row['evt_start_time'];
-					$end=$row['evt_end_date'] . "T" . $row['evt_end_time'];
-					$duration = $start . " to " . $end;
-					$subArray=array("id"=>$row['eventId'], "org_id" => $row['org_id'], "org_name" => $evt_orgName, "title" => $row['evt_name'], 
-						"desc"=>$row['evt_desc'], "room"=>$row['evt_room'],"start" => $start, "end" => $end, "link" => $row['evt_url'],
-						"date"=>$row['evt_start_date'], "start_time" =>$row['evt_start_time'], "end_time" =>$row['evt_end_time']);
-					$jsonArray[]=$subArray;
-					
-				}
-				echo json_encode($jsonArray);
-			}
-			$con->close();
-		
 		}
 	}
 	
