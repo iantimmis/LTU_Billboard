@@ -19,7 +19,7 @@
 		$orgInfo['website'] = $_SESSION['orgWebsite'];
 		$message = $orgInfo['name'];
 	} else {
-		$message = "No One";
+		$userInfo['userId'] = 0;
 	}
 	
 	$filterSet = isset($_SESSION['filter']);
@@ -33,7 +33,7 @@
 		{
 			die("Connection failed:" . $con->connect_error);
 		}
-		$evtSql="SELECT * FROM ltuevents ORDER BY evt_start_date";
+		$evtSql="SELECT * FROM ltuevents WHERE org_id = -{$userInfo['userId']} or org_id > 0 ORDER BY evt_start_date";
 		$evtResult=$con->query($evtSql);
 		
 		$orgSql="SELECT orgId, org_name FROM ltuorganization order by orgId;";
@@ -106,7 +106,7 @@
 				}
 			}
 			if($hasEvents){
-				$evtSql="SELECT * FROM ltuevents ORDER BY evt_start_date";//get all events
+				$evtSql="SELECT * FROM ltuevents WHERE org_id = -{$userInfo['userId']} or org_id > 0 ORDER BY evt_start_date";//get all events
 				$evtResult=$con->query($evtSql);
 				if($evtResult->num_rows==0){}
 				else
