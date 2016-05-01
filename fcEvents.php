@@ -18,6 +18,7 @@
 		$orgInfo['desc'] = $_SESSION['orgDesc'];
 		$orgInfo['website'] = $_SESSION['orgWebsite'];
 		$message = $orgInfo['name'];
+		$userInfo['userId'] = 0;
 	} else {
 		$userInfo['userId'] = 0;
 	}

@@ -11,6 +11,9 @@ header{
   padding-bottom:2em;
   margin-bottom:5em;
 }
+.fc-content {
+    cursor: pointer;
+}
 .event{
   float:left;
   margin-left:1.4em;

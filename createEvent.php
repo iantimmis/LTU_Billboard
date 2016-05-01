@@ -10,6 +10,7 @@
 		$message = "You need to be logged in as an organization to create an event.";
 	} elseif (isset($_SESSION['orgId'])) {
 		$orgId = $_SESSION['orgId'];
+		$orgInfo['name']=$_SESSION['orgName'];
 		$loggedInAsOrg = true;
 		$message = "";
 	} else {
