@@ -3,7 +3,7 @@
 			<a href="fcIndex.php" id=logo>LTU Billboard</a>
 			<?php if(!$loggedIn): ?>
 			<span class="log-in">
-				<button id="loginButton" data-toggle="modal" data-target="#loginModal">Log In</button>
+				<button id="loginButton" data-toggle="modal" data-target="#loginModal">Log In</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				<br />
 				<a id="createAccountLink">or create an account</a>
 			</span>
@@ -45,13 +45,16 @@
 						<div class="tab-content">
 							<!-- First tab for student log-in form -->
 							<div role="tabpanel" class="tab-pane active" id="loginAsStudent"><br />
+							
+								
 								<!--Form for logging in. Just takes username, password -->
-								<form action="loginAsStudent.php" method ="post" role="form" id="studentForm">
+								<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="studentForm">
 									<!-- Username row -->
 									<div class="form-group row">
 										<label for="studentEmail" class="col-sm-4 form-control-label" align="right">Email</label>
 										<div class="col-sm-7">
 											<input required type="email" class="form-control" id="studentEmail" name="studentEmail" placeholder="user@example.com" />
+											
 										</div>
 									</div>
 									<!-- Password row -->
@@ -65,8 +68,9 @@
 									<hr />
 									<div class="form-group row">
 										<div class="col-sm-12" align="right">
-											<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="<?php echo $thisPage;?>">Submit</button>
-											<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
+											<label id="stuLoginMessage" class="message" for="type"></label>
+											<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="stu">Submit</button>
+											<button type = "submit" class ="btn btn-default" data-dismiss="modal">Close</button>
 										</div>
 									</div>
 								</form>
@@ -76,7 +80,7 @@
 							<!-- Second tab for Organization log-in form -->
 							<div role="tabpanel" class="tab-pane" id="loginAsOrg"><br />
 								<!--Form for logging in. Just takes username, password -->
-								<form action="loginAsOrg.php" method ="post" role="form" id="orgForm">
+								<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="orgForm">
 									<!-- Username row -->
 									<div class="form-group row">
 										<label for="orgEmail" class="col-sm-4 form-control-label" align="right">Email</label>
@@ -95,7 +99,8 @@
 									<hr />
 									<div class="form-group row">
 										<div class="col-sm-12" align="right">
-											<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="<?php echo $thisPage;?>">Submit</button>
+											<label id="orgLoginMessage" class="message" for="type"></label>
+											<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="org">Submit</button>
 											<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 										</div>
 									</div>
@@ -145,14 +150,14 @@
 										<!-- Password row -->
 										<div class="form-group row">
 											<label for="stuPassword" class="col-sm-3 form-control-label" align="right">Password</label>
-											<div class="col-sm-3">
+											<div class="col-sm-4">
 												<input required type="password" class="form-control" id="stuPassword" name="stuPassword" placeholder="Password" />
 											</div>
 										</div>
 										<div class="form-group row">
 											<!-- Confirm password row -->
 											<label for="confirmStuPassword" class="col-sm-3 form-control-label" align="right">Repeat Password</label>
-											<div class="col-sm-3">
+											<div class="col-sm-4">
 												<input required type="password" class="form-control" id="confirmStuPassword" name="confirmStuPassword" placeholder="Password" />
 											</div>
 										</div>
@@ -170,7 +175,7 @@
 									<div id="orgAct" class="chooseActType">
 										<!-- Email row -->
 										<div class="form-group row">
-											<label for="orgName" class="col-sm-3 form-control-label" align="right">Name</label>
+											<label for="orgName" class="col-sm-3 form-control-label" align="right">Organization Name</label>
 											<div class="col-sm-4">
 												<input required type="text" class="form-control" id="orgName" name="orgName" placeholder="Example Name" />
 											</div>
@@ -184,14 +189,14 @@
 										<!-- Password row -->
 										<div class="form-group row">
 											<label for="orgPassword" class="col-sm-3 form-control-label" align="right">Password</label>
-											<div class="col-sm-3">
+											<div class="col-sm-4">
 												<input required type="password" class="form-control" id="orgPassword" name="orgPassword" placeholder="Password" />
 											</div>
 										</div>
 										<!-- Confirm password row -->
 										<div class="form-group row">
 											<label for="confirmOrgPassword" class="col-sm-3 form-control-label" align="right">Repeat Password</label>
-											<div class="col-sm-3">
+											<div class="col-sm-4">
 												<input required type="password" class="form-control" id="confirmOrgPassword" name="confirmOrgPassword" placeholder="Password" />
 											</div>
 										</div>

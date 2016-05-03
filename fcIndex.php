@@ -1,6 +1,87 @@
 <?php
 	session_start();
 	$thisPage = "fcIndex.php";
+	
+	//data validation for logging in
+	$email = $password = $type = "";
+	$emailErr = $passwordErr = $loginMessage = "";
+	$loginAttempted = $loginSuccess = false;
+	$servername = "localhost";
+	$dbusername = "root";
+	$dbpassword = "root";
+	$dbname = "LTUBillboard";
+	// Create connection
+	$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+	// Check connection
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		$loginAttempted = true;
+		if(!empty($_POST['type'])){$type = $_POST['type'];}
+		if(strcmp($type,'stu')==0)//logging in as student
+		{
+			if(empty($_POST['studentEmail']))
+				$emailErr = "Email is Required";
+			elseif(empty($_POST['studentPassword']))
+				$passwordErr = "Password is Required";
+			else
+			{
+				$email = cleanInput($_POST['studentEmail'],$dbname);
+				$password = cleanInput($_POST['studentPassword'],$dbname);
+				$sql = "SELECT * FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$loginSuccess = true;
+					$userInfo = $result->fetch_assoc();
+					$_SESSION['userId'] = $userInfo['userId'];
+					$_SESSION["firstName"] = $userInfo['first_name'];
+					$_SESSION["lastName"] = $userInfo['last_name'];
+					$_SESSION['isAdmin'] = $userInfo['is_admin'];
+					$_SESSION['userEmail'] = $userInfo['user_email'];
+					$loginMessage = "Login Successful";
+				}
+			}
+		}
+		if(strcmp($type,'org')==0)//logging in as an organization
+		{
+			if(empty($_POST['orgEmail']))
+				$emailErr = "Email is Required";
+			elseif(empty($_POST['orgPassword']))
+				$passwordErr = "Password is Required";
+			else
+			{
+				$email = cleanInput($_POST['orgEmail'],$dbname);
+				$password = cleanInput($_POST['orgPassword'],$dbname);
+				$sql = "SELECT * FROM ltuorganization WHERE org_email='{$email}' AND login_password='{$password}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$loginSuccess = true;
+					$orgInfo=$result->fetch_assoc();
+					$_SESSION['orgId'] = $orgInfo['orgId'];
+					$_SESSION["orgName"] = $orgInfo['org_name'];
+					$_SESSION["orgDesc"] = $orgInfo['org_description'];
+					$_SESSION['orgWebsite'] = $orgInfo['org_website'];
+					$_SESSION['orgEmail'] = $orgInfo['org_email'];
+					$loginMessage = "Login Successful";
+				}
+			}
+		}
+	}
+	
+	function cleanInput($input,$db){
+		$input = trim($input);
+		$input = stripslashes($input);
+		$input = htmlspecialchars($input);
+		$input = mysqli_real_escape_string($db,$input);
+      	return $input;
+	}
+	$conn->close();
+	
 	//check session to see if logged in and user and get info if true
 	$loggedInAsUser = false;
 	$loggedInAsOrg = false;
@@ -23,6 +104,9 @@
 		$message = "No One";
 	}
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
+	
+	
+	//Checking if mobile user
 	require_once 'mobile_detect.php';//required file for checking for mobile
 	$detect = new Mobile_Detect;//variable for mobile detection
 	$isMobile = $detect->isMobile();
@@ -91,13 +175,19 @@
 			//validation for student account creation
 			$("#createStuAct").validate({
 				"rules" : {
-					"stuPassword" : {
-						"minlength" : 8},
 					"confirmStuPassword" : {
 						"equalTo" : "#stuPassword"}
 				}
 			});
+			$("#createOrgAct").validate({
+				"rules" : {
+					"confirmOrgPassword" : {
+						"equalTo" : "#orgPassword"}
+				}
+			});
 			
+			$("#studentForm").validate({});
+			$("#orgForm").validate({});
 			//used for the calendar filter
 			$("#selectId").on( "change", function(){
 				$("#dropdown").submit();
@@ -107,6 +197,25 @@
 				$('#loginModal').modal('show');
 				$('#loginTabs a:last').tab('show');
 			});
+			<?php if($loginAttempted):?>
+				<?php if(strcmp($type,'stu')==0):?>
+					<?php if(!$loginSuccess):?>
+			//login student fail
+			$('#loginModal').modal('show');
+			$('#stuLoginMessage').html("Login Failed");
+			$('#stuLoginMessage').toggleClass('error');
+					<?php endif; ?>
+				<?php elseif(strcmp($type,'org')==0): ?>
+					<?php if(!$loginSuccess):?>
+			$('#loginModal').modal('show');
+			$('#loginTabs a[href="#loginAsOrg"]').tab('show')
+			$('#orgLoginMessage').html("Login Failed");
+			$('#orgLoginMessage').toggleClass('error');
+					<?php endif;?>
+				<?php endif;?>
+			
+			<?php endif?>
+			
 		});//end of doc.ready
 	</script>	
 	</head>
@@ -254,7 +363,7 @@
 				</div>
 				<div class="form-group row">
 					<label for="evtDesc" class="col-sm-3 form-control-label" align="right">Description:</label>
-					<div class="col-sm-6">
+					<div class="col-sm-8">
 						<textarea class="form-control" id="evtDesc" name="evtDesc" rows="3" placeholder="Add any extra information for yourself."></textarea>
 					</div>
 				<div class="col-sm-1">
