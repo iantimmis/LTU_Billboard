@@ -27,8 +27,8 @@
 				$passwordErr = "Password is Required";
 			else
 			{
-				$email = cleanInput($_POST['studentEmail'],$dbname);
-				$password = cleanInput($_POST['studentPassword'],$dbname);
+				$email = cleanInput($_POST['studentEmail'],$conn);
+				$password = cleanInput($_POST['studentPassword'],$conn);
 				$sql = "SELECT * FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
 				$result = $conn->query($sql);
 				if($result->num_rows==0){$loginMessage="Login Failed";}
@@ -53,8 +53,8 @@
 				$passwordErr = "Password is Required";
 			else
 			{
-				$email = cleanInput($_POST['orgEmail'],$dbname);
-				$password = cleanInput($_POST['orgPassword'],$dbname);
+				$email = cleanInput($_POST['orgEmail'],$conn);
+				$password = cleanInput($_POST['orgPassword'],$conn);
 				$sql = "SELECT * FROM ltuorganization WHERE org_email='{$email}' AND login_password='{$password}';";
 				$result = $conn->query($sql);
 				if($result->num_rows==0){$loginMessage="Login Failed";}
@@ -71,13 +71,44 @@
 				}
 			}
 		}
+		if(strcmp($type,'orgCreate')==0)//Creating organiaztion
+		{
+			$orgName = cleanInput($_POST['orgName'],$conn);
+			$orgDesc = cleanInput($_POST['orgDesc'],$conn);
+			$orgUrl = cleanInput($_POST['orgUrl'],$conn);
+			$orgPassword = cleanInput($_POST['orgCreatePassword'],$conn);
+			$orgEmail = cleanInput($_POST['orgEmail'],$conn);
+			$sql = "INSERT INTO ltuorganization (org_name,org_description,org_website,login_password,org_email,org_accepted)
+			values ('{$orgName}','{$orgDesc}','{$orgUrl}','{$orgPassword}','{$orgEmail}',0);";
+			$errorMessage = "";
+			if ($conn->query($sql) === TRUE) {
+				//echo "New record created successfully";
+			} else {
+				//echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+		}
+		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
+		{
+			$firstName = cleanInput($_POST['firstName'],$conn);
+			$lastName = cleanInput($_POST['lastName'],$conn);
+			$stuPassword = cleanInput($_POST['stuCreatePassword'],$conn);
+			$stuEmail = cleanInput($_POST['stuEmail'],$conn);
+			$sql = "INSERT INTO user_account (first_name,last_name,login_password,is_admin,user_email)
+			values ('{$firstName}','{$lastName}','{$stuPassword}',0,'{$stuEmail}');";
+	
+			if ($conn->query($sql) === TRUE) {
+				//echo "New record created successfully";
+			} else {
+				//echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+		}
 	}
 	
-	function cleanInput($input,$db){
+	function cleanInput($input,$conn){
 		$input = trim($input);
 		$input = stripslashes($input);
 		$input = htmlspecialchars($input);
-		$input = mysqli_real_escape_string($db,$input);
+		$input = mysqli_real_escape_string($conn,$input);
       	return $input;
 	}
 	$conn->close();
@@ -176,13 +207,13 @@
 			$("#createStuAct").validate({
 				"rules" : {
 					"confirmStuPassword" : {
-						"equalTo" : "#stuPassword"}
+						"equalTo" : "#stuCreatePassword"}
 				}
 			});
 			$("#createOrgAct").validate({
-				"rules" : {
-					"confirmOrgPassword" : {
-						"equalTo" : "#orgPassword"}
+				rules : {
+					confirmOrgPassword : {
+						equalTo : "#orgCreatePassword"}
 				}
 			});
 			

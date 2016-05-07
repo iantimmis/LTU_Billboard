@@ -124,7 +124,7 @@
 										</div>
 									</div>
 								</form>
-								<form action = "createAccount.php" method ="post" role="form" id="createStuAct">
+								<form action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="createStuAct">
 									<div id="studentAct" class="chooseActType">
 										<!-- First Name Row -->
 										<div class="form-group row">
@@ -151,7 +151,7 @@
 										<div class="form-group row">
 											<label for="stuPassword" class="col-sm-3 form-control-label" align="right">Password</label>
 											<div class="col-sm-4">
-												<input required type="password" class="form-control" id="stuPassword" name="stuPassword" placeholder="Password" />
+												<input required type="password" class="form-control" id="stuCreatePassword" name="stuCreatePassword" placeholder="Password" />
 											</div>
 										</div>
 										<div class="form-group row">
@@ -165,19 +165,19 @@
 										<div class="form-group row">
 											<!-- Submit Row -->
 											<div class="col-sm-12" align="right">
-												<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="<?php echo $thisPage;?>">Submit</button>
+												<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="stuCreate">Submit</button>
 												<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 											</div>
 										</div>
 									</div>
 								</form>
-								<form action = "createAccount.php" method ="post" role="form" id="createOrgAct">
+								<form action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="createOrgAct">
 									<div id="orgAct" class="chooseActType">
 										<!-- Email row -->
 										<div class="form-group row">
 											<label for="orgName" class="col-sm-3 form-control-label" align="right">Organization Name</label>
 											<div class="col-sm-4">
-												<input required type="text" class="form-control" id="orgName" name="orgName" placeholder="Example Name" />
+												<input required type="name" class="form-control" id="orgName" name="orgName" placeholder="Example Name" />
 											</div>
 										</div>
 										<div class="form-group row">
@@ -190,7 +190,7 @@
 										<div class="form-group row">
 											<label for="orgPassword" class="col-sm-3 form-control-label" align="right">Password</label>
 											<div class="col-sm-4">
-												<input required type="password" class="form-control" id="orgPassword" name="orgPassword" placeholder="Password" />
+												<input required type="password" class="form-control" id="orgCreatePassword" name="orgCreatePassword" placeholder="Password" />
 											</div>
 										</div>
 										<!-- Confirm password row -->
@@ -215,13 +215,13 @@
 										<hr />
 										<div class="form-group row">
 											<div class="col-sm-12" align="right">
-												<button type = "submit" class ="btn btn-primary" id = "submit" name="source" value="<?php echo $thisPage;?>">Submit</button>
+												<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="orgCreate">Submit</button>
 												<button type = "submit" class ="btn btn-default" data-dismiss="modal">Cancel</button>
 											</div>
 										</div>
 									</div>
 								</form>
-								<!-- End of account creation form and first tab -->
+								<!-- End of account creation form and third tab -->
 							</div>
 
 
