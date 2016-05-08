@@ -20,12 +20,12 @@
   background-color:white;
   padding:1em 1.5em 1em 1.5em;
   color:#0084ff;
-  height:25em;
-  max-height:25em;
+  height:30em;
+  max-height:30em;
 }
 #requestHeader{
    background-color:#004299;
-   padding: 1em 0 0 0; //2.5 from top
+   padding: 1em 0 0 0; 
 }
 .requestType, .sort, .navButton, .choose{
   margin:0;
@@ -53,7 +53,7 @@ a{
   text-decoration:none;
 }
 #requestTable{
-  height:35em; /*39.3*/
+  height:35em;
   max-height:35em;
   overflow-y:auto;
   overflow-x:auto;
@@ -72,11 +72,8 @@ a{
   color:white;
 }
 #type{
-  //clear:both;
   color:white;
   font-size:1.5em;
-  //margin-top:3em;
-  //margin-bottom:0.2em;
 }
 #type{
   clear:both;
@@ -101,4 +98,8 @@ a{
   margin-right:0.5em;
   color:white;
   font-size:0.9em;
+}
+#orgTitle{
+  font-size:1.2em;
+  text-decoration:underline;
 }
