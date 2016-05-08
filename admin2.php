@@ -95,7 +95,7 @@
         <br/><br/>
       </div>
       <div id="links">
-        <a href="fcIndex.html" class="link">View Calendar</a><br/>
+        <a href="index.php" class="link">View Calendar</a><br/>
         <!-- Links to trigger modals -->
         <a data-toggle="modal" href="#announceModal" class="link">Add/Edit Announcements</a><br/>
         <a data-toggle="modal" href="#orgListModal" class="link">View Organizations</a>
