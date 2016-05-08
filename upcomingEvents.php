@@ -1,3 +1,4 @@
+<!-- Shows the next 5 scheduled events -->
 <?php
     function upcomingEvents()
     {
