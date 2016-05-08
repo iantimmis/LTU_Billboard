@@ -30,9 +30,8 @@
 	}
 	$endDateEarly = $endTimeEarly = false;
 	$eventSuccess = true;
-	$name = $url = $room = $desc = "";
+	$name = $url = $room = $desc = $message = "";
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		
 		$startDate = new DateTime($_POST['evtStartDate']);
 		$endDate = new DateTime($_POST['evtEndDate']);
 		$startTime = new DateTime($_POST['evtStartTime']);
@@ -40,7 +39,7 @@
 		if($endDate < $startDate)
 		{
 			$endDateEarly = true;
-			$eventSucess = false;
+			$eventSuccess = false;
 		}
 		elseif($endDate == $startDate)
 		{
@@ -56,6 +55,7 @@
 			if(!empty($_POST['evtUrl'])) {$url  = $_POST['evtUrl'];}
 			if(!empty($_POST['evtBuildingRoom'])){$room = $_POST['evtBuildingRoom'];}
 			if(!empty($_POST['evtDesc'])){$desc = $_POST['evtDesc'];}
+			$message = "Event Creation Failed.";
 		}
 		else
 		{
@@ -68,17 +68,19 @@
 				'{$_POST["evtStartDate"]}','{$_POST["evtEndDate"]}', '{$_POST["evtStartTime"]}', '{$_POST["evtEndTime"]}', '{$desc}','{$url}',1)";
 		
 			if ($conn->query($sql) === TRUE) {
+				$message = "Event Created Successfully";
 			} else {
 				echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
-		function cleanInput($input,$conn){
-			$input = trim($input);
-			$input = stripslashes($input);
-			$input = htmlspecialchars($input);
-			$input = mysqli_real_escape_string($conn,$input);
-			return $input;
-		}
+		
+	}
+	function cleanInput($input,$conn){
+		$input = trim($input);
+		$input = stripslashes($input);
+		$input = htmlspecialchars($input);
+		$input = mysqli_real_escape_string($conn,$input);
+		return $input;
 	}
 ?>
 
@@ -112,14 +114,10 @@
 		</head>
 		<body>
 	<?php require 'requiredHeader.php'?>
-	<?php if(!empty($_POST['evtPrivate'])): ?>
-	<pre>
-	<?php print_r($_POST);?>
-	</pre>
-	<?php endif;?>
 		<br />
 		<br />
 		<?php if($loggedInAsOrg): ?>
+		<?php echo "<h1 align='center'>{$message}</h1>";?>
 		<form class="form-horizontal" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="eventForm">
 			<!-- Type Row -->
 			<div class="form-group row">

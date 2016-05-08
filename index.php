@@ -5,7 +5,7 @@
 	//data validation for logging in
 	$email = $password = $type = "";
 	$emailErr = $passwordErr = $loginMessage = "";
-	$loginAttempted = $loginSuccess = false;
+	$loginAttempted = $loginSuccess = $evtCreation = false;
 	$servername = "localhost";
 	$dbusername = "root";
 	$dbpassword = "root";
@@ -19,11 +19,12 @@
 	if (!empty($_GET['filter'])) {
 		$_SESSION['filter'] = $_GET['filter'];
 	}
+	$endDateEarly = $endTimeEarly = false;
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		$loginAttempted = true;
 		if(!empty($_POST['type'])){$type = $_POST['type'];}
 		if(strcmp($type,'stu')==0)//logging in as student
 		{
+			$loginAttempted = true;
 			if(empty($_POST['studentEmail']))
 				$emailErr = "Email is Required";
 			elseif(empty($_POST['studentPassword']))
@@ -50,6 +51,7 @@
 		}
 		if(strcmp($type,'org')==0)//logging in as an organization
 		{
+			$loginAttempted =true;
 			if(empty($_POST['orgEmail']))
 				$emailErr = "Email is Required";
 			elseif(empty($_POST['orgPassword']))
@@ -76,6 +78,7 @@
 		}
 		if(strcmp($type,'orgCreate')==0)//Creating organiaztion
 		{
+			$loginAttempted = true;
 			$orgName = cleanInput($_POST['orgName'],$conn);
 			$orgDesc = cleanInput($_POST['orgDesc'],$conn);
 			$orgUrl = cleanInput($_POST['orgUrl'],$conn);
@@ -89,9 +92,22 @@
 			} else {
 				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
+			$sql = "SELECT orgId FROM ltuorganization WHERE org_email='{$orgEmail}' AND login_password='{$orgPassword}';";
+			$result = $conn->query($sql);
+			if($result->num_rows==0){$loginMessage="Login Failed";}
+			else
+			{
+				$userInfo = $result->fetch_assoc();
+				$_SESSION['orgId'] = $userInfo['orgId'];
+				$_SESSION["orgName"] = $orgName;
+				$_SESSION["orgDesc"] = $orgDesc;
+				$_SESSION['orgWebsite'] = $orgWebsite;
+				$_SESSION['orgEmail'] = $orgEmail;
+			}
 		}
 		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
 		{
+			$loginAttempted = true;
 			$firstName = cleanInput($_POST['firstName'],$conn);
 			$lastName = cleanInput($_POST['lastName'],$conn);
 			$stuPassword = cleanInput($_POST['stuCreatePassword'],$conn);
@@ -104,11 +120,23 @@
 			} else {
 				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
+			
+			$sql = "SELECT userId FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
+			$result = $conn->query($sql);
+			if($result->num_rows==0){$loginMessage="Login Failed";}
+			else
+			{
+				$userInfo = $result->fetch_assoc();
+				$_SESSION['userId'] = $userInfo['userId'];
+				$_SESSION["firstName"] = $firstName;
+				$_SESSION["lastName"] = $lastName;
+				$_SESSION['isAdmin'] = 0;
+				$_SESSION['userEmail'] = $email;
+			}
 		}
 		if(strcmp($type,'privateEvt')==0)//Creating private event
 		{
-			$endDateEarly = $endTimeEarly = false;
-			$eventSuccess = true;
+			$eventSuccess = $evtCreation = true;
 			$name = $url = $room = $desc = "";
 			$startDate = new DateTime($_POST['evtStartDate']);
 			$endDate = new DateTime($_POST['evtEndDate']);
@@ -117,7 +145,7 @@
 			if($endDate < $startDate)
 			{
 				$endDateEarly = true;
-				$eventSucess = false;
+				$eventSuccess = false;
 			}
 			elseif($endDate == $startDate)
 			{
@@ -260,7 +288,7 @@
 			$("#createOrgAct").validate({
 				rules : {
 					confirmOrgPassword : {
-						equalTo : "#orgCreatePassword"}	
+						equalTo : "#orgCreatePassword"}
 				}
 			});
 			$("#studentForm").validate({});
@@ -278,21 +306,36 @@
 			<?php if($loginAttempted):?>
 				<?php if(strcmp($type,'stu')==0):?>
 					<?php if(!$loginSuccess):?>
-			//login student fail
-			$('#loginModal').modal('show');
-			$('#stuLoginMessage').html("Login Failed");
-			$('#stuLoginMessage').toggleClass('error');
+					//login student fail
+					$('#loginModal').modal('show');
+					$('#stuLoginMessage').html("Login Failed");
+					$('#stuLoginMessage').toggleClass('error');
 					<?php endif; ?>
 				<?php elseif(strcmp($type,'org')==0): ?>
 					<?php if(!$loginSuccess):?>
-			$('#loginModal').modal('show');
-			$('#loginTabs a[href="#loginAsOrg"]').tab('show')
-			$('#orgLoginMessage').html("Login Failed");
-			$('#orgLoginMessage').toggleClass('error');
+					$('#loginModal').modal('show');
+					$('#loginTabs a[href="#loginAsOrg"]').tab('show')
+					$('#orgLoginMessage').html("Login Failed");
+					$('#orgLoginMessage').toggleClass('error');
 					<?php endif;?>
 				<?php endif;?>
-			
 			<?php endif?>
+			
+			<?php if($evtCreation):?>
+				<?php if($eventSuccess):?>
+					//private event success
+					$('#privateEventModal').modal('show');
+					$('#privateEvtMessage').html("Event Creation Successful");
+					$('#privateEvtMessage').toggleClass('success');
+				<?php else: ?>
+					//private event success
+					$('#privateEventModal').modal('show');
+					$('#privateEvtMessage').html("Event Creation Failed");
+					$('#privateEvtMessage').toggleClass('error');
+				<?php endif; ?>
+			<?php endif;?>
+			
+			
 			
 		});//end of doc.ready
 	</script>	
@@ -410,7 +453,9 @@
 		  <div class="modal-body">
 			<div align="center">Here you can add your own event to your calendar.<br />It won't show up on anyone else's calendar.</div>
 			<br />
+			<div id="privateEvtMessage" class="message" align="center"></div><br />
 			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="privateEventForm">
+				
 				<div class="form-group row">
 					<label for="evtName" class="col-sm-3 form-control-label" align="right">Name</label>
 					<div class="col-sm-3">
@@ -430,6 +475,11 @@
 						<input type="date" class="form-control" id="evtEndDate" name="evtEndDate" />
 					</div>
 				</div>
+				<?php if($endDateEarly): ?>
+				<div class="form-group row">
+					<span class="col-sm-5 error" align="right">End date must be after start date</span>
+				</div>
+				<?php endif; ?>
 				<div class="form-group row">
 					<label for="evtStartTime" class="col-sm-3 form-control-label" align="right">Start/End Time:</label>
 					<div class="col-sm-4">
@@ -439,6 +489,11 @@
 						<input type="time" class="form-control" id="evtEndTime" name="evtEndTime" min ="0" />
 					</div>
 				</div>
+				<?php if($endTimeEarly): ?>
+				<div class="form-group row">
+					<span class="col-sm-5 error" align="right">End time must be after time date</span>
+				</div>
+				<?php endif; ?>
 				<div class="form-group row">
 					<label for="evtDesc" class="col-sm-3 form-control-label" align="right">Description:</label>
 					<div class="col-sm-8">
