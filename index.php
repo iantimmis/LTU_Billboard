@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$thisPage = "fcIndex.php";
+	$thisPage = "index.php";
 	
 	//data validation for logging in
 	$email = $password = $type = "";
@@ -15,6 +15,9 @@
 	// Check connection
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
+	}
+	if (!empty($_GET['filter'])) {
+		$_SESSION['filter'] = $_GET['filter'];
 	}
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$loginAttempted = true;
@@ -100,6 +103,50 @@
 				//echo "New record created successfully";
 			} else {
 				//echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+		}
+		if(strcmp($type,'privateEvt')==0)//Creating private event
+		{
+			$endDateEarly = $endTimeEarly = false;
+			$eventSuccess = true;
+			$name = $url = $room = $desc = "";
+			$startDate = new DateTime($_POST['evtStartDate']);
+			$endDate = new DateTime($_POST['evtEndDate']);
+			$startTime = new DateTime($_POST['evtStartTime']);
+			$endTime = new DateTime($_POST['evtEndTime']);
+			if($endDate < $startDate)
+			{
+				$endDateEarly = true;
+				$eventSucess = false;
+			}
+			elseif($endDate == $startDate)
+			{
+				if($endTime <= $startTime)
+				{
+					$endTimeEarly = true;
+					$eventSuccess = false;
+				}
+			}
+			if(!$eventSuccess)
+			{
+				if(!empty($_POST['evtName'])){$name = $_POST['evtName'];}
+				if(!empty($_POST['evtUrl'])) {$url  = $_POST['evtUrl'];}
+				if(!empty($_POST['evtBuildingRoom'])){$room = $_POST['evtBuildingRoom'];}
+				if(!empty($_POST['evtDesc'])){$desc = $_POST['evtDesc'];}
+			}
+			else
+			{
+				$name = cleanInput($_POST['evtName'],$conn);
+				$room = cleanInput($_POST['evtBuildingRoom'],$conn);
+				$desc = cleanInput($_POST['evtDesc'],$conn);
+				$sql = "INSERT INTO LTUEvents (org_id,is_private, evt_name, evt_room, evt_category,evt_start_date,evt_end_date,evt_start_time,evt_end_time,evt_desc,evt_url,evt_visible)
+					VALUES (-{$_SESSION["userId"]},1, '{$name}', '{$room}', 'User Created',
+					'{$_POST["evtStartDate"]}','{$_POST["evtEndDate"]}', '{$_POST["evtStartTime"]}', '{$_POST["evtEndTime"]}', '{$desc}','N/A',1)";
+			
+				if ($conn->query($sql) === TRUE) {
+				} else {
+					echo "Error: " . $sql . "<br>" . $conn->error;
+				}
 			}
 		}
 	}
@@ -213,12 +260,12 @@
 			$("#createOrgAct").validate({
 				rules : {
 					confirmOrgPassword : {
-						equalTo : "#orgCreatePassword"}
+						equalTo : "#orgCreatePassword"}	
 				}
 			});
-			
 			$("#studentForm").validate({});
 			$("#orgForm").validate({});
+			
 			//used for the calendar filter
 			$("#selectId").on( "change", function(){
 				$("#dropdown").submit();
@@ -272,7 +319,7 @@
       </div>
     </div>
     <div id="calendarWrapper">
-      <form method="get" action="changeFilter.php" id="dropdown">
+      <form method="get" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="dropdown">
         Event Filter:&nbsp;
         <select id="selectId" name="filter">
 			<option value="non" <?php if($filterSet){if(strcmp($filter,'non')==0){echo "selected";}}?> >Show All</option>
@@ -363,7 +410,7 @@
 		  <div class="modal-body">
 			<div align="center">Here you can add your own event to your calendar.<br />It won't show up on anyone else's calendar.</div>
 			<br />
-			<form action="submitEvent.php" method="post" role="form" id="privateEventForm">
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="privateEventForm">
 				<div class="form-group row">
 					<label for="evtName" class="col-sm-3 form-control-label" align="right">Name</label>
 					<div class="col-sm-3">
@@ -403,7 +450,7 @@
 				</div>
 		  </div>
 		  <div class="modal-footer">
-			<button type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="fcIndex.php">Add to Calendar</button>
+			<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="privateEvt">Add to Calendar</button>
 			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		  </div>
 		  </form>

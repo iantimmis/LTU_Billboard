@@ -135,6 +135,9 @@ article{
   height:10em; 
   color:black;
 }
+.error{
+	color: white;
+}
 #tableCalendar td:hover{
   background-color:#fff; 
 }
@@ -165,6 +168,9 @@ article{
 }
 #bottomWrapper{
   clear:both;
+}
+modal-content{
+	text-align: center;
 }
 footer{
   background-color:#004e99;
