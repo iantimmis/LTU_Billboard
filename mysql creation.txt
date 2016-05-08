@@ -38,6 +38,7 @@ CREATE TABLE user_account (
     login_password VARCHAR(50) NOT NULL,
     is_admin TINYINT(1) NOT NULL,
 	user_email VARCHAR(255) NOT NULL,
+	receive_emails TINYINT(1) NOT NULL,
     PRIMARY KEY (userId)
 );
 

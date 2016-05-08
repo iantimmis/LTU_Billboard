@@ -7,7 +7,7 @@
 	//data validation for logging in
 	$email = $password = $type = "";
 	$emailErr = $passwordErr = $loginMessage = "";
-	$loginAttempted = $loginSuccess = $evtCreation = false;
+	$loginAttempted = $loginSuccess = $evtCreation = $loggedInAsUser = $loggedInAsOrg =false;
 	$servername = "localhost";
 	$dbusername = "root";
 	$dbpassword = "root";
@@ -47,6 +47,8 @@
 					$_SESSION["lastName"] = $userInfo['last_name'];
 					$_SESSION['isAdmin'] = $userInfo['is_admin'];
 					$_SESSION['userEmail'] = $userInfo['user_email'];
+					$_SESSION['userPassword'] = $userInfo['login_password'];
+					$_SESSION['receiveEmails'] = $userInfo['receive_emails'];
 					$loginMessage = "Login Successful";
 				}
 			}
@@ -74,6 +76,7 @@
 					$_SESSION["orgDesc"] = $orgInfo['org_description'];
 					$_SESSION['orgWebsite'] = $orgInfo['org_website'];
 					$_SESSION['orgEmail'] = $orgInfo['org_email'];
+					$_SESSION['orgPassword'] = $orgInfo['login_password'];
 					$loginMessage = "Login Successful";
 				}
 			}
@@ -105,6 +108,7 @@
 				$_SESSION["orgDesc"] = $orgDesc;
 				$_SESSION['orgWebsite'] = $orgWebsite;
 				$_SESSION['orgEmail'] = $orgEmail;
+				$_SESSION['orgPassword'] = $orgPassword;
 			}
 		}
 		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
@@ -114,8 +118,8 @@
 			$lastName = cleanInput($_POST['lastName'],$conn);
 			$stuPassword = cleanInput($_POST['stuCreatePassword'],$conn);
 			$stuEmail = cleanInput($_POST['stuEmail'],$conn);
-			$sql = "INSERT INTO user_account (first_name,last_name,login_password,is_admin,user_email)
-			values ('{$firstName}','{$lastName}','{$stuPassword}',0,'{$stuEmail}');";
+			$sql = "INSERT INTO user_account (first_name,last_name,login_password,is_admin,user_email,receive_emails)
+			values ('{$firstName}','{$lastName}','{$stuPassword}',0,'{$stuEmail}',1);";
 	
 			if ($conn->query($sql) === TRUE) {
 				//echo "New record created successfully";
@@ -134,6 +138,8 @@
 				$_SESSION["lastName"] = $lastName;
 				$_SESSION['isAdmin'] = 0;
 				$_SESSION['userEmail'] = $email;
+				$_SESSION['userPassword'] = $stuPassword;
+				$_SESSION['receiveEmails'] = 1;
 			}
 		}
 		if(strcmp($type,'privateEvt')==0)//Creating private event

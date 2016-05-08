@@ -1,11 +1,204 @@
 <?php
 	session_start();
 	$thisPage = 'createEvent.php';
+	
+	$servername = "localhost";
+	$username = "root";
+	$password = "root";
+	$dbname = "LTUBillboard";
+	// Create connection
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	// Check connection
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	$endDateEarly = $endTimeEarly = false;
+	$eventSuccess = true;
+	$name = $url = $room = $desc = $message = "";
+	if($_SERVER["REQUEST_METHOD"] == "POST"){
+		if(!empty($_POST['type'])){$type = $_POST['type'];}
+		if(strcmp($type,'createEvt')==0)
+		{
+			$startDate = new DateTime($_POST['evtStartDate']);
+			$endDate = new DateTime($_POST['evtEndDate']);
+			$startTime = new DateTime($_POST['evtStartTime']);
+			$endTime = new DateTime($_POST['evtEndTime']);
+			if($endDate < $startDate)
+			{
+				$endDateEarly = true;
+				$eventSuccess = false;
+			}
+			elseif($endDate == $startDate)
+			{
+				if($endTime <= $startTime)
+				{
+					$endTimeEarly = true;
+					$eventSuccess = false;
+				}
+			}
+			if(!$eventSuccess)
+			{
+				if(!empty($_POST['evtName'])){$name = $_POST['evtName'];}
+				if(!empty($_POST['evtUrl'])) {$url  = $_POST['evtUrl'];}
+				if(!empty($_POST['evtBuildingRoom'])){$room = $_POST['evtBuildingRoom'];}
+				if(!empty($_POST['evtDesc'])){$desc = $_POST['evtDesc'];}
+				$message = "Event Creation Failed.";
+			}
+			else
+			{
+				$name = cleanInput($_POST['evtName'],$conn);
+				$url = cleanInput($_POST['evtUrl'],$conn);
+				$room = cleanInput($_POST['evtBuildingRoom'],$conn);
+				$desc = cleanInput($_POST['evtDesc'],$conn);
+				$sql = "INSERT INTO LTUEvents (org_id,is_private, evt_name, evt_room, evt_category,evt_start_date,evt_end_date,evt_start_time,evt_end_time,evt_desc,evt_url,evt_visible)
+					VALUES ({$_POST["evtOrgId"]},{$_POST["evtPrivate"]}, '{$name}', '{$room}', '{$_POST["evtCategory"]}',
+					'{$_POST["evtStartDate"]}','{$_POST["evtEndDate"]}', '{$_POST["evtStartTime"]}', '{$_POST["evtEndTime"]}', '{$desc}','{$url}',1)";
+			
+				if ($conn->query($sql) === TRUE) {
+					$message = "Event Created Successfully";
+				} else {
+					echo "Error: " . $sql . "<br>" . $conn->error;
+				}
+			}
+		}
+	}
+	function cleanInput($input,$conn){
+		$input = trim($input);
+		$input = stripslashes($input);
+		$input = htmlspecialchars($input);
+		$input = mysqli_real_escape_string($conn,$input);
+		return $input;
+	}
+	
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		if(!empty($_POST['type'])){$type = $_POST['type'];}
+		if(strcmp($type,'stu')==0)//logging in as student
+		{
+			$loginAttempted = true;
+			if(empty($_POST['studentEmail']))
+				$emailErr = "Email is Required";
+			elseif(empty($_POST['studentPassword']))
+				$passwordErr = "Password is Required";
+			else
+			{
+				$email = cleanInput($_POST['studentEmail'],$conn);
+				$password = cleanInput($_POST['studentPassword'],$conn);
+				$sql = "SELECT * FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$loginSuccess = true;
+					$userInfo = $result->fetch_assoc();
+					$_SESSION['userId'] = $userInfo['userId'];
+					$_SESSION["firstName"] = $userInfo['first_name'];
+					$_SESSION["lastName"] = $userInfo['last_name'];
+					$_SESSION['isAdmin'] = $userInfo['is_admin'];
+					$_SESSION['userEmail'] = $userInfo['user_email'];
+					$_SESSION['userPassword'] = $userInfo['login_password'];
+					$_SESSION['receiveEmails'] = $userInfo['receive_emails'];
+					$loginMessage = "Login Successful";
+				}
+			}
+		}
+		if(strcmp($type,'org')==0)//logging in as an organization
+		{
+			$loginAttempted =true;
+			if(empty($_POST['orgEmail']))
+				$emailErr = "Email is Required";
+			elseif(empty($_POST['orgPassword']))
+				$passwordErr = "Password is Required";
+			else
+			{
+				$email = cleanInput($_POST['orgEmail'],$conn);
+				$password = cleanInput($_POST['orgPassword'],$conn);
+				$sql = "SELECT * FROM ltuorganization WHERE org_email='{$email}' AND login_password='{$password}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$loginSuccess = true;
+					$orgInfo=$result->fetch_assoc();
+					$_SESSION['orgId'] = $orgInfo['orgId'];
+					$_SESSION["orgName"] = $orgInfo['org_name'];
+					$_SESSION["orgDesc"] = $orgInfo['org_description'];
+					$_SESSION['orgWebsite'] = $orgInfo['org_website'];
+					$_SESSION['orgEmail'] = $orgInfo['org_email'];
+					$_SESSION['orgPassword'] = $orgInfo['login_password'];
+					$loginMessage = "Login Successful";
+				}
+			}
+		}
+		if(strcmp($type,'orgCreate')==0)//Creating organiaztion
+		{
+			$loginAttempted = true;
+			$orgName = cleanInput($_POST['orgName'],$conn);
+			$orgDesc = cleanInput($_POST['orgDesc'],$conn);
+			$orgUrl = cleanInput($_POST['orgUrl'],$conn);
+			$orgPassword = cleanInput($_POST['orgCreatePassword'],$conn);
+			$orgEmail = cleanInput($_POST['orgEmail'],$conn);
+			$sql = "INSERT INTO ltuorganization (org_name,org_description,org_website,login_password,org_email,org_accepted)
+			values ('{$orgName}','{$orgDesc}','{$orgUrl}','{$orgPassword}','{$orgEmail}',0);";
+			$errorMessage = "";
+			if ($conn->query($sql) === TRUE) {
+				//echo "New record created successfully";
+			} else {
+				//echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			$sql = "SELECT orgId FROM ltuorganization WHERE org_email='{$orgEmail}' AND login_password='{$orgPassword}';";
+			$result = $conn->query($sql);
+			if($result->num_rows==0){$loginMessage="Login Failed";}
+			else
+			{
+				$userInfo = $result->fetch_assoc();
+				$_SESSION['orgId'] = $userInfo['orgId'];
+				$_SESSION["orgName"] = $orgName;
+				$_SESSION["orgDesc"] = $orgDesc;
+				$_SESSION['orgWebsite'] = $orgWebsite;
+				$_SESSION['orgEmail'] = $orgEmail;
+				$_SESSION['orgPassword'] = $orgPassword;
+			}
+		}
+		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
+		{
+			$loginAttempted = true;
+			$firstName = cleanInput($_POST['firstName'],$conn);
+			$lastName = cleanInput($_POST['lastName'],$conn);
+			$stuPassword = cleanInput($_POST['stuCreatePassword'],$conn);
+			$stuEmail = cleanInput($_POST['stuEmail'],$conn);
+			$sql = "INSERT INTO user_account (first_name,last_name,login_password,is_admin,user_email,receive_emails)
+			values ('{$firstName}','{$lastName}','{$stuPassword}',0,'{$stuEmail}',1);";
+	
+			if ($conn->query($sql) === TRUE) {
+				//echo "New record created successfully";
+			} else {
+				//echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+			
+			$sql = "SELECT userId FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
+			$result = $conn->query($sql);
+			if($result->num_rows==0){$loginMessage="Login Failed";}
+			else
+			{
+				$userInfo = $result->fetch_assoc();
+				$_SESSION['userId'] = $userInfo['userId'];
+				$_SESSION["firstName"] = $firstName;
+				$_SESSION["lastName"] = $lastName;
+				$_SESSION['isAdmin'] = 0;
+				$_SESSION['userEmail'] = $email;
+				$_SESSION['userPassword'] = $stuPassword;
+				$_SESSION['receiveEmails'] = 1;
+			}
+		}
+	}
+	
 	//check session to see if logged in and user and get info if true
 	$loggedInAsUser = false;
 	$loggedInAsOrg = false;
 	if (isset($_SESSION['userId'])){
 		$userInfo['userId'] = $_SESSION['userId'];
+		$userInfo['firstName'] = $_SESSION["firstName"];
 		$loggedInAsUser = true;
 		$message = "You need to be logged in as an organization to create an event.";
 	} elseif (isset($_SESSION['orgId'])) {
@@ -18,70 +211,6 @@
 	}
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
 	
-	$servername = "localhost";
-	$username = "root";
-	$password = "root";
-	$dbname = "LTUBillboard";
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-	$endDateEarly = $endTimeEarly = false;
-	$eventSuccess = true;
-	$name = $url = $room = $desc = $message = "";
-	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		$startDate = new DateTime($_POST['evtStartDate']);
-		$endDate = new DateTime($_POST['evtEndDate']);
-		$startTime = new DateTime($_POST['evtStartTime']);
-		$endTime = new DateTime($_POST['evtEndTime']);
-		if($endDate < $startDate)
-		{
-			$endDateEarly = true;
-			$eventSuccess = false;
-		}
-		elseif($endDate == $startDate)
-		{
-			if($endTime <= $startTime)
-			{
-				$endTimeEarly = true;
-				$eventSuccess = false;
-			}
-		}
-		if(!$eventSuccess)
-		{
-			if(!empty($_POST['evtName'])){$name = $_POST['evtName'];}
-			if(!empty($_POST['evtUrl'])) {$url  = $_POST['evtUrl'];}
-			if(!empty($_POST['evtBuildingRoom'])){$room = $_POST['evtBuildingRoom'];}
-			if(!empty($_POST['evtDesc'])){$desc = $_POST['evtDesc'];}
-			$message = "Event Creation Failed.";
-		}
-		else
-		{
-			$name = cleanInput($_POST['evtName'],$conn);
-			$url = cleanInput($_POST['evtUrl'],$conn);
-			$room = cleanInput($_POST['evtBuildingRoom'],$conn);
-			$desc = cleanInput($_POST['evtDesc'],$conn);
-			$sql = "INSERT INTO LTUEvents (org_id,is_private, evt_name, evt_room, evt_category,evt_start_date,evt_end_date,evt_start_time,evt_end_time,evt_desc,evt_url,evt_visible)
-				VALUES ({$_POST["evtOrgId"]},{$_POST["evtPrivate"]}, '{$name}', '{$room}', '{$_POST["evtCategory"]}',
-				'{$_POST["evtStartDate"]}','{$_POST["evtEndDate"]}', '{$_POST["evtStartTime"]}', '{$_POST["evtEndTime"]}', '{$desc}','{$url}',1)";
-		
-			if ($conn->query($sql) === TRUE) {
-				$message = "Event Created Successfully";
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-		}
-		
-	}
-	function cleanInput($input,$conn){
-		$input = trim($input);
-		$input = stripslashes($input);
-		$input = htmlspecialchars($input);
-		$input = mysqli_real_escape_string($conn,$input);
-		return $input;
-	}
 ?>
 
 <!DOCTYPE html>
@@ -104,17 +233,9 @@
 			});
 		</script>
 		<title>Create Events Page</title>
-		<style type="text/css">
-		footer{
-			position: fixed;
-			bottom: 0px;
-			text-align: center;
-		}
-		</style>
 		</head>
 		<body>
 	<?php require 'requiredHeader.php'?>
-		<br />
 		<br />
 		<?php if($loggedInAsOrg): ?>
 		<?php echo "<h1 align='center'>{$message}</h1>";?>
@@ -212,7 +333,7 @@
 			<div class="form-group row">
 				<label for="submit" class="col-sm-1 form-control-label" align="right"></label>
 				<div class="col-sm-1" align="left">
-					<button required type = "submit" class ="btn btn-primary" id = "submit" name="submit" value="createEvent.php">Submit</button>
+					<button required type = "submit" class ="btn btn-primary" id = "submit" name="type" value="createEvt">Submit</button>
 				</div>
 			</div>
 		</form>
