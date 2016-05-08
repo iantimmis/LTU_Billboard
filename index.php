@@ -185,6 +185,16 @@
 				}
 			}
 		}
+		if(strcmp($type,'addToCal')==0)//Adding event to calendar
+		{
+			$sql = "INSERT INTO user_event_join (userId,eventId) VALUES ({$_POST['addToCalUserId']},{$_POST['addToCalEvtId']});";
+			if ($conn->query($sql) === TRUE) 
+			{} 
+			else 
+			{
+					echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+		}
 	}
 	
 	function cleanInput($input,$conn){
@@ -260,6 +270,7 @@
 					$('#modalOrgName').html(event.org_name);
 					$('#modalRoom').html(event.room)
 					$('#modalEvtLink').attr('href',event.link);
+					$('#addToCalEvtId').val(event.id)
 					$('#eventModal').modal();
 					return false;
 				},
@@ -437,8 +448,17 @@
 			</div>
 		  </div>
 		  <div class="modal-footer">
-			<button type="button" class="btn btn-primary" data-dismiss="modal">Add to Calendar</button>
-			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<?php if($loggedInAsUser): ?>
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="addToCal">
+				<input type="hidden" name="addToCalEvtId" id="addToCalEvtId" value="">
+				<input type="hidden" name="addToCalUserId" id="addToCalUserId" value="<?php echo $userInfo['userId'];?>">
+				<button type="submit" class="btn btn-primary" name="type" value="addToCal">Add to Calendar</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</form>
+			<?php else:?>
+				Log in to add to calendar
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<?php endif;?>
 		  </div>
 		</div>
 	  </div>
