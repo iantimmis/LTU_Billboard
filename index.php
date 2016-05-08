@@ -1,6 +1,8 @@
 <?php
 	session_start();
 	$thisPage = "index.php";
+	include 'upcomingEvents.php';
+        include 'showAnnouncements.php';
 	
 	//data validation for logging in
 	$email = $password = $type = "";
@@ -346,19 +348,11 @@
     <div id="topWrap">
       <div class="subheader">
         <span class="subTitle">Announcements</span>
-        <ul class="subList">
-          <li>Mid-Semester break runs from March 7 to March 11.</li>
-          <li>Classes resume March 14.</li>
-        </ul>
+        <ul id="currAnnounce"><?php showAnnounce(); ?></ul>
       </div>
       <div class="subheader">
         <span class="subTitle">Upcoming Events</span>
-        <ul class="subList">
-          <li><a href="eventpage.html">March 24: Distinguished Lecturer</a></li>
-          <li><a href="">March 30: Computer Science Seminar: Android Auto</a></li>
-          <li><a href="">April 1: Blue and White Days</a></li>
-          <li><a href="">April 3: Semi-Annual Code Challenge</a></li>
-        </ul>
+        <ul id="currEvents"><?php upcomingEvents(); ?></ul>
       </div>
     </div>
     <div id="calendarWrapper">
