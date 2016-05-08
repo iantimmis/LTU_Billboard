@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
+  <!-- Handles accepting or declining an event or organization request -->
   <?php
     $action=intval($_POST["a"]);
     $showType=intval($_POST["type"]);
@@ -9,10 +10,6 @@
     $username="root";
     $password="root";
     $dbname="LTUBillboard";
-
-/*FIND WAY TO HANDLE SQL QUERY ERRORS AS WELL AS TRACK HOW MANY REQUEST WERE FOUND (IF FOUND)
-  IMPLEMENT SQL QUERY */
-
 
     $con=new mysqli($servername, $username, $password, $dbname);
     if($con->connect_error)
@@ -26,11 +23,10 @@
             foreach($checkedIds as $id)
             {
                 $sql="UPDATE ltuevents
-                      SET evt_visible=true 
+                      SET evt_visible=1
                       WHERE eventId=" . intval($id);
                 $con->query($sql);
             }
-            /*echo "___ event requests were found and accepted.";*/
         }
         else
         {
@@ -40,7 +36,6 @@
                       WHERE eventId=" . intval($id);
                 $con->query($sql);
             }
-            /*echo "___ event requests were found and deleted.";*/
         }
     }
     else
@@ -54,7 +49,6 @@
                       WHERE orgId=" . intval($id);
                 $con->query($sql);
             }
-            /*echo "___ organization requests were found and accepted.";*/
         }
         else
         {
@@ -64,7 +58,6 @@
                       WHERE orgId=" . intval($id);
                 $con->query($sql);
             }
-            /*echo "___ organization requests were found and deleted.";*/
         }
     }
     echo "";
