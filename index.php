@@ -346,7 +346,7 @@
 <?php require 'requiredHeader.php';?>
   <div id="theWrap">
     <div id="topWrap">
-      <div class="subheader">
+      <div class="subheader" id="firstSubheader">
         <span class="subTitle">Announcements</span>
         <ul id="currAnnounce"><?php showAnnounce(); ?></ul>
       </div>
