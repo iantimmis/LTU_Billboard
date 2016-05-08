@@ -187,9 +187,31 @@
 		}
 		if(strcmp($type,'addToCal')==0)//Adding event to calendar
 		{
-			$sql = "INSERT INTO user_event_join (userId,eventId) VALUES ({$_POST['addToCalUserId']},{$_POST['addToCalEvtId']});";
+			$sql = "INSERT INTO user_event_join (userId,eventId) VALUES ({$_SESSION['userId']},{$_POST['toggleOnCalEvtId']});";
 			if ($conn->query($sql) === TRUE) 
 			{} 
+			else 
+			{
+					echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+		}
+		if(strcmp($type,'removeFromCal')==0)//Adding event to calendar
+		{
+			$sql = "DELETE FROM user_event_join WHERE userId = {$_SESSION['userId']} AND eventId = {$_POST['toggleOnCalEvtId']};";
+			if ($conn->query($sql) === TRUE) 
+			{
+			} 
+			else 
+			{
+					echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+		}
+		if(strcmp($type,'deleteEvent')==0)//Adding event to calendar
+		{
+			$sql = "DELETE FROM ltuevents WHERE org_id = -{$_SESSION['userId']} AND eventId = {$_POST['toggleOnCalEvtId']};";
+			if ($conn->query($sql) === TRUE) 
+			{
+			} 
 			else 
 			{
 					echo "Error: " . $sql . "<br>" . $conn->error;
@@ -204,7 +226,6 @@
 		$input = mysqli_real_escape_string($conn,$input);
       	return $input;
 	}
-	$conn->close();
 	
 	//check session to see if logged in and user and get info if true
 	$loggedInAsUser = false;
@@ -216,6 +237,17 @@
 		$userInfo['isAdmin'] = $_SESSION['isAdmin'];
 		$userId = $userInfo['userId'];
 		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
+		$userInfo['events'] = array();
+		$sql = "SELECT eventId FROM user_event_join WHERE userId = {$userInfo['userId']};";
+		$result=$conn->query($sql);
+		if($result->num_rows==0){}
+		else
+		{
+			while($row = $result->fetch_array())
+			{
+				array_push($userInfo['events'],$row['eventId']);
+			}
+		}
 		$loggedInAsUser = true;
 	} elseif (isset($_SESSION['orgId'])) {
 		$orgInfo['id'] = $_SESSION['orgId'];
@@ -229,6 +261,7 @@
 	}
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
 	
+	$conn->close();
 	
 	//Checking if mobile user
 	require_once 'mobile_detect.php';//required file for checking for mobile
@@ -258,10 +291,20 @@
 	<script type="text/javascript" src="bootstrap.min.js"></script>
 
 	<script type="text/javascript">
+		<?php if($loggedInAsUser): ?>
+			var eventsAddedToCal = [ 
+				<?php foreach($userInfo['events'] as $anEventId)
+						{
+							echo "'{$anEventId}',";
+						}?>
+			];
+			<?php endif;?>
 		$(document).ready(function() {
+			
+			
 			$('#calendar').fullCalendar({
 				eventClick:  function(event, jsEvent, view) {
-					
+					var privateEvent = event.org_id < 0;
 					$('#eventModalLabel').html(event.title);
 					$('#modalDesc').html(event.desc);
 					$('#modalDate').html(event.date);
@@ -269,8 +312,27 @@
 					$('#modalEndtime').html(event.end_time);
 					$('#modalOrgName').html(event.org_name);
 					$('#modalRoom').html(event.room)
-					$('#modalEvtLink').attr('href',event.link);
-					$('#addToCalEvtId').val(event.id)
+					if(privateEvent)
+					{
+						$('#modalLinkDiv').html("User Created Event");
+						$('#modalEvtLink').hide();
+					}
+					else
+					{
+						$('#modalLinkDiv').html("Link: <a id='modalEvtLink' target='_blank'>Click Here</a>");
+						$('#modalEvtLink').attr('href',event.link);
+						//$('#modalEvtLink').show();
+					}
+					$('.toggleOnCalEvtId').val(event.id);
+					var added = $.inArray(event.id,eventsAddedToCal)>=0 ? true : false;
+					$('#eventAdded').val(added);
+					$('.toggleOnCal').hide();
+					if(added)
+						$("#removeFromCal").show();
+					else if(privateEvent)
+						$("#delete").show();
+					else
+						$("#addToCal").show();
 					$('#eventModal').modal();
 					return false;
 				},
@@ -435,6 +497,7 @@
 			<h2 class="modal-title" id="eventModalLabel"></h2>
 		  </div>
 		  <div class="modal-body">
+		  <input type="hidden" name="eventAdded" id="eventAdded" value="">
 			<div id="modalDesc" align="center"></div>
 			<br />
 			<div class="row">
@@ -444,15 +507,24 @@
 			<br />
 			<div class="row">
 				<div class="col-sm-6" align="center">Room: <span id="modalRoom"></span></div>
-				<div class="col-sm-6" align="center">Link: <a class="orglink" id="modalEvtLink" target="_blank">link</a></div>
+				<div class="col-sm-6" align="center" id="modalLinkDiv">Link: <a id="modalEvtLink" target="_blank">Click Here</a></div>
 			</div>
 		  </div>
 		  <div class="modal-footer">
 			<?php if($loggedInAsUser): ?>
-			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="addToCal">
-				<input type="hidden" name="addToCalEvtId" id="addToCalEvtId" value="">
-				<input type="hidden" name="addToCalUserId" id="addToCalUserId" value="<?php echo $userInfo['userId'];?>">
-				<button type="submit" class="btn btn-primary" name="type" value="addToCal">Add to Calendar</button>
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="addToCal" class="toggleOnCal">
+				<input type="hidden" name="toggleOnCalEvtId"  class="toggleOnCalEvtId" value="">
+				<button type="submit" class="btn btn-primary" name="type" value="addToCal">Add To My Events</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</form>
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="removeFromCal" class="toggleOnCal">
+				<input type="hidden" name="toggleOnCalEvtId"  class="toggleOnCalEvtId" value="">
+				<button type="submit" class="btn btn-primary" name="type" value="removeFromCal">Remove From My Events</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</form>
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="delete" class="toggleOnCal">
+				<input type="hidden" name="toggleOnCalEvtId"  class="toggleOnCalEvtId" value="">
+				<button type="submit" class="btn btn-primary" name="type" value="deleteEvent">Delete Event</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</form>
 			<?php else:?>
