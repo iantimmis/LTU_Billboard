@@ -29,6 +29,7 @@
   </style>
 </head>
 <body>
+<!-- Builds request table to show correct request type, sort method, and page number -->
 <?php
     $currpage=intval($_GET["page"]);
     $sortBy=intval($_GET["sort"]);
@@ -56,7 +57,7 @@
         $result=$con->query($sql);
         if($result->num_rows==0)
         {
-            echo "<h3 id='noEvents'>No new events</h3>";
+            echo "<h4 id='noEvents'>No new events</h4>";
         }
         else
         {  
@@ -87,7 +88,7 @@
         $result=$con->query($sql);
         if($result->num_rows==0)
         {
-            echo "<h3 id='noOrgs'>No new organizations</h3>";
+            echo "<h4 id='noOrgs'>No new organizations</h4>";
         }
         else
         {   
