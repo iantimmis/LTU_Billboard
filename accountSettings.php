@@ -1,10 +1,8 @@
 <?php
-	session_start();
-	$thisPage = "index.php";
-	//data validation for logging in
-	$email = $password = $type = "";
-	$emailErr = $passwordErr = $loginMessage = "";
-	$loginAttempted = $loginSuccess = $loggedInAsUser = $loggedInAsOrg = false;
+	session_start();//session control
+	$thisPage = "index.php";//page for logout redirection
+	
+	//Establish connection with the database
 	$servername = "localhost";
 	$dbusername = "root";
 	$dbpassword = "root";
@@ -15,26 +13,50 @@
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
+	
+	//Get what the filter for the calendar is set as
 	if (!empty($_GET['filter'])) {
 		$_SESSION['filter'] = $_GET['filter'];
 	}
+	
+	//variables used in validation
+	$email = $password = $type = "";
+	$emailErr = $passwordErr = $loginMessage = "";
+	$loginAttempted = $loginSuccess = $loggedInAsUser = $loggedInAsOrg = false;
+	//data validation for logging in
 	$endDateEarly = $endTimeEarly = false;
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		
+		/*get the type of post request. Option: Request
+			stu: 				for logging in as student
+			org: 				for logging in as organization
+			orgCreate: 			for creating organization account
+			stuCreate:			for creating student account
+			changeStuEmail: 	for changing student email
+			changeStuPassword: 	for changing student password
+			unfollowOrg:		for unfollowing an organization's events
+			'empty':			if there isn't a type, it's for the checkbox used to stop receiving any emails
+		*/
 		if(!empty($_POST['type'])){$type = $_POST['type'];}
+		
+		//If cases for checking the type of request
 		if(strcmp($type,'stu')==0)//logging in as student
 		{
-			$loginAttempted = true;
-			if(empty($_POST['studentEmail']))
+			$loginAttempted = true;//user tried to log in
+			if(empty($_POST['studentEmail']))//email is required
 				$emailErr = "Email is Required";
-			elseif(empty($_POST['studentPassword']))
+			elseif(empty($_POST['studentPassword']))//password is required
 				$passwordErr = "Password is Required";
-			else
+			else//if information is filled out
 			{
+				//clean inputs using function
 				$email = cleanInput($_POST['studentEmail'],$conn);
 				$password = cleanInput($_POST['studentPassword'],$conn);
+				
+				//query database to get information, then store it in the session
 				$sql = "SELECT * FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
 				$result = $conn->query($sql);
-				if($result->num_rows==0){$loginMessage="Login Failed";}
+				if($result->num_rows==0){$loginMessage="Login Failed";}//not found in database
 				else
 				{
 					$loginSuccess = true;
@@ -90,25 +112,26 @@
 			$sql = "INSERT INTO ltuorganization (org_name,org_description,org_website,login_password,org_email,org_accepted)
 			values ('{$orgName}','{$orgDesc}','{$orgUrl}','{$orgPassword}','{$orgEmail}',0);";
 			$errorMessage = "";
-			if ($conn->query($sql) === TRUE) {
-				//echo "New record created successfully";
-			} else {
+			if ($conn->query($sql) === TRUE) {//if successfully created account, log them in
+				$sql = "SELECT orgId FROM ltuorganization WHERE org_email='{$orgEmail}' AND login_password='{$orgPassword}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$userInfo = $result->fetch_assoc();
+					$_SESSION['orgId'] = $userInfo['orgId'];
+					$_SESSION["orgName"] = $orgName;
+					$_SESSION["orgDesc"] = $orgDesc;
+					$_SESSION['orgWebsite'] = $orgWebsite;
+					$_SESSION['orgEmail'] = $orgEmail;
+					$_SESSION['orgPassword'] = $orgPassword;
+					$_SESSION['isAccepted'] = 0;
+				}
+			} //success
+			else 
+			{//for error checking while developing
 				//echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-			$sql = "SELECT orgId FROM ltuorganization WHERE org_email='{$orgEmail}' AND login_password='{$orgPassword}';";
-			$result = $conn->query($sql);
-			if($result->num_rows==0){$loginMessage="Login Failed";}
-			else
-			{
-				$userInfo = $result->fetch_assoc();
-				$_SESSION['orgId'] = $userInfo['orgId'];
-				$_SESSION["orgName"] = $orgName;
-				$_SESSION["orgDesc"] = $orgDesc;
-				$_SESSION['orgWebsite'] = $orgWebsite;
-				$_SESSION['orgEmail'] = $orgEmail;
-				$_SESSION['orgPassword'] = $orgPassword;
-				$_SESSION['isAccepted'] = 0;
-			}
+			}//fail
 		}
 		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
 		{
@@ -121,46 +144,46 @@
 			values ('{$firstName}','{$lastName}','{$stuPassword}',0,'{$stuEmail}',1);";
 	
 			if ($conn->query($sql) === TRUE) {
-				//echo "New record created successfully";
-			} else {
-				//echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-			
-			$sql = "SELECT userId FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
-			$result = $conn->query($sql);
-			if($result->num_rows==0){$loginMessage="Login Failed";}
-			else
+				$sql = "SELECT userId FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$userInfo = $result->fetch_assoc();
+					$_SESSION['userId'] = $userInfo['userId'];
+					$_SESSION["firstName"] = $firstName;
+					$_SESSION["lastName"] = $lastName;
+					$_SESSION['isAdmin'] = 0;
+					$_SESSION['userEmail'] = $email;
+					$_SESSION['userPassword'] = $stuPassword;
+					$_SESSION['receiveEmails'] = 1;
+				}
+			} else 
 			{
-				$userInfo = $result->fetch_assoc();
-				$_SESSION['userId'] = $userInfo['userId'];
-				$_SESSION["firstName"] = $firstName;
-				$_SESSION["lastName"] = $lastName;
-				$_SESSION['isAdmin'] = 0;
-				$_SESSION['userEmail'] = $email;
-				$_SESSION['userPassword'] = $stuPassword;
-				$_SESSION['receiveEmails'] = 1;
+				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
 		if(strcmp($type,'changeStuEmail')==0)
 		{
 			$newEmail = cleanInput($_POST['changeStudentEmail'],$conn);
 			$sql = "UPDATE user_account SET user_email = '{$newEmail}' WHERE user_email='{$_SESSION['userEmail']}' AND login_password='{$_SESSION['userPassword']}';";
-			if ($conn->query($sql) === TRUE) {
+			if ($conn->query($sql) === TRUE) {//if successfull, change email in session and for this page
 				$userInfo['userEmail'] = $newEmail;
 				$_SESSION['userEmail'] = $newEmail;
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
+			} else 
+			{
+				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
 		if(strcmp($type,'changeStuPassword')==0)
 		{
 			$newPassword = cleanInput($_POST['changeStudentPassword'],$conn);
 			$sql = "UPDATE user_account SET login_password = '{$newPassword}' WHERE user_email='{$_SESSION['userEmail']}' AND login_password='{$_SESSION['userPassword']}';";
-			if ($conn->query($sql) === TRUE) {
+			if ($conn->query($sql) === TRUE) {//if successfull, change password in session and for this page
 				$userInfo['userPassword'] = $newPassword;
 				$_SESSION['userPassword'] = $newPassword;
 			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
+				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
 		if(strcmp($type,'unfollowOrg')==0)
@@ -169,25 +192,26 @@
 			$sql = "DELETE FROM user_org_join WHERE userId={$_SESSION['userId']} AND orgId = {$unfollowOrgId};";
 			if ($conn->query($sql) === TRUE) {}
 			else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
+				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
 		if(empty($_POST['type']))
 		{
+			//the form is empty if the checkbox is unchecked, and not if it is checked, so check if it's empty or not
 			$emailBool = empty($_POST['receiveEmails']) ? 0 : 1;
 			$sql = "UPDATE user_account SET receive_emails = {$emailBool} WHERE user_email='{$_SESSION['userEmail']}' AND login_password='{$_SESSION['userPassword']}';";
-			if ($conn->query($sql) === TRUE) {
+			if ($conn->query($sql) === TRUE) {//update session and page as well
 				$userInfo['receiveEmails'] = $emailBool;
 				$_SESSION['receiveEmails'] = $emailBool;
 			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
+				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
 	}
+	
 	//check session to see if logged in and user and get info if true
-
-	require 'getOrgsScript.php';
-	if (isset($_SESSION['userId'])){
+	require 'getOrgsScript.php';//function for getting organizations the user follows
+	if (isset($_SESSION['userId'])){//get info from session and store on page
 		$userInfo['userId'] = $_SESSION['userId'];
 		$userInfo['firstName'] = $_SESSION["firstName"];
 		$userInfo['lastName'] = $_SESSION["lastName"];
@@ -199,17 +223,11 @@
 		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
 		$loggedInAsUser = true;
 		
-		$followedOrgs = getOrgs($userInfo['userId'],$conn);
+		$followedOrgs = getOrgs($userInfo['userId'],$conn);//get followed org information
 		$numFollowedOrgs = 0;
-		if(!empty($followedOrgs))
+		if(!empty($followedOrgs))//get how many orgs the user follows
 			$numFollowedOrgs = count($followedOrgs);
-	} elseif (isset($_SESSION['orgId'])) {
-		$orgInfo['id'] = $_SESSION['orgId'];
-		$orgInfo['name'] = $_SESSION['orgName'];
-		$orgInfo['desc'] = $_SESSION['orgDesc'];
-		$orgInfo['website'] = $_SESSION['orgWebsite'];
-		$orgInfo['password'] = $_SESSION['orgPassword'];
-		$orgInfo['orgAccepted'] = $_SESSION['isAccepted'];
+	} elseif (isset($_SESSION['orgId'])) {//orgs can view this page
 		$loggedInAsOrg = true;
 		$message = $orgInfo['name'];
 	} else {
@@ -217,7 +235,7 @@
 	}
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
 	
-	function cleanInput($input,$conn){
+	function cleanInput($input,$conn){//function for cleaning input
 		$input = trim($input);
 		$input = stripslashes($input);
 		$input = htmlspecialchars($input);
@@ -229,6 +247,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<!-- included scripts and styles -->
 		<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="bootstrap.css" rel="stylesheet" type="text/css" />
@@ -236,7 +255,8 @@
 		<script type="text/javascript" src="bootstrap.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
 		<script type="text/javascript">
-			$(document).ready(function() {
+			$(document).ready(function() {//doc.ready
+				//used for the account creation tab, determining what type to show
 				$("#orgAct").hide();
 				$("input[name=actType]").on( "change", function() {
 					var target = $(this).val();
@@ -244,74 +264,75 @@
 					$("#"+target).show();
 				});
 				
+				//validate the change password form by ensuring passwords are equal
 				$("#changePasswordForm").validate({
 					"rules" : {
 						"confirmChangeStudentPassword" : {
 							"equalTo" : ".changeStudentPassword"}
 					}
 				});
+				
+				//submit the checkbox form on change
 				$("#receiveEmails").on( "change", function(){
 					$("#receiveEmailsForm").submit();
 				});
-				//used for create account panel radio buttons
-			$("#orgAct").hide();
-			$("input[name=actType]").on( "change", function() {
-				var target = $(this).val();
-				$(".chooseActType").hide();
-				$("#"+target).show();
-			});
+				
 			
-			//validation for student account creation
-			$("#createStuAct").validate({
-				"rules" : {
-					"confirmStuPassword" : {
-						"equalTo" : "#stuCreatePassword"}
-				}
-			});
-			$("#createOrgAct").validate({
-				rules : {
-					confirmOrgPassword : {
-						equalTo : "#orgCreatePassword"}
-				}
-			});
-			$("#studentForm").validate({});
-			$("#orgForm").validate({});
-			
-			
-			$("#createAccountLink").on("click", function(){
-				$('#loginModal').modal('show');
-				$('#loginTabs a:last').tab('show');
-			});
-			<?php if($loginAttempted):?>
-				<?php if(strcmp($type,'stu')==0):?>
-					<?php if(!$loginSuccess):?>
-					//login student fail
+				//validation for account creation and logging in
+				$("#createStuAct").validate({
+					"rules" : {
+						"confirmStuPassword" : {
+							"equalTo" : "#stuCreatePassword"}
+					}
+				});
+				$("#createOrgAct").validate({
+					rules : {
+						confirmOrgPassword : {
+							equalTo : "#orgCreatePassword"}
+					}
+				});
+				$("#studentForm").validate({});
+				$("#orgForm").validate({});
+				
+				//directly open the create account tab
+				$("#createAccountLink").on("click", function(){
 					$('#loginModal').modal('show');
-					$('#stuLoginMessage').html("Login Failed");
-					$('#stuLoginMessage').toggleClass('error');
-					<?php endif; ?>
-				<?php elseif(strcmp($type,'org')==0): ?>
-					<?php if(!$loginSuccess):?>
-					$('#loginModal').modal('show');
-					$('#loginTabs a[href="#loginAsOrg"]').tab('show')
-					$('#orgLoginMessage').html("Login Failed");
-					$('#orgLoginMessage').toggleClass('error');
+					$('#loginTabs a:last').tab('show');
+				});
+				
+				//open the login modal and show error if login fails
+				<?php if($loginAttempted):?>
+					<?php if(strcmp($type,'stu')==0):?>
+						<?php if(!$loginSuccess):?>
+						//login student fail
+						$('#loginModal').modal('show');
+						$('#stuLoginMessage').html("Login Failed");
+						$('#stuLoginMessage').toggleClass('error');
+						<?php endif; ?>
+					<?php elseif(strcmp($type,'org')==0): ?>
+						<?php if(!$loginSuccess):?>
+						//login org fail
+						$('#loginModal').modal('show');
+						$('#loginTabs a[href="#loginAsOrg"]').tab('show')
+						$('#orgLoginMessage').html("Login Failed");
+						$('#orgLoginMessage').toggleClass('error');
+						<?php endif;?>
 					<?php endif;?>
-				<?php endif;?>
-			<?php endif?>
-			});
+				<?php endif?>
+			});//end of doc.ready
 		</script>
 		<style>
-			.orgPage{
-				color: #333;
-				text-decoration: underline;
-			}
+		.orgPage{
+			color: #333;
+			text-decoration: underline;
+		}
 		</style>
 		<title>Account Settings</title>
 	</head>
 	<body>
-		<?php require 'requiredHeader.php'?>
+		<?php require 'requiredHeader.php';//header html?>
 		<?php if($loggedInAsUser): ?>
+		<!-- forms for changing user information -->
 		<div class="form-group row pageMessage">
 			<div class="col-sm-5" align="center">
 				You're logged in as: <?php echo $message?>,<br />Below you can change your email and password.<br/>
@@ -345,6 +366,7 @@
 			</div>
 		</form>
 		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="receiveEmailsForm">
+			<!-- emails checkbox -->
 			<div class="form-group row">
 				<label for="receiveEmails" class="col-sm-1 form-control-label" align="right"> Recieve Emails:</label>
 				<div class="col-sm-2">
@@ -352,13 +374,15 @@
 				</div>
 			</div>
 		</form>
+		
+		<!-- section for showing followed organizations -->
 		<div class="form-group row pageMessage">
 			<div class="col-sm-5" align="center">
 				You follow <?php echo $numFollowedOrgs?> organizations at Lawrence Tech.<br /> <a class="orgPage" href="organizations.php">Click here</a> to find more, or look at the organizations you follow below.
 			</div>
 		</div>
 			<?php if($numFollowedOrgs>0):?>
-				<?php foreach($followedOrgs as $followedOrgInfo):?>
+				<?php foreach($followedOrgs as $followedOrgInfo)://loops through each org followed?>
 				<div class="form-group row">
 					<div class="col-sm-2" align="right">
 						Name: <?php echo $followedOrgInfo['org_name'];?>
