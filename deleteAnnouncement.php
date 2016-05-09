@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<link rel="icon" href="favicon.ico"/>
+</head>
+</head>
 <body>
 <!-- Delete selected announcement -->
 <?php
