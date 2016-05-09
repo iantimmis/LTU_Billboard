@@ -243,6 +243,7 @@
 <html lang="en">
 	<head>
 		<!-- included scripts and styles -->
+		<link rel="icon" href="favicon.ico"/>
 		<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="bootstrap.css" rel="stylesheet" type="text/css" />
