@@ -1,5 +1,6 @@
 		<header>
 			<?php if($loggedInAsOrg) echo "<a href='createEvent.php'><button class='event'>Create Event</button></a>";?>
+			<?php if($loggedInAsAdmin) echo "<a href='admin.php'><button class='event'>Administration</button></a>";?>
 			<a href="index.php" id=logo>LTU Billboard</a>
 			<?php if(!$loggedIn): ?>
 			<span class="log-in">
@@ -10,7 +11,7 @@
 			<?php else: ?>
 			<span class="log-in">
 				<form action="logout.php" method="post" role="form">
-					<div class="loggedInText" align="right">Logged in as:<br /> <?php echo ($loggedInAsOrg ? $orgInfo['name'] : $userInfo['firstName']);?></div>
+					<div class="loggedInText" align="right">Logged in as:<br /> <?php echo ($loggedInAsOrg ? "<a href='organizations.php'>{$orgInfo['name']}</a>" : "<a href='accountSettings.php'>{$userInfo['firstName']}</a>");?></div>
 					<button class="button" id="logoutButton" type="submit" name="source" value="<?php echo $thisPage;?>">Log Out</button>
 				</form>
 			</span>

@@ -14,11 +14,12 @@
 	}
 	
 	//check session to see if logged in and user and get info if true
-	$loggedInAsUser = false;
+	$loggedInAsUser = $loggedInAsAdmin = false;
 	$loggedInAsOrg = false;
 	if (isset($_SESSION['userId'])){
 		$userInfo['userId'] = $_SESSION['userId'];
 		$userInfo['firstName'] = $_SESSION["firstName"];
+		$loggedInAsAdmin = $_SESSION['isAdmin'];
 		$loggedInAsUser = true;
 		$message = "You need to be logged in as an organization to create an event.";
 	} elseif (isset($_SESSION['orgId'])) {
@@ -388,7 +389,7 @@
 		<?php endif ?>
 
 		<footer>
-			Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Timmis
+			Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Tammis
 		</footer>
 	</body>
 </html>

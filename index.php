@@ -230,13 +230,12 @@
 	}
 	
 	//check session to see if logged in and user and get info if true
-	$loggedInAsUser = false;
-	$loggedInAsOrg = false;
+	$loggedInAsUser = $loggedInAsOrg = $loggedInAsAdmin = false;
 	if (isset($_SESSION['userId'])){
 		$userInfo['userId'] = $_SESSION['userId'];
 		$userInfo['firstName'] = $_SESSION["firstName"];
 		$userInfo['lastName'] = $_SESSION["lastName"];
-		$userInfo['isAdmin'] = $_SESSION['isAdmin'];
+		$loggedInAsAdmin = $_SESSION['isAdmin'];
 		$userId = $userInfo['userId'];
 		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
 		$userInfo['events'] = array();

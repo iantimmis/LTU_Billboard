@@ -17,7 +17,7 @@
 	//variables used in validation
 	$email = $password = $type = "";
 	$emailErr = $passwordErr = $loginMessage = "";
-	$loginAttempted = $loginSuccess = $loggedInAsUser = $loggedInAsOrg = false;
+	$loginAttempted = $loginSuccess = $loggedInAsUser = $loggedInAsOrg = $loggedInAsAdmin = false;
 	//data validation for logging in
 	$endDateEarly = $endTimeEarly = false;
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -210,7 +210,7 @@
 		$userInfo['userId'] = $_SESSION['userId'];
 		$userInfo['firstName'] = $_SESSION["firstName"];
 		$userInfo['lastName'] = $_SESSION["lastName"];
-		$userInfo['isAdmin'] = $_SESSION['isAdmin'];
+		$loggedInAsAdmin = $_SESSION['isAdmin'];
 		$userInfo['userEmail'] = $_SESSION['userEmail'];
 		$userInfo['userPassword'] = $_SESSION['userPassword'];
 		$userInfo['receiveEmails'] = $_SESSION['receiveEmails'];

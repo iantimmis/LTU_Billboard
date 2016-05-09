@@ -53,11 +53,10 @@
 		$userInfo['userId'] = $_SESSION['userId'];
 		$userInfo['firstName'] = $_SESSION["firstName"];
 		$userInfo['lastName'] = $_SESSION["lastName"];
-		$userInfo['isAdmin'] = $_SESSION['isAdmin'];
+		$loggedInAsAdmin = $_SESSION['isAdmin'];
 		$userId = $userInfo['userId'];
 		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
 		$loggedInAsUser = true;
-		$loggedInAsAdmin = true;
 	} elseif (isset($_SESSION['orgId'])) {
 		$orgInfo['id'] = $_SESSION['orgId'];
 		$orgInfo['name'] = $_SESSION['orgName'];
