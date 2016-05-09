@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="icon" href="favicon.ico"/>
+</head>
 <body>
 <!-- Add new announcement -->
 <?php
