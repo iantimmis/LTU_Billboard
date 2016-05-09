@@ -457,26 +457,26 @@
 						{
 							echo "<option value='add'>Added to Calendar</option>";
 							echo "<option value='org' selected>My Organizations</option>";
-							echo "<option value='mine'>My Events</option>";
+							echo "<option value='mine'>Private Events</option>";
 						}
 						elseif(strcmp($filter,'mine')==0)
 						{
 							echo "<option value='add'>Added to Calendar</option>";
 							echo "<option value='org'>My Organizations</option>";
-							echo "<option value='mine' selected>My Events</option>";
+							echo "<option value='mine' selected>Private Events</option>";
 						}
 						else
 						{ 
 							echo "<option value='add'>Added to Calendar</option>";
 							echo "<option value='org'>My Organizations</option>";
-							echo "<option value='mine'>My Events</option>";
+							echo "<option value='mine'>Private Events</option>";
 						}
 					}
 					else
 					{
 						echo "<option value='add'>Added to Calendar</option>";
 						echo "<option value='org'>My Organizations</option>";
-						echo "<option value='mine'>My Events</option>";
+						echo "<option value='mine'>Private Events</option>";
 					}
 				}?>
         </select>
@@ -516,12 +516,12 @@
 			<?php if($loggedInAsUser): ?>
 			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="addToCal" class="toggleOnCal">
 				<input type="hidden" name="toggleOnCalEvtId"  class="toggleOnCalEvtId" value="">
-				<button type="submit" class="btn btn-primary" name="type" value="addToCal">Add To My Events</button>
+				<button type="submit" class="btn btn-primary" name="type" value="addToCal">Add To Calendar</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</form>
 			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="removeFromCal" class="toggleOnCal">
 				<input type="hidden" name="toggleOnCalEvtId"  class="toggleOnCalEvtId" value="">
-				<button type="submit" class="btn btn-primary" name="type" value="removeFromCal">Remove From My Events</button>
+				<button type="submit" class="btn btn-primary" name="type" value="removeFromCal">Remove From Calendar</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</form>
 			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" id="delete" class="toggleOnCal">
