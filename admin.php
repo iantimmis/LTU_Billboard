@@ -93,6 +93,13 @@
 	<script src='moment.min.js'></script>
 	<script src='fullcalendar.js'></script>
 	<script type="text/javascript" src="bootstrap.min.js"></script>
+	<!-- (Hide this icon for IE) -->
+        <![if !IE]>
+        <link rel="icon" href="favicon.ico"/>
+	<![endif]>
+        <!-- This is the icon for IE -->
+        <link rel="shortcut icon" href="favicon.ico" type="image/ico"/>
+        
   <script>
 		$(document).ready(function() {
 			$('#loginTabs a:last').hide();
