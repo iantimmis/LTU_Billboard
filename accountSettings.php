@@ -74,6 +74,7 @@
 					$_SESSION['orgWebsite'] = $orgInfo['org_website'];
 					$_SESSION['orgEmail'] = $orgInfo['org_email'];
 					$_SESSION['orgPassword'] = $orgInfo['login_password'];
+					$_SESSION['isAccepted'] = $orgInfo['org_accepted'];
 					$loginMessage = "Login Successful";
 				}
 			}
@@ -106,6 +107,7 @@
 				$_SESSION['orgWebsite'] = $orgWebsite;
 				$_SESSION['orgEmail'] = $orgEmail;
 				$_SESSION['orgPassword'] = $orgPassword;
+				$_SESSION['isAccepted'] = 0;
 			}
 		}
 		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
@@ -161,7 +163,7 @@
 				echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
-		if(strcmp($type,'unfollowOrg'==0))
+		if(strcmp($type,'unfollowOrg')==0)
 		{
 			$unfollowOrgId = $_POST['unfollowOrgId'];
 			$sql = "DELETE FROM user_org_join WHERE userId={$_SESSION['userId']} AND orgId = {$unfollowOrgId};";
@@ -207,6 +209,7 @@
 		$orgInfo['desc'] = $_SESSION['orgDesc'];
 		$orgInfo['website'] = $_SESSION['orgWebsite'];
 		$orgInfo['password'] = $_SESSION['orgPassword'];
+		$orgInfo['orgAccepted'] = $_SESSION['isAccepted'];
 		$loggedInAsOrg = true;
 		$message = $orgInfo['name'];
 	} else {
@@ -241,16 +244,61 @@
 					$("#"+target).show();
 				});
 				
-				$("#passwordForm").validate({
+				$("#changePasswordForm").validate({
 					"rules" : {
 						"confirmChangeStudentPassword" : {
-							"equalTo" : "#changeStudentPassword"}
+							"equalTo" : ".changeStudentPassword"}
 					}
 				});
-				
 				$("#receiveEmails").on( "change", function(){
 					$("#receiveEmailsForm").submit();
 				});
+				//used for create account panel radio buttons
+			$("#orgAct").hide();
+			$("input[name=actType]").on( "change", function() {
+				var target = $(this).val();
+				$(".chooseActType").hide();
+				$("#"+target).show();
+			});
+			
+			//validation for student account creation
+			$("#createStuAct").validate({
+				"rules" : {
+					"confirmStuPassword" : {
+						"equalTo" : "#stuCreatePassword"}
+				}
+			});
+			$("#createOrgAct").validate({
+				rules : {
+					confirmOrgPassword : {
+						equalTo : "#orgCreatePassword"}
+				}
+			});
+			$("#studentForm").validate({});
+			$("#orgForm").validate({});
+			
+			
+			$("#createAccountLink").on("click", function(){
+				$('#loginModal').modal('show');
+				$('#loginTabs a:last').tab('show');
+			});
+			<?php if($loginAttempted):?>
+				<?php if(strcmp($type,'stu')==0):?>
+					<?php if(!$loginSuccess):?>
+					//login student fail
+					$('#loginModal').modal('show');
+					$('#stuLoginMessage').html("Login Failed");
+					$('#stuLoginMessage').toggleClass('error');
+					<?php endif; ?>
+				<?php elseif(strcmp($type,'org')==0): ?>
+					<?php if(!$loginSuccess):?>
+					$('#loginModal').modal('show');
+					$('#loginTabs a[href="#loginAsOrg"]').tab('show')
+					$('#orgLoginMessage').html("Login Failed");
+					$('#orgLoginMessage').toggleClass('error');
+					<?php endif;?>
+				<?php endif;?>
+			<?php endif?>
 			});
 		</script>
 		<style>
@@ -281,7 +329,7 @@
 				</div>
 			</div>
 		</form>
-		<form action="$followedOrgInfopasswordForm">
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="$changePasswordForm">
 			<!-- Password row -->
 			<div class="form-group row">
 				<label for="changeStudentPassword" class="col-sm-1 form-control-label" align="right">Password:</label>
@@ -316,12 +364,12 @@
 						Name: <?php echo $followedOrgInfo['org_name'];?>
 					</div>
 					<div class="col-sm-2" align="center">
-						<a href='organizations.php?orgId=<?php echo $followedOrgInfo['orgId'];?>'><button id='loginButton'>More Info</button></a>
+						<a href='organizations.php?orgId=<?php echo $followedOrgInfo['orgId'];?>'><button class="button" id='infoButton'>More Info</button></a>
 					</div>
 					<div class="col-sm-2" align="center">
 						<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="unfollowOrg">
 							<input type="hidden" name="unfollowOrgId" value="<?php echo $followedOrgInfo['orgId'];?>" />
-							<button id='loginButton' type="submit" name="type" value="unfollowOrg">Unfollow</button>
+							<button class="button" id='unfollowButton' type="submit" name="type" value="unfollowOrg">Unfollow</button>
 							</form>
 					</div>
 				</div>

@@ -38,7 +38,25 @@ header{
   margin-top:0.9em;
   font-size:0.95em;
 }
-#loginButton{
+.button{
+  margin-bottom:0.6em;
+  background-color:#003d78;
+  color:white;
+  border:none;
+  align:center;
+  padding:0.4em 1em;
+  font-size:1.1em;
+}
+#unfollowButton{
+  margin-bottom:0.6em;
+  background-color:#003d78;
+  color:white;
+  border:none;
+  align:center;
+  padding:0.4em 1em;
+  font-size:1.1em;
+}
+#infoButton{
   margin-bottom:0.6em;
   background-color:#003d78;
   color:white;
@@ -81,6 +99,10 @@ header a, .subheader a{
 .subTitle{
   font-size:1.6em; 
   font-weight:bold;
+}
+.pageMessage{
+	font-size:1.4em;
+	font-weight:bold;
 }
 .subList{
   list-style-type:square;
@@ -136,7 +158,10 @@ article{
   color:black;
 }
 .error{
-	color: white;
+	color: red;
+}
+.success{
+	color: green;
 }
 #tableCalendar td:hover{
   background-color:#fff; 
@@ -174,6 +199,8 @@ modal-content{
 }
 footer{
   background-color:#004e99;
+  position: fixed;
+  bottom: 0px;
   width:100%; 
   clear:both;
   text-align:center;

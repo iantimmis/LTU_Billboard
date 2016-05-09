@@ -77,6 +77,7 @@
 					$_SESSION['orgWebsite'] = $orgInfo['org_website'];
 					$_SESSION['orgEmail'] = $orgInfo['org_email'];
 					$_SESSION['orgPassword'] = $orgInfo['login_password'];
+					$_SESSION['isAccepted'] = $orgInfo['org_accepted'];
 					$loginMessage = "Login Successful";
 				}
 			}
@@ -109,6 +110,7 @@
 				$_SESSION['orgWebsite'] = $orgWebsite;
 				$_SESSION['orgEmail'] = $orgEmail;
 				$_SESSION['orgPassword'] = $orgPassword;
+				$_SESSION['isAccepted'] = 0;
 			}
 		}
 		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
@@ -254,6 +256,7 @@
 		$orgInfo['name'] = $_SESSION['orgName'];
 		$orgInfo['desc'] = $_SESSION['orgDesc'];
 		$orgInfo['website'] = $_SESSION['orgWebsite'];
+		$orgInfo['orgAccepted'] = $_SESSION['isAccepted'];
 		$loggedInAsOrg = true;
 		$message = $orgInfo['name'];
 	} else {
@@ -375,10 +378,6 @@
 			$("#studentForm").validate({});
 			$("#orgForm").validate({});
 			
-			//used for the calendar filter
-			$("#selectId").on( "change", function(){
-				$("#dropdown").submit();
-			});
 			
 			$("#createAccountLink").on("click", function(){
 				$('#loginModal').modal('show');
@@ -402,6 +401,10 @@
 				<?php endif;?>
 			<?php endif?>
 			
+			//used for the calendar filter
+			$("#selectId").on( "change", function(){
+				$("#dropdown").submit();
+			});
 			<?php if($evtCreation):?>
 				<?php if($eventSuccess):?>
 					//private event success

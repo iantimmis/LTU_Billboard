@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$thisPage = "index.php";
+	$thisPage = "organizations.php";
 	//data validation for logging in
 	$email = $password = $type = "";
 	$emailErr = $passwordErr = $loginMessage = "";
@@ -74,6 +74,7 @@
 					$_SESSION['orgWebsite'] = $orgInfo['org_website'];
 					$_SESSION['orgEmail'] = $orgInfo['org_email'];
 					$_SESSION['orgPassword'] = $orgInfo['login_password'];
+					$_SESSION['isAccepted'] = $orgInfo['org_accepted'];
 					$loginMessage = "Login Successful";
 				}
 			}
@@ -138,16 +139,27 @@
 				$_SESSION['userPassword'] = $stuPassword;
 				$_SESSION['receiveEmails'] = 1;
 			}
-		}
-		if(strcmp($type,'changeStuEmail')==0)
-		{
-			$newEmail = cleanInput($_POST['changeStudentEmail'],$conn);
-			$sql = "UPDATE user_account SET user_email = '{$newEmail}' WHERE user_email='{$_SESSION['userEmail']}' AND login_password='{$_SESSION['userPassword']}';";
-			if ($conn->query($sql) === TRUE) {
-				$userInfo['userEmail'] = $newEmail;
-				$_SESSION['userEmail'] = $newEmail;
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
+			if(strcmp($type,'changeOrgPassword')==0)
+			{
+				$newPassword = cleanInput($_POST['changeOrgPassword'],$conn);
+				$sql = "UPDATE ltuorganization SET login_password = '{$newPassword}' WHERE org_email='{$_SESSION['orgEmail']}' AND login_password='{$_SESSION['orgPassword']}';";
+				if ($conn->query($sql) === TRUE) {
+					$orgInfo['password'] = $newPassword;
+					$_SESSION['orgPassword'] = $newPassword;
+				} else {
+					echo "Error: " . $sql . "<br>" . $conn->error;
+				}
+			}
+			if(strcmp($type,'changeOrgDesc')==0)
+			{
+				$newDesc = cleanInput($_POST['changeOrgDesc'],$conn);
+				$sql = "UPDATE ltuorganization SET login_password = '{$newDesc}' WHERE org_email='{$_SESSION['orgEmail']}' AND login_password='{$_SESSION['orgPassword']}';";
+				if ($conn->query($sql) === TRUE) {
+					$orgInfo['desc'] = $newDesc;
+					$_SESSION['orgDesc'] = $newDesc;
+				} else {
+					echo "Error: " . $sql . "<br>" . $conn->error;
+				}
 			}
 		}
 	}
@@ -157,9 +169,6 @@
 		$userInfo['firstName'] = $_SESSION["firstName"];
 		$userInfo['lastName'] = $_SESSION["lastName"];
 		$userInfo['isAdmin'] = $_SESSION['isAdmin'];
-		$userInfo['userEmail'] = $_SESSION['userEmail'];
-		$userInfo['userPassword'] = $_SESSION['userPassword'];
-		$userInfo['receiveEmails'] = $_SESSION['receiveEmails'];
 		$userId = $userInfo['userId'];
 		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
 		$loggedInAsUser = true;
@@ -169,6 +178,8 @@
 		$orgInfo['desc'] = $_SESSION['orgDesc'];
 		$orgInfo['website'] = $_SESSION['orgWebsite'];
 		$orgInfo['password'] = $_SESSION['orgPassword'];
+		$orgInfo['email'] = $_SESSION['orgEmail'];
+		$orgInfo['orgAccepted'] = $_SESSION['isAccepted'];
 		$loggedInAsOrg = true;
 		$message = $orgInfo['name'];
 	} else {
@@ -206,8 +217,8 @@
 				
 				$("#passwordForm").validate({
 					"rules" : {
-						"confirmChangeStudentPassword" : {
-							"equalTo" : "#changeStudentPassword"}
+						"confirmChangeOrgPassword" : {
+							"equalTo" : "#changeOrgPassword"}
 					}
 				});
 				
@@ -221,6 +232,53 @@
 	<body>
 		<?php require 'requiredHeader.php'?>
 		<?php if($loggedInAsUser): ?>
+		
+		<?php elseif($loggedInAsOrg):?>
+		<div class="form-group row pageMessage">
+			<div class="col-sm-5" align="center">
+				You're logged in as: <?php echo $message?>,<br />Below you can change your organization's information.<br/>
+				<?php echo $orgInfo['orgAccepted'] ? "Your organization have been approved by administration" : "Youre organization is still waiting approval.";?>
+			</div>
+		</div>
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="emailForm">
+			<!-- Username row -->
+			<div class="form-group row">
+				<label for="changeOrgEmail" class="col-sm-1 form-control-label" align="right">Email:</label>
+				<div class="col-sm-2">
+					<input required type="email" class="form-control" id="changeOrgEmail" name="changeOrgEmail" value="<?php echo $orgInfo['email']?>" />
+				</div>
+				<div class="col-sm-1">
+					<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="changeOrgEmail">Change</button>
+				</div>
+			</div>
+		</form>
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="$passwordForm">
+			<!-- Password row -->
+			<div class="form-group row">
+				<label for="changeOrgPassword" class="col-sm-1 form-control-label" align="right">Password:</label>
+				<div class="col-sm-2">
+					<input required type="password" class="form-control" id="changeOrgPassword" name="changeOrgPassword" value="<?php echo $orgInfo['password']?>" />
+				</div>
+				<div class="col-sm-2">
+					<input required type="password" class="form-control" id="confirmChangeOrgPassword" name="confirmChangeOrgPassword" placeholder="Repeat new password" />
+				</div>
+				<div class="col-sm-1">
+					<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="changeOrgPassword">Change</button>
+				</div>
+			</div>
+		</form>
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="orgDescForm">
+			<div class="form-group row">
+				<label for="changeOrgDesc" class="col-sm-1 form-control-label" align="right">Description:</label>
+				<div class="col-sm-4">
+					<textarea required type="email" class="form-control" id="changeOrgEmail" name="changeOrgEmail"><?php echo $orgInfo['desc'];?></textarea>
+				</div>
+				<div class="col-sm-1">
+					<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="changeOrgDesc">Change</button>
+				</div>
+			</div>
+		</form>
+		<?php else:?>
 		
 		<?php endif;?>
 		<div id="bottomWrapper">
