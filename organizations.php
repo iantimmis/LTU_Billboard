@@ -180,6 +180,13 @@
 			}
 		}
 	}
+	function cleanInput($input,$conn){
+		$input = trim($input);
+		$input = stripslashes($input);
+		$input = htmlspecialchars($input);
+		$input = mysqli_real_escape_string($conn,$input);
+      	return $input;
+	}
 	
 	//check session to see if logged in and user and get info if true
 	if (isset($_SESSION['userId'])){
@@ -190,6 +197,7 @@
 		$userId = $userInfo['userId'];
 		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
 		$loggedInAsUser = true;
+		
 	} elseif (isset($_SESSION['orgId'])) {
 		$orgInfo['id'] = $_SESSION['orgId'];
 		$orgInfo['name'] = $_SESSION['orgName'];
@@ -200,18 +208,51 @@
 		$orgInfo['orgAccepted'] = $_SESSION['isAccepted'];
 		$loggedInAsOrg = true;
 		$message = $orgInfo['name'];
+		
+		
 	} else {
 		$message = "No One";
-	}
-		
-	
+	}	
 	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
-	function cleanInput($input,$conn){
-		$input = trim($input);
-		$input = stripslashes($input);
-		$input = htmlspecialchars($input);
-		$input = mysqli_real_escape_string($conn,$input);
-      	return $input;
+	
+	//get events hosted by either org that is logged in, or one the user wants to see
+	$numEvents = 0;
+	if(!empty($orgInfo['id']))
+	{
+		$sql = "SELECT * FROM ltuevents WHERE org_id = {$orgInfo['id']} AND evt_start_date > CURDATE() ORDER BY evt_start_date;";
+		$result = $conn->query($sql);
+		$numEvents  =$result->num_rows;
+		if($numEvents==0){}
+		else
+		{
+			$orgInfo['eventArray']= array();
+			while($row=$result->fetch_assoc())
+			{
+				array_push($orgInfo['eventArray'],$row);//put event info into array
+			}
+		}
+	}
+	else{$orgInfo['id']=0;}
+	
+	//get all organizations
+	$numOrgs = 0;
+	$sql = "SELECT orgId, org_name, org_description, org_website, org_email, org_accepted FROM ltuorganization;";
+	$result = $conn->query($sql);
+	$numOrgs = $result->num_rows;
+	if($numOrgs==0){}
+	else
+	{
+		$orgsArray= array();
+		while($row=$result->fetch_assoc())
+		{
+			array_push($orgsArray,$row);//put event info into array
+			if(empty($orgInfo['name'])){
+				if($row['orgId']==$orgInfo['id'])
+					$orgInfo['name'] = $row['org_name'];
+			}
+		}
+		if(empty($orgInfo['name']))
+			$orgInfo['name'] = "No organization selected";
 	}
 	$conn->close();
 ?>
@@ -226,6 +267,12 @@
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function() {
+				
+				//used for choosing org
+				$("#chooseOrgId").on( "change", function(){
+					$("#selectOrgForm").submit();
+				});
+				
 				$("#orgAct").hide();
 				$("input[name=actType]").on( "change", function() {
 					var target = $(this).val();
@@ -296,7 +343,7 @@
 		<div class="form-group row pageMessage">
 			<div class="col-sm-5" align="center">
 				You're logged in as: <?php echo $message?>,<br />Below you can change your organization's information.<br/>
-				<?php echo $orgInfo['orgAccepted'] ? "Your organization have been approved by administration" : "Youre organization is still waiting approval.";?>
+				<?php echo $orgInfo['orgAccepted'] ? "Your organization have been approved by administration" : "Your organization is still waiting approval.";?>
 			</div>
 		</div>
 		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="emailForm">
@@ -338,8 +385,56 @@
 			</div>
 		</form>
 		<?php else: //section for if logged in as user or not logged in. Shows dropdown to select an org to view information, or shows information of the org chosen.?>
-		
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="get" role="form" id="selectOrgForm">
+			<div class="form-group row pageMessage">
+				<div class="col-sm-5" align="center">
+				Pick an Organization: 
+					<select id="chooseOrgId" name="orgId">
+					<?php foreach($orgsArray as $org):?>
+						<option value="<?php echo $org['orgId']?>" <?php echo $org['orgId']==$orgInfo['id'] ? "selected" : ""?>><?php echo $org['org_name']?></option>
+						<?php if($org['orgId']==$orgInfo['id']){$orgInfo['name']=$org['org_name'];}?>
+					<?php endforeach;?>
+					</select>
+				</div>
+			</div>
+		</form>
 		<?php endif;?>
+		
+		<div class="form-group row pageMessage">
+			<div class="col-sm-5" align="center">
+				Below are events hosted by: <?php echo $orgInfo['name'];?>.
+			</div>
+		</div>
+		<?php if($numEvents>0):?>
+			<?php foreach($orgInfo['eventArray'] as $eventInfo)://loops through each org followed?>
+			<div class="form-group row">
+				<div class="col-sm-2" align="right">
+					Name: <?php echo $eventInfo['evt_name'];?>
+				</div>
+				<div class="col-sm-2" align="right">
+					Start Date: <?php echo $eventInfo['evt_start_date'];?>
+				</div>
+				<div class="col-sm-2" align="center">
+					<a href='index.php'><button class="button" id='infoButton'>More Info</button></a>
+				</div>
+				<!--<div class="col-sm-2" align="center">
+					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="unfollowEvent">
+						<input type="hidden" name="unfollowEvtId" value="<?php echo $eventInfo['orgId'];?>" />
+						<button class="button" id='unfollowButton' type="submit" name="type" value="unfollowEvent">Unfollow</button>
+						</form>
+				</div>-->
+			</div>
+			<?php endforeach;?>
+		<?php else:?>
+		<div class="form-group row pageMessage">
+			<div class="col-sm-5" align="center">
+				This organization doesn't host any events
+			</div>
+		</div>
+		<?php endif;?>
+		<!--<pre>
+		<?php //print_r($orgInfo['eventArray']);?>
+		</pre>-->
 		<div id="bottomWrapper">
 			<footer>
 			  Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Timmis
