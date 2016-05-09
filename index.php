@@ -291,6 +291,7 @@
 	<script src='moment.min.js'></script>
 	<script src='fullcalendar.js'></script>
 	<script type="text/javascript" src="bootstrap.min.js"></script>
+	<link rel="icon" href="favicon.ico"/>
 
 	<script type="text/javascript">
 		<?php if($loggedInAsUser): ?>
