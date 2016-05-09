@@ -264,7 +264,7 @@
 				$("#changePasswordForm").validate({
 					"rules" : {
 						"confirmChangeStudentPassword" : {
-							"equalTo" : ".changeStudentPassword"}
+							"equalTo" : "#changeStudentPassword"}
 					}
 				});
 				
@@ -351,10 +351,10 @@
 			<div class="form-group row">
 				<label for="changeStudentPassword" class="col-sm-1 form-control-label" align="right">Password:</label>
 				<div class="col-sm-2">
-					<input required type="password" class="form-control" id="changeStudentPassword" name="changeStudentPassword" value="<?php echo $userInfo['userPassword']?>" />
+					<input required type="text" class="form-control" id="changeStudentPassword" name="changeStudentPassword" value="<?php echo $userInfo['userPassword']?>" />
 				</div>
 				<div class="col-sm-2">
-					<input required type="password" class="form-control" id="confirmChangeStudentPassword" name="confirmChangeStudentPassword" placeholder="Repeat new password" />
+					<input required type="text" class="form-control" id="confirmChangeStudentPassword" name="confirmChangeStudentPassword" placeholder="Repeat new password" />
 				</div>
 				<div class="col-sm-1">
 					<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="changeStuPassword">Change</button>
