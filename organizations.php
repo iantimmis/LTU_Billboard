@@ -179,6 +179,15 @@
 				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
+		if(strcmp($type,'deleteEvent')==0)
+		{
+			$evtId = cleanInput($_POST['deleteEvtId'],$conn);
+			$sql = "DELETE FROM ltuevents where eventId={$evtId};";
+			if ($conn->query($sql) === TRUE) {} 
+			else {
+				//echo "Error: " . $sql . "<br>" . $conn->error;
+			}
+		}
 	}
 	function cleanInput($input,$conn){
 		$input = trim($input);
@@ -390,9 +399,11 @@
 				<div class="col-sm-5" align="center">
 				Pick an Organization: 
 					<select id="chooseOrgId" name="orgId">
+					<option value="0">Pick One</option>
 					<?php foreach($orgsArray as $org):?>
 						<option value="<?php echo $org['orgId']?>" <?php echo $org['orgId']==$orgInfo['id'] ? "selected" : ""?>><?php echo $org['org_name']?></option>
 						<?php if($org['orgId']==$orgInfo['id']){$orgInfo['name']=$org['org_name'];}?>
+						
 					<?php endforeach;?>
 					</select>
 				</div>
@@ -414,15 +425,18 @@
 				<div class="col-sm-2" align="right">
 					Start Date: <?php echo $eventInfo['evt_start_date'];?>
 				</div>
-				<div class="col-sm-2" align="center">
+				<div class="col-sm-2" align="left">
 					<a href='index.php'><button class="button" id='infoButton'>More Info</button></a>
 				</div>
-				<!--<div class="col-sm-2" align="center">
-					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="unfollowEvent">
-						<input type="hidden" name="unfollowEvtId" value="<?php echo $eventInfo['orgId'];?>" />
-						<button class="button" id='unfollowButton' type="submit" name="type" value="unfollowEvent">Unfollow</button>
-						</form>
-				</div>-->
+		
+				<?php if($loggedInAsOrg):?>
+				<div class="col-sm-1" align="left">
+					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="deleteEvent">
+						<input type="hidden" name="deleteEvtId" value="<?php echo $eventInfo['eventId'];?>" />
+						<button class="button" id='deleteButton' type="submit" name="type" value="deleteEvent">Delete</button>
+					</form>
+				</div>
+				<?php endif;?>
 			</div>
 			<?php endforeach;?>
 		<?php else:?>
