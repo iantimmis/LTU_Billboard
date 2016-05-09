@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="icon" href="favicon.ico"/>
+</head>
 <body>
 <!--Find maximum number of request pages -->
 <?php
