@@ -110,13 +110,7 @@ $loggedIn = $loggedInAsOrg || $loggedInAsUser
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<!-- (Hide this icon for IE) -->
-        	<![if !IE]>
         	<link rel="icon" href="favicon.ico"/>
-		<![endif]>
-        	<!-- This is the icon for IE -->
-        	<link rel="shortcut icon" href="favicon.ico" type="image/ico"/>
-        	
 		<link href="stylesheet.css" rel="stylesheet" type="text/css" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link href="bootstrap.css" rel="stylesheet" type="text/css" />
