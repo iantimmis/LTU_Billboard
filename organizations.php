@@ -150,41 +150,8 @@
 				echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
-		if(strcmp($type,'changeStuPassword')==0)
-		{
-			$newPassword = cleanInput($_POST['changeStudentPassword'],$conn);
-			$sql = "UPDATE user_account SET login_password = '{$newPassword}' WHERE user_email='{$_SESSION['userEmail']}' AND login_password='{$_SESSION['userPassword']}';";
-			if ($conn->query($sql) === TRUE) {
-				$userInfo['userPassword'] = $newPassword;
-				$_SESSION['userPassword'] = $newPassword;
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-		}
-		if(strcmp($type,'unfollowOrg'==0))
-		{
-			$unfollowOrgId = $_POST['unfollowOrgId'];
-			$sql = "DELETE FROM user_org_join WHERE userId={$_SESSION['userId']} AND orgId = {$unfollowOrgId};";
-			if ($conn->query($sql) === TRUE) {}
-			else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-		}
-		if(empty($_POST['type']))
-		{
-			$emailBool = empty($_POST['receiveEmails']) ? 0 : 1;
-			$sql = "UPDATE user_account SET receive_emails = {$emailBool} WHERE user_email='{$_SESSION['userEmail']}' AND login_password='{$_SESSION['userPassword']}';";
-			if ($conn->query($sql) === TRUE) {
-				$userInfo['receiveEmails'] = $emailBool;
-				$_SESSION['receiveEmails'] = $emailBool;
-			} else {
-				echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-		}
 	}
 	//check session to see if logged in and user and get info if true
-
-	require 'getOrgsScript.php';
 	if (isset($_SESSION['userId'])){
 		$userInfo['userId'] = $_SESSION['userId'];
 		$userInfo['firstName'] = $_SESSION["firstName"];
@@ -196,11 +163,6 @@
 		$userId = $userInfo['userId'];
 		$message  = $userInfo['firstName'] . " " . $userInfo['lastName'];
 		$loggedInAsUser = true;
-		
-		$followedOrgs = getOrgs($userInfo['userId'],$conn);
-		$numFollowedOrgs = 0;
-		if(!empty($followedOrgs))
-			$numFollowedOrgs = count($followedOrgs);
 	} elseif (isset($_SESSION['orgId'])) {
 		$orgInfo['id'] = $_SESSION['orgId'];
 		$orgInfo['name'] = $_SESSION['orgName'];
@@ -212,8 +174,9 @@
 	} else {
 		$message = "No One";
 	}
-	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
+		
 	
+	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
 	function cleanInput($input,$conn){
 		$input = trim($input);
 		$input = stripslashes($input);
@@ -253,82 +216,12 @@
 				});
 			});
 		</script>
-		<style>
-			.orgPage{
-				color: #333;
-				text-decoration: underline;
-			}
-		</style>
 		<title>Account Settings</title>
 	</head>
 	<body>
 		<?php require 'requiredHeader.php'?>
 		<?php if($loggedInAsUser): ?>
-		<div class="form-group row pageMessage">
-			<div class="col-sm-5" align="center">
-				You're logged in as: <?php echo $message?>,<br />Below you can change your email and password.<br/>
-			</div>
-		</div>
-		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="emailForm">
-			<!-- Username row -->
-			<div class="form-group row">
-				<label for="changeStudentEmail" class="col-sm-1 form-control-label" align="right">Email:</label>
-				<div class="col-sm-2">
-					<input required type="email" class="form-control" id="changeStudentEmail" name="changeStudentEmail" value="<?php echo $userInfo['userEmail']?>" />
-				</div>
-				<div class="col-sm-1">
-					<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="changeStuEmail">Change</button>
-				</div>
-			</div>
-		</form>
-		<form action="$followedOrgInfopasswordForm">
-			<!-- Password row -->
-			<div class="form-group row">
-				<label for="changeStudentPassword" class="col-sm-1 form-control-label" align="right">Password:</label>
-				<div class="col-sm-2">
-					<input required type="password" class="form-control" id="changeStudentPassword" name="changeStudentPassword" value="<?php echo $userInfo['userPassword']?>" />
-				</div>
-				<div class="col-sm-2">
-					<input required type="password" class="form-control" id="confirmChangeStudentPassword" name="confirmChangeStudentPassword" placeholder="Repeat new password to change" />
-				</div>
-				<div class="col-sm-1">
-					<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="changeStuPassword">Change</button>
-				</div>
-			</div>
-		</form>
-		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="receiveEmailsForm">
-			<div class="form-group row">
-				<label for="receiveEmails" class="col-sm-1 form-control-label" align="right"> Recieve Emails:</label>
-				<div class="col-sm-2">
-					<input type="checkbox" name="receiveEmails" id="receiveEmails" <?php if($userInfo['receiveEmails']==1){echo "checked";}?>/>
-				</div>
-			</div>
-		</form>
-		<div class="form-group row pageMessage">
-			<div class="col-sm-5" align="center">
-				You follow <?php echo $numFollowedOrgs?> organizations at Lawrence Tech.<br /> <a class="orgPage" href="organizations.php">Click here</a> to find more, or look at the organizations you follow below.
-			</div>
-		</div>
-			<?php if($numFollowedOrgs>0):?>
-				<?php foreach($followedOrgs as $followedOrgInfo):?>
-				<div class="form-group row">
-					<div class="col-sm-2" align="right">
-						Name: <?php echo $followedOrgInfo['org_name'];?>
-					</div>
-					<div class="col-sm-2" align="center">
-						<a href='organizations.php?orgId=<?php echo $followedOrgInfo['orgId'];?>'><button id='loginButton'>More Info</button></a>
-					</div>
-					<div class="col-sm-2" align="center">
-						<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="unfollowOrg">
-							<input type="hidden" name="unfollowOrgId" value="<?php echo $followedOrgInfo['orgId'];?>" />
-							<button id='loginButton' type="submit" name="type" value="unfollowOrg">Unfollow</button>
-							</form>
-					</div>
-				</div>
-				<?php endforeach;?>
-			<?php endif;?>
-		<?php else:?>
-		<h1>Must be logged in as a user account to view this page.</h1>
+		
 		<?php endif;?>
 		<div id="bottomWrapper">
 			<footer>
