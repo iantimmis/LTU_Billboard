@@ -14,11 +14,6 @@
 		die("Connection failed: " . $conn->connect_error);
 	}
 	
-	//Get what the filter for the calendar is set as
-	if (!empty($_GET['filter'])) {
-		$_SESSION['filter'] = $_GET['filter'];
-	}
-	
 	//variables used in validation
 	$email = $password = $type = "";
 	$emailErr = $passwordErr = $loginMessage = "";
@@ -254,6 +249,7 @@
 		<script type="text/javascript" src="jquery-2.2.2.min.js"></script>
 		<script type="text/javascript" src="bootstrap.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+
 		<script type="text/javascript">
 			$(document).ready(function() {//doc.ready
 				//used for the account creation tab, determining what type to show

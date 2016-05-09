@@ -1,10 +1,8 @@
 <?php
-	session_start();
-	$thisPage = "organizations.php";
-	//data validation for logging in
-	$email = $password = $type = "";
-	$emailErr = $passwordErr = $loginMessage = "";
-	$loginAttempted = $loginSuccess = $loggedInAsUser = $loggedInAsOrg = false;
+	session_start();//session control
+	$thisPage = "organizations.php";//page for logout redirection
+	
+	//Establish connection with the database
 	$servername = "localhost";
 	$dbusername = "root";
 	$dbpassword = "root";
@@ -15,12 +13,30 @@
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	if (!empty($_GET['filter'])) {
-		$_SESSION['filter'] = $_GET['filter'];
+	
+	//get org id to show info
+	if (!empty($_GET['orgId'])) {
+		$orgInfo['id'] = $_GET['orgId'];
 	}
+	
+	//variables used in validation
+	$email = $password = $type = "";
+	$emailErr = $passwordErr = $loginMessage = "";
+	$loginAttempted = $loginSuccess = $loggedInAsUser = $loggedInAsOrg = false;
+	//data validation for logging in
 	$endDateEarly = $endTimeEarly = false;
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		/*get the type of post request. Option: Request
+			stu: 				for logging in as student
+			org: 				for logging in as organization
+			orgCreate: 			for creating organization account
+			stuCreate:			for creating student account
+			changeOrgEmail: 	for changing organization email
+			changeOrgPassword: 	for changing organization password
+		*/
 		if(!empty($_POST['type'])){$type = $_POST['type'];}
+		
+		//If cases for checking the type of request
 		if(strcmp($type,'stu')==0)//logging in as student
 		{
 			$loginAttempted = true;
@@ -92,21 +108,21 @@
 			$errorMessage = "";
 			if ($conn->query($sql) === TRUE) {
 				//echo "New record created successfully";
+				$sql = "SELECT orgId FROM ltuorganization WHERE org_email='{$orgEmail}' AND login_password='{$orgPassword}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$userInfo = $result->fetch_assoc();
+					$_SESSION['orgId'] = $userInfo['orgId'];
+					$_SESSION["orgName"] = $orgName;
+					$_SESSION["orgDesc"] = $orgDesc;
+					$_SESSION['orgWebsite'] = $orgWebsite;
+					$_SESSION['orgEmail'] = $orgEmail;
+					$_SESSION['orgPassword'] = $orgPassword;
+				}
 			} else {
 				//echo "Error: " . $sql . "<br>" . $conn->error;
-			}
-			$sql = "SELECT orgId FROM ltuorganization WHERE org_email='{$orgEmail}' AND login_password='{$orgPassword}';";
-			$result = $conn->query($sql);
-			if($result->num_rows==0){$loginMessage="Login Failed";}
-			else
-			{
-				$userInfo = $result->fetch_assoc();
-				$_SESSION['orgId'] = $userInfo['orgId'];
-				$_SESSION["orgName"] = $orgName;
-				$_SESSION["orgDesc"] = $orgDesc;
-				$_SESSION['orgWebsite'] = $orgWebsite;
-				$_SESSION['orgEmail'] = $orgEmail;
-				$_SESSION['orgPassword'] = $orgPassword;
 			}
 		}
 		if(strcmp($type,'stuCreate')==0)//Creating organiaztion
@@ -121,48 +137,50 @@
 	
 			if ($conn->query($sql) === TRUE) {
 				//echo "New record created successfully";
+				$sql = "SELECT userId FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
+				$result = $conn->query($sql);
+				if($result->num_rows==0){$loginMessage="Login Failed";}
+				else
+				{
+					$userInfo = $result->fetch_assoc();
+					$_SESSION['userId'] = $userInfo['userId'];
+					$_SESSION["firstName"] = $firstName;
+					$_SESSION["lastName"] = $lastName;
+					$_SESSION['isAdmin'] = 0;
+					$_SESSION['userEmail'] = $email;
+					$_SESSION['userPassword'] = $stuPassword;
+					$_SESSION['receiveEmails'] = 1;
+				}
 			} else {
 				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 			
-			$sql = "SELECT userId FROM user_account WHERE user_email='{$email}' AND login_password='{$password}';";
-			$result = $conn->query($sql);
-			if($result->num_rows==0){$loginMessage="Login Failed";}
-			else
-			{
-				$userInfo = $result->fetch_assoc();
-				$_SESSION['userId'] = $userInfo['userId'];
-				$_SESSION["firstName"] = $firstName;
-				$_SESSION["lastName"] = $lastName;
-				$_SESSION['isAdmin'] = 0;
-				$_SESSION['userEmail'] = $email;
-				$_SESSION['userPassword'] = $stuPassword;
-				$_SESSION['receiveEmails'] = 1;
+			
+		}
+		if(strcmp($type,'changeOrgPassword')==0)
+		{
+			$newPassword = cleanInput($_POST['changeOrgPassword'],$conn);
+			$sql = "UPDATE ltuorganization SET login_password = '{$newPassword}' WHERE org_email='{$_SESSION['orgEmail']}' AND login_password='{$_SESSION['orgPassword']}';";
+			if ($conn->query($sql) === TRUE) {
+				$orgInfo['password'] = $newPassword;
+				$_SESSION['orgPassword'] = $newPassword;
+			} else {
+				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
-			if(strcmp($type,'changeOrgPassword')==0)
-			{
-				$newPassword = cleanInput($_POST['changeOrgPassword'],$conn);
-				$sql = "UPDATE ltuorganization SET login_password = '{$newPassword}' WHERE org_email='{$_SESSION['orgEmail']}' AND login_password='{$_SESSION['orgPassword']}';";
-				if ($conn->query($sql) === TRUE) {
-					$orgInfo['password'] = $newPassword;
-					$_SESSION['orgPassword'] = $newPassword;
-				} else {
-					echo "Error: " . $sql . "<br>" . $conn->error;
-				}
-			}
-			if(strcmp($type,'changeOrgDesc')==0)
-			{
-				$newDesc = cleanInput($_POST['changeOrgDesc'],$conn);
-				$sql = "UPDATE ltuorganization SET login_password = '{$newDesc}' WHERE org_email='{$_SESSION['orgEmail']}' AND login_password='{$_SESSION['orgPassword']}';";
-				if ($conn->query($sql) === TRUE) {
-					$orgInfo['desc'] = $newDesc;
-					$_SESSION['orgDesc'] = $newDesc;
-				} else {
-					echo "Error: " . $sql . "<br>" . $conn->error;
-				}
+		}
+		if(strcmp($type,'changeOrgDesc')==0)
+		{
+			$newDesc = cleanInput($_POST['changeOrgDesc'],$conn);
+			$sql = "UPDATE ltuorganization SET login_password = '{$newDesc}' WHERE org_email='{$_SESSION['orgEmail']}' AND login_password='{$_SESSION['orgPassword']}';";
+			if ($conn->query($sql) === TRUE) {
+				$orgInfo['desc'] = $newDesc;
+				$_SESSION['orgDesc'] = $newDesc;
+			} else {
+				//echo "Error: " . $sql . "<br>" . $conn->error;
 			}
 		}
 	}
+	
 	//check session to see if logged in and user and get info if true
 	if (isset($_SESSION['userId'])){
 		$userInfo['userId'] = $_SESSION['userId'];
@@ -231,9 +249,8 @@
 	</head>
 	<body>
 		<?php require 'requiredHeader.php'?>
-		<?php if($loggedInAsUser): ?>
 		
-		<?php elseif($loggedInAsOrg):?>
+		<?php if($loggedInAsOrg)://section for if logged in as organization. Has options to change account info and delete events.?>
 		<div class="form-group row pageMessage">
 			<div class="col-sm-5" align="center">
 				You're logged in as: <?php echo $message?>,<br />Below you can change your organization's information.<br/>
@@ -278,7 +295,7 @@
 				</div>
 			</div>
 		</form>
-		<?php else:?>
+		<?php else: //section for if logged in as user or not logged in. Shows dropdown to select an org to view information, or shows information of the org chosen.?>
 		
 		<?php endif;?>
 		<div id="bottomWrapper">
