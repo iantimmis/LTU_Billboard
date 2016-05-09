@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <link rel="icon" href="favicon.ico"/>
+  </head>
 <body>
   <!-- Handles accepting or declining an event or organization request -->
   <?php
