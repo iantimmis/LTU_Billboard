@@ -304,7 +304,7 @@
   <div id="bottomWrapper">
     <div id="testArea"></div>
     <footer>
-      Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Tammis
+      Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Timmis
     </footer> 
   </div>
 </body>

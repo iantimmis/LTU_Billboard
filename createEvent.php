@@ -346,7 +346,7 @@
 		<?php endif ?>
 
 		<footer>
-			Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Tammis
+			Created By: Matthew Castaldini, Hanan Jalnko, Kathleen Napier, Ian Timmis
 		</footer>
 	</body>
 </html>
