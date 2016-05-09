@@ -243,6 +243,48 @@
 				$("#receiveEmails").on( "change", function(){
 					$("#receiveEmailsForm").submit();
 				});
+				
+				//validation for account creation and logging in
+				$("#createStuAct").validate({
+					"rules" : {
+						"confirmStuPassword" : {
+							"equalTo" : "#stuCreatePassword"}
+					}
+				});
+				$("#createOrgAct").validate({
+					rules : {
+						confirmOrgPassword : {
+							equalTo : "#orgCreatePassword"}
+					}
+				});
+				$("#studentForm").validate({});
+				$("#orgForm").validate({});
+				
+				//directly open the create account tab
+				$("#createAccountLink").on("click", function(){
+					$('#loginModal').modal('show');
+					$('#loginTabs a:last').tab('show');
+				});
+				
+				//open the login modal and show error if login fails
+				<?php if($loginAttempted):?>
+					<?php if(strcmp($type,'stu')==0):?>
+						<?php if(!$loginSuccess):?>
+						//login student fail
+						$('#loginModal').modal('show');
+						$('#stuLoginMessage').html("Login Failed");
+						$('#stuLoginMessage').toggleClass('error');
+						<?php endif; ?>
+					<?php elseif(strcmp($type,'org')==0): ?>
+						<?php if(!$loginSuccess):?>
+						//login org fail
+						$('#loginModal').modal('show');
+						$('#loginTabs a[href="#loginAsOrg"]').tab('show')
+						$('#orgLoginMessage').html("Login Failed");
+						$('#orgLoginMessage').toggleClass('error');
+						<?php endif;?>
+					<?php endif;?>
+				<?php endif?>
 			});
 		</script>
 		<title>Account Settings</title>
@@ -269,7 +311,7 @@
 				</div>
 			</div>
 		</form>
-		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="$passwordForm">
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="passwordForm">
 			<!-- Password row -->
 			<div class="form-group row">
 				<label for="changeOrgPassword" class="col-sm-1 form-control-label" align="right">Password:</label>

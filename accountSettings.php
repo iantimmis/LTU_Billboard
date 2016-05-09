@@ -346,7 +346,7 @@
 				</div>
 			</div>
 		</form>
-		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="$changePasswordForm">
+		<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method ="post" role="form" id="changePasswordForm">
 			<!-- Password row -->
 			<div class="form-group row">
 				<label for="changeStudentPassword" class="col-sm-1 form-control-label" align="right">Password:</label>
@@ -354,7 +354,7 @@
 					<input required type="password" class="form-control" id="changeStudentPassword" name="changeStudentPassword" value="<?php echo $userInfo['userPassword']?>" />
 				</div>
 				<div class="col-sm-2">
-					<input required type="password" class="form-control" id="confirmChangeStudentPassword" name="confirmChangeStudentPassword" placeholder="Repeat new password to change" />
+					<input required type="password" class="form-control" id="confirmChangeStudentPassword" name="confirmChangeStudentPassword" placeholder="Repeat new password" />
 				</div>
 				<div class="col-sm-1">
 					<button type = "submit" class ="btn btn-primary" id = "submit" name="type" value="changeStuPassword">Change</button>
