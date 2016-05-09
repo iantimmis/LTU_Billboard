@@ -13,6 +13,24 @@
 		die("Connection failed: " . $conn->connect_error);
 	}
 	
+	//check session to see if logged in and user and get info if true
+	$loggedInAsUser = false;
+	$loggedInAsOrg = false;
+	if (isset($_SESSION['userId'])){
+		$userInfo['userId'] = $_SESSION['userId'];
+		$userInfo['firstName'] = $_SESSION["firstName"];
+		$loggedInAsUser = true;
+		$message = "You need to be logged in as an organization to create an event.";
+	} elseif (isset($_SESSION['orgId'])) {
+		$orgId = $_SESSION['orgId'];
+		$orgInfo['name']=$_SESSION['orgName'];
+		$loggedInAsOrg = true;
+		$message = "";
+	} else {
+		$message = "You need to be logged in to create an event.";
+	}
+	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
+	
 	$endDateEarly = $endTimeEarly = false;
 	$eventSuccess = true;
 	$name = $url = $room = $desc = $message = "";
@@ -60,6 +78,10 @@
 				} else {
 					echo "Error: " . $sql . "<br>" . $conn->error;
 				}
+				$name = "";
+				$url = "";
+				$room = "";
+				$desc = "";
 			}
 		}
 	}
@@ -193,23 +215,6 @@
 		}
 	}
 	
-	//check session to see if logged in and user and get info if true
-	$loggedInAsUser = false;
-	$loggedInAsOrg = false;
-	if (isset($_SESSION['userId'])){
-		$userInfo['userId'] = $_SESSION['userId'];
-		$userInfo['firstName'] = $_SESSION["firstName"];
-		$loggedInAsUser = true;
-		$message = "You need to be logged in as an organization to create an event.";
-	} elseif (isset($_SESSION['orgId'])) {
-		$orgId = $_SESSION['orgId'];
-		$orgInfo['name']=$_SESSION['orgName'];
-		$loggedInAsOrg = true;
-		$message = "";
-	} else {
-		$message = "You need to be logged in to create an event.";
-	}
-	$loggedIn = $loggedInAsOrg || $loggedInAsUser;
 	
 ?>
 
